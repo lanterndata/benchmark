@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS tsv_data (
+  language TEXT,
+  page_url TEXT,
+  image_url TEXT,
+  image_ai VECTOR(512),
+  page_title TEXT,
+  section_title TEXT,
+  hierarchical_section_title TEXT,
+  caption_reference_description TEXT,
+  caption_attribution_description TEXT,
+  caption_alt_text_description TEXT,
+  mime_type TEXT,
+  original_height INTEGER,
+  original_width INTEGER,
+  is_main_image BOOLEAN,
+  attribution_passes_lang_id BOOLEAN,
+  page_changed_recently BOOLEAN,
+  context_page_description TEXT,
+  context_section_description TEXT,
+  context_page_description_ai VECTOR(512)
+);

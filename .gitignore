@@ -1,0 +1,11 @@
+# Data / Postgres
+db/data
+*.tsv
+
+# Python
+*.pyc
+__pycache__/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
