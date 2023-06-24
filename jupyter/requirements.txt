@@ -12,3 +12,5 @@ torchvision
 transformers
 ipywidgets
 pgvector
+nest_asyncio
+aiohttp
