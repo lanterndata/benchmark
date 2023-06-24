@@ -11,3 +11,4 @@ tqdm
 torchvision
 transformers
 ipywidgets
+pgvector
