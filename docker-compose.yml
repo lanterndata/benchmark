@@ -11,7 +11,8 @@ services:
       - 5432:5432
     volumes:
       - ./db/data:/var/lib/postgresql/data
-      - ./db/init_extension.sql:/docker-entrypoint-initdb.d/init_extension.sql
+      - ./db/init_pgvector.sql:/docker-entrypoint-initdb.d/init_pgvector.sql
+      - ./jupyter/data:/jupyter/data
 
   jupyter:
     build: ./jupyter
