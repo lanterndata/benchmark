@@ -17,6 +17,6 @@ CREATE TABLE IF NOT EXISTS tsv_data (
   attribution_passes_lang_id BOOLEAN,
   page_changed_recently BOOLEAN,
   context_page_description TEXT,
-  context_page_description_ai VECTOR(512),
+  context_page_description_ai VECTOR(768),
   context_section_description TEXT
 );

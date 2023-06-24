@@ -9,3 +9,5 @@ requests
 Pillow
 tqdm
 torchvision
+transformers
+ipywidgets
