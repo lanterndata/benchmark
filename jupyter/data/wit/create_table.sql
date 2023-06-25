@@ -22,7 +22,3 @@ CREATE TABLE IF NOT EXISTS tsv_data (
   context_page_description_ai2 VECTOR(768),
   context_section_description TEXT
 );
-
-CREATE INDEX ON tsv_data USING ivfflat (image_url_ai2 vector_l2_ops) WITH (lists = 100);
-CREATE INDEX ON tsv_data USING ivfflat (context_page_description_ai2 vector_l2_ops) WITH (lists = 100);
-CREATE INDEX ON tsv_data (original_width);
