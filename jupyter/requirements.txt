@@ -14,3 +14,4 @@ ipywidgets
 pgvector
 nest_asyncio
 aiohttp
+asyncpg
