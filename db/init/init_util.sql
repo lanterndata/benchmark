@@ -14,3 +14,9 @@ CREATE OR REPLACE FUNCTION random_array(n INT) RETURNS float[] AS $$
     RETURN result;
   END
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION random_vector(n INT) RETURNS vector AS $$
+  BEGIN
+    RETURN random_array(n)::vector;
+  END
+$$ LANGUAGE plpgsql;

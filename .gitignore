@@ -1,10 +1,12 @@
 # Data / Postgres
 db/data
 *.tsv
+*.txt
 
 # Python
 *.pyc
 __pycache__/
+.DS_Store
 
 # Jupyter Notebooks
 .ipynb_checkpoints/

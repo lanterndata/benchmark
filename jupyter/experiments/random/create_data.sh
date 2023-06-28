@@ -1,9 +1,11 @@
+#!/bin/bash
+
 N=$1
 
-cat << EOF
+PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 << EOF
   DROP TABLE IF EXISTS test_table2;
 
-  CREATE TABLE test_table2 IF NOT EXISTS (
+  CREATE TABLE IF NOT EXISTS test_table2 (
     id SERIAL PRIMARY KEY,
     vector5 VECTOR NOT NULL,
     vector10 VECTOR NOT NULL,
@@ -11,9 +13,7 @@ cat << EOF
     vector100 VECTOR NOT NULL,
     vector200 VECTOR NOT NULL,
     vector400 VECTOR NOT NULL,
-    vector600 VECTOR NOT NULL,
-    vector800 VECTOR NOT NULL,
-    vector1000 VECTOR NOT NULL
+    vector800 VECTOR NOT NULL
   );
 
   INSERT INTO test_table2 (
@@ -23,9 +23,7 @@ cat << EOF
     vector100,
     vector200,
     vector400,
-    vector600,
-    vector800,
-    vector1000
+    vector800
   )
   SELECT
     random_vector(5),
@@ -34,9 +32,7 @@ cat << EOF
     random_vector(100),
     random_vector(200),
     random_vector(400),
-    random_vector(600),
-    random_vector(800),
-    random_vector(1000)
+    random_vector(800)
   FROM
     generate_series(1, ${N});
 EOF
