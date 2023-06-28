@@ -36,3 +36,5 @@ PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 << EOF
   FROM
     generate_series(1, ${N});
 EOF
+
+echo "Created test_table2 with N=$N"
