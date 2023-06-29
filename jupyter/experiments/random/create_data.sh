@@ -3,7 +3,8 @@
 INDEXED=$1
 N=$2
 
-PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 << EOF
+# SQL commands heredoc
+psql_commands=$(cat <<EOF
   DROP TABLE IF EXISTS test_table2;
 
   CREATE TABLE IF NOT EXISTS test_table2 (
@@ -33,15 +34,20 @@ PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 << EOF
     random_vector(400)
   FROM
     generate_series(1, ${N});
-
-  if [ "$INDEXED" = "true" ]; then
-    CREATE INDEX ON test_table2 USING ivfflat (vector5 vector_l2_ops) WITH (lists = 100);
-    CREATE INDEX ON test_table2 USING ivfflat (vector10 vector_l2_ops) WITH (lists = 100);
-    CREATE INDEX ON test_table2 USING ivfflat (vector50 vector_l2_ops) WITH (lists = 100);
-    CREATE INDEX ON test_table2 USING ivfflat (vector100 vector_l2_ops) WITH (lists = 100);
-    CREATE INDEX ON test_table2 USING ivfflat (vector200 vector_l2_ops) WITH (lists = 100);
-    CREATE INDEX ON test_table2 USING ivfflat (vector400 vector_l2_ops) WITH (lists = 100);
-  end
 EOF
+)
+
+# Conditionally append index creation commands
+if [ "$INDEXED" = "true" ]; then
+  psql_commands+="CREATE INDEX ON test_table2 USING ivfflat (vector5 vector_l2_ops) WITH (lists = 100);"
+  psql_commands+="CREATE INDEX ON test_table2 USING ivfflat (vector10 vector_l2_ops) WITH (lists = 100);"
+  psql_commands+="CREATE INDEX ON test_table2 USING ivfflat (vector50 vector_l2_ops) WITH (lists = 100);"
+  psql_commands+="CREATE INDEX ON test_table2 USING ivfflat (vector100 vector_l2_ops) WITH (lists = 100);"
+  psql_commands+="CREATE INDEX ON test_table2 USING ivfflat (vector200 vector_l2_ops) WITH (lists = 100);"
+  psql_commands+="CREATE INDEX ON test_table2 USING ivfflat (vector400 vector_l2_ops) WITH (lists = 100);"
+fi
+
+# Execute SQL commands using psql
+PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 -c "$psql_commands"
 
 echo "Created test_table2 with indexed=$INDEXED and N=$N"
