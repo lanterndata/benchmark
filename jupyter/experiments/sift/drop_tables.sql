@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS sift_base10k;
+DROP TABLE IF EXISTS sift_base1m;
+DROP TABLE IF EXISTS gist_base1m;
+DROP TABLE IF EXISTS sift_base1b;
