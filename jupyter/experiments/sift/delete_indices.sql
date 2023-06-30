@@ -1,0 +1,4 @@
+DROP INDEX IF EXISTS sift_base10k_index CASCADE;
+DROP INDEX IF EXISTS sift_base1m_index CASCADE;
+DROP INDEX IF EXISTS gist_base1m_index CASCADE;
+DROP INDEX IF EXISTS sift_base1b_index CASCADE;
