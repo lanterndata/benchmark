@@ -38,7 +38,7 @@ benchmark() {
   done
 
   # Destroy tables
-  ./destroy_tables.sh
+  ./delete_tables.sh
 }
 
 benchmark "false"

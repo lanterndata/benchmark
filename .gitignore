@@ -1,7 +1,6 @@
 # Data / Postgres
 db/data
 *.tsv
-*.txt
 
 # Python
 *.pyc
