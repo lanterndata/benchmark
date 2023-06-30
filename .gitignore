@@ -1,6 +1,8 @@
 # Data / Postgres
 db/data
 *.tsv
+*.fvecs
+*.csv
 
 # Python
 *.pyc
