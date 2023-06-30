@@ -35,5 +35,5 @@ SELECT * FROM sift_base1m LIMIT 400000;
 INSERT INTO sift_base600k
 SELECT * FROM sift_base1m LIMIT 600000;
 
-INSERT INTO sift_base700k
+INSERT INTO sift_base800k
 SELECT * FROM sift_base1m LIMIT 800000;

@@ -3,14 +3,14 @@ CREATE TABLE IF NOT EXISTS sift_base10k (
   v VECTOR(128)
 );
 
-\COPY sift_base10k (v) FROM '/jupyter/data/sift/sift_base10k.csv' WITH csv;
+\COPY sift_base10k (v) FROM '/Users/diqi/postvec/benchmark/jupyter/data/sift/sift_base10k.csv' WITH csv;
 
 CREATE TABLE IF NOT EXISTS sift_base1m (
   id SERIAL PRIMARY KEY,
   v VECTOR(128)
 );
 
-\COPY sift_base1m (v) FROM '/jupyter/data/sift/sift_base1m.csv' WITH csv;
+\COPY sift_base1m (v) FROM '/Users/diqi/postvec/benchmark/jupyter/data/sift/sift_base1m.csv' WITH csv;
 
 -- CREATE TABLE IF NOT EXISTS gist_base1m (
 --   id SERIAL PRIMARY KEY,

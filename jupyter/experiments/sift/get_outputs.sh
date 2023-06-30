@@ -2,7 +2,7 @@
 
 # Define values for K, T
 K_values=(4 8 16 32 64)
-T_values=("sift_base10k" "sift_base100k" "sift_base200k" "sift_base400k" "sift_base600k" "sift_base800k" "sift_base1m")
+T_values=("10k" "100k" "200k" "400k" "600k" "800k" "1m")
 
 benchmark() {
   PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 -f ./delete_indices.sql
