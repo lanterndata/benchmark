@@ -15,9 +15,7 @@ def fvecs_to_csv(input_file, output_file):
     else:
         raise Exception("unknown file format %s in %s" % (filesuffix, input_file))
 
-
     with open(input_file, 'rb') as f:
-
         a = np.fromfile(f, dtype='int32')
         d = a[0]
         vectors = a.reshape(-1, d + 1)[:, 1:].copy().view(elem_type)
@@ -25,7 +23,10 @@ def fvecs_to_csv(input_file, output_file):
     with open(output_file, 'w', newline='') as f:
         writer = csv.writer(f)
         for vector in vectors:
-            writer.writerow([str(vector.tolist())])
+            row = str(vector.tolist())
+            if elem_type == "int32":
+                row = row.replace('[', '{').replace(']', '}')  # Replace brackets with braces for ivecs files to enable storing as array
+            writer.writerow([row])
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
