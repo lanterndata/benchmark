@@ -24,16 +24,16 @@ CREATE TABLE IF NOT EXISTS sift_base800k (
 );
 
 INSERT INTO sift_base100k
-SELECT * FROM sift_base1m LIMIT 100000;
+SELECT * FROM sift_base1m WHERE id <= 100000;
 
 INSERT INTO sift_base200k
-SELECT * FROM sift_base1m LIMIT 200000;
+SELECT * FROM sift_base1m WHERE id <= 200000;
 
 INSERT INTO sift_base400k
-SELECT * FROM sift_base1m LIMIT 400000;
+SELECT * FROM sift_base1m WHERE id <= 400000;
 
 INSERT INTO sift_base600k
-SELECT * FROM sift_base1m LIMIT 600000;
+SELECT * FROM sift_base1m WHERE id <= 600000;
 
 INSERT INTO sift_base800k
-SELECT * FROM sift_base1m LIMIT 800000;
+SELECT * FROM sift_base1m WHERE id <= 800000;

@@ -1,8 +1,8 @@
 #!/bin/bash
-INDEXED=$1
+INDEX=$1
 N=$2
 K=$3
-OUTPUT_FILE="outputs/${INDEXED}_${N}_K${K}.txt"
+OUTPUT_FILE="outputs/${INDEX}_${N}_K${K}.txt"
 
 PGPASSWORD=postgres pgbench -d postgres -U postgres -h localhost -p 5432 -f - -c 5 -j 5 -t 15 -r > "$OUTPUT_FILE" 2>/dev/null << EOF
   \SET id random(1, 10000)
