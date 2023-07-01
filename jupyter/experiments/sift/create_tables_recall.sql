@@ -1,3 +1,8 @@
+DROP TABLE sift_query10k;
+DROP TABLE sift_query1m;
+DROP TABLE sift_truth10k;
+DROP TABLE sift_truth1m;
+
 CREATE TABLE IF NOT EXISTS sift_query10k (
   id SERIAL PRIMARY KEY,
   v VECTOR(128)
