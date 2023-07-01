@@ -2,34 +2,18 @@
 
 # Define values for N, K, D
 K_values=(4 8 16 32 64)
-N_values=(100000 200000 400000 600000 800000)
-D_values=(5 10 50 100 200 400)
+N_values=("250k" "500k" "750k" "1m" "2m")
+D_values=(5 25 125 250)
 
 benchmark() {
-  # Create tables
-  ./create_tables.sh
-
   # Create index if needed
   should_index=$1
   if [ "$should_index" = "true" ]; then
-    ./create_indices.sh
+    PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 -f ./create_indices.sql
   fi
 
-  # Loop over N, D, K values
-  for i in "${!N_values[@]}"; do
-    N="${N_values[$i]}"
-
-    # Calculate delta based on current and previous N
-    if (( i == 0 )); then
-      delta="${N_values[0]}"
-    else
-      delta=$((N_values[i] - N_values[i - 1]))
-    fi
-
-    # Insert delta rows of data
-    time ./insert_rows.sh "$delta"
-
-    # Run pgbench
+  # Loop over N, D, K values and run pgbench
+  for N in "${N_values[@]}"; do
     for D in "${D_values[@]}"; do
       for K in "${K_values[@]}"; do
         ./run_pgbench.sh "$should_index" "$N" "$D" "$K"
@@ -37,8 +21,10 @@ benchmark() {
     done
   done
 
-  # Destroy tables
-  ./delete_tables.sh
+  # Destroy indices
+  if [ "$should_index" = "true" ]; then
+    PGPASSWORD=postgres psql -d postgres -U postgres -h localhost -p 5432 -f ./delete_indices.sql
+  fi
 }
 
 benchmark "false"

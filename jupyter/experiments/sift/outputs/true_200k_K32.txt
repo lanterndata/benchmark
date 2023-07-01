@@ -6,9 +6,9 @@ number of clients: 5
 number of threads: 5
 number of transactions per client: 15
 number of transactions actually processed: 75/75
-latency average = 62.869 ms
-initial connection time = 12.474 ms
-tps = 79.530621 (without initial connection time)
+latency average = 0.892 ms
+initial connection time = 15.450 ms
+tps = 5602.450138 (without initial connection time)
 statement latencies in milliseconds:
-         0.018  \SET id random(1, 10000)
-        60.501  SELECT *
+         0.008  \SET id random(1, 10000)
+         0.765  SELECT *
