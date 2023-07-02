@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 def convert_string_to_number(s):
     """
     Convert a string to a number. The string can end with 'k', 'm', or 'b',
@@ -46,9 +48,19 @@ def convert_number_to_string(num):
         return str(int(num))
 
 def convert_bytes_to_number(bytes):
-    if 'kB' in size:
-        return float(size.replace(' kB', '')) / 1024
-    elif 'MB' in size:
-        return float(size.replace(' MB', ''))
+    if 'kB' in bytes:
+        return float(bytes.replace(' kB', '')) / 1024
+    elif 'MB' in bytes:
+        return float(bytes.replace(' MB', ''))
     else:
         return None
+  
+def extract_connection_params(db_url):
+    parsed_url = urlparse(db_url)
+    host = parsed_url.hostname
+    port = parsed_url.port
+    user = parsed_url.username
+    password = parsed_url.password
+    database = parsed_url.path.lstrip("/")
+
+    return host, port, user, password, database
