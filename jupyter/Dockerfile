@@ -4,6 +4,7 @@ WORKDIR /jupyter
 
 COPY requirements.txt /tmp/requirements.txt
 
+RUN apt-get update && apt-get install -y postgresql-15 postgresql-client-15
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY . /jupyter
