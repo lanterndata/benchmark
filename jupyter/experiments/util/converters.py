@@ -44,3 +44,11 @@ def convert_number_to_string(num):
         return str(int(num // 10**3)) + 'k'
     else:
         return str(int(num))
+
+def convert_bytes_to_number(bytes):
+    if 'kB' in size:
+        return float(size.replace(' kB', '')) / 1024
+    elif 'MB' in size:
+        return float(size.replace(' MB', ''))
+    else:
+        return None
