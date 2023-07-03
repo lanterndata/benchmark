@@ -1,0 +1,630 @@
+Experiment - N: 10k, count: 1
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 216.191 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 2
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 187.779 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 3
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 183.376 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 4
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 184.314 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 5
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 180.779 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 6
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 181.402 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 7
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 178.888 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 8
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 176.835 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 9
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 184.875 ms
+SET
+DROP INDEX
+Experiment - N: 10k, count: 10
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 186.937 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 1
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 183.591 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 2
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 213.423 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 3
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 202.152 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 4
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 212.890 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 5
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 209.776 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 6
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 207.434 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 7
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 196.451 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 8
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 186.439 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 9
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 183.431 ms
+SET
+DROP INDEX
+Experiment - N: 100k, count: 10
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 205.155 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 1
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 192.813 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 2
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 223.470 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 3
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 196.015 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 4
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 195.910 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 5
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 196.008 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 6
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 184.842 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 7
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 181.783 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 8
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 199.493 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 9
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 211.495 ms
+SET
+DROP INDEX
+Experiment - N: 200k, count: 10
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 215.010 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 1
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 199.202 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 2
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 215.234 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 3
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 192.578 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 4
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 210.444 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 5
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 197.890 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 6
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 185.203 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 7
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 198.001 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 8
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 187.258 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 9
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 183.475 ms
+SET
+DROP INDEX
+Experiment - N: 400k, count: 10
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 185.888 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 1
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 180.247 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 2
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 187.719 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 3
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 179.610 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 4
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 186.897 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 5
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 181.504 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 6
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 188.627 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 7
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 206.473 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 8
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 188.120 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 9
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 195.709 ms
+SET
+DROP INDEX
+Experiment - N: 600k, count: 10
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 195.618 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 1
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 189.656 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 2
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 194.560 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 3
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 212.176 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 4
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 206.136 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 5
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 174.973 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 6
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 205.163 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 7
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 188.574 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 8
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 205.847 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 9
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 200.316 ms
+SET
+DROP INDEX
+Experiment - N: 800k, count: 10
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 194.735 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 1
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 184.393 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 2
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 213.766 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 3
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 198.244 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 4
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 193.942 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 5
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 197.893 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 6
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 194.557 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 7
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 190.236 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 8
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 212.159 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 9
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 258.399 ms
+SET
+DROP INDEX
+Experiment - N: 1m, count: 10
+SET
+DROP INDEX
+SET
+Timing is on.
+CREATE INDEX
+Time: 188.631 ms
+SET
+DROP INDEX
