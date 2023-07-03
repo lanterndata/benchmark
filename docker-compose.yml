@@ -1,27 +1,21 @@
 version: '3'
 services:
-  db:
-    build: ./db
+  benchmark:
+    container_name: benchmark
+    build: .
+    ports:
+      - 5432:5432
+      - 8888:8888
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+      - ./data:/app/data
+      - ./experiments:/app/experiments
+      - ./requirements.txt:/app/requirements.txt
     environment:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_PORT: 5432
-    ports:
-      - 5432:5432
-    volumes:
-      - ./db/postgresql.conf:/etc/postgresql/postgresql.conf:ro
-      - ./db/data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
-      - ./jupyter/data:/jupyter/data
 
-  jupyter:
-    build: ./jupyter
-    ports:
-      - 8888:8888
-    depends_on:
-      - db
-    volumes:
-      - ./jupyter:/jupyter
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres

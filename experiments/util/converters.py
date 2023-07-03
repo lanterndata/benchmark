@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+import subprocess
 
 def convert_string_to_number(s):
     """
@@ -64,3 +65,8 @@ def extract_connection_params(db_url):
     database = parsed_url.path.lstrip("/")
 
     return host, port, user, password, database
+
+def run_command(command):
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, error = process.communicate()
+    return output.decode(), error.decode()
