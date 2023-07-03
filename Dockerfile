@@ -1,11 +1,18 @@
-# Starting from the Python image also includes a full Debian OS
-FROM python:3.9
+# Starting from the PostgreSQL 15 image
+FROM postgres:15
 
 # Set working directory
 WORKDIR /app
 
+# Install Python and pip
+RUN apt-get update && apt-get install -y python3.9 python3-pip python3-venv
+
+# Create a virtual environment and activate it
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
 # Install dependencies (both PostgreSQL server and client)
-RUN apt-get update && apt-get install -y git build-essential postgresql-15 postgresql-client-15 postgresql-server-dev-all
+RUN apt-get update && apt-get install -y git build-essential postgresql-server-dev-all
 
 # Clone and install pgvector
 RUN git clone https://github.com/pgvector/pgvector.git /pgvector
@@ -20,9 +27,12 @@ COPY ./data /app/data
 COPY ./experiments /app/experiments
 COPY ./db /app/db
 
+# Create the directory for pg_hba.conf
+RUN mkdir -p /etc/postgresql/15/main
+RUN echo "local all postgres md5" > /etc/postgresql/15/main/pg_hba.conf
+RUN echo "host all postgres 127.0.0.1/32 md5" >> /etc/postgresql/15/main/pg_hba.conf
+RUN echo "host all postgres ::1/128 md5" >> /etc/postgresql/15/main/pg_hba.conf
+
 # Expose ports
 EXPOSE 8888
 EXPOSE 5432
-
-# Default command: start PostgreSQL
-CMD service postgresql start && tail -f /dev/null
