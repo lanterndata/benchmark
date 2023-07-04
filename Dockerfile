@@ -5,7 +5,7 @@ FROM postgres:15
 WORKDIR /app
 
 # Install Python and pip
-RUN apt-get update && apt-get install -y python3.9 python3-pip python3-venv
+RUN apt-get update && apt-get install -y python3.9 python3-pip python3-venv procps
 
 # Create a virtual environment and activate it
 RUN python3 -m venv /opt/venv
