@@ -48,7 +48,7 @@ check_completion_status() {
 
 # Function to perform index deletion
 perform_index_deletion() {
-    sleep 1
+    sleep 2
     local current_timestamp=$(date +"%Y-%m-%d %H:%M:%S")
     echo "DROP INDEX IF EXISTS $INDEX_NAME;" | psql -U postgres &
     local delete_index_pid=$!
@@ -60,12 +60,12 @@ perform_index_deletion() {
     # Check the completion status
     local current_timestamp=$(date +"%Y-%m-%d %H:%M:%S")
     check_completion_status $delete_index_exit_code "$current_timestamp | Index Deletion"
-    sleep 1
+    sleep 2
 }
 
 # Function to perform index creation
 perform_index_creation() {
-    sleep 1
+    sleep 2
     local current_timestamp=$(date +"%Y-%m-%d %H:%M:%S")
     echo -e "\n\n${current_timestamp} | Index Creation Started\n\n" >> "$TOP_LOG"
     echo "CREATE INDEX IF NOT EXISTS $INDEX_NAME ON sift_base${N} USING ivfflat (v vector_l2_ops) WITH (lists = 100);" | psql -U postgres &
@@ -78,7 +78,7 @@ perform_index_creation() {
     # Check the completion status
     local current_timestamp=$(date +"%Y-%m-%d %H:%M:%S")
     check_completion_status $create_index_exit_code "$current_timestamp | Index Creation Completed"
-    sleep 1
+    sleep 2
 }
 
 # Run Postgres commands

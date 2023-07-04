@@ -1,46 +1,64 @@
-top - 20:45:42 up 1 day,  6:04,  0 user,  load average: 0.05, 0.08, 0.08
+top - 20:54:02 up 1 day,  6:12,  0 user,  load average: 0.00, 0.06, 0.08
 Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
-%Cpu(s):  0.0 us, 50.0 sy,  0.0 ni, 50.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
-MiB Mem :   7851.4 total,   1975.7 free,   1388.3 used,   4906.4 buff/cache     
-MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6463.2 avail Mem 
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :   7851.4 total,   1507.5 free,   1397.7 used,   5365.2 buff/cache     
+MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6453.8 avail Mem 
 
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.92 postgres
+    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.97 postgres
 
-2023-07-04 20:45:43 | Index Deletion
-
-
-
-
-2023-07-04 20:45:45 | Index Creation Started
+2023-07-04 20:54:04 | Index Deletion
 
 
 
 
-top - 20:45:45 up 1 day,  6:04,  0 user,  load average: 0.05, 0.08, 0.08
+top - 20:54:05 up 1 day,  6:12,  0 user,  load average: 0.00, 0.06, 0.08
 Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
-%Cpu(s):  0.8 us,  1.0 sy,  0.0 ni, 98.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
-MiB Mem :   7851.4 total,   1969.6 free,   1394.4 used,   4906.4 buff/cache     
-MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6457.1 avail Mem 
+%Cpu(s):  0.8 us,  0.6 sy,  0.0 ni, 98.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :   7851.4 total,   1506.9 free,   1398.2 used,   5365.2 buff/cache     
+MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6453.2 avail Mem 
 
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.92 postgres
+    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.97 postgres
 
-2023-07-04 20:45:47 | Index Creation Completed
-
-
+2023-07-04 20:54:08 | Index Creation Started
 
 
-top - 20:45:48 up 1 day,  6:04,  0 user,  load average: 0.12, 0.10, 0.09
+
+
+top - 20:54:08 up 1 day,  6:12,  0 user,  load average: 0.00, 0.06, 0.08
 Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
-%Cpu(s):  9.6 us,  2.7 sy,  0.0 ni, 87.6 id,  0.0 wa,  0.0 hi,  0.1 si,  0.0 st 
-MiB Mem :   7851.4 total,   1872.6 free,   1379.8 used,   5017.8 buff/cache     
-MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6471.6 avail Mem 
+%Cpu(s):  0.5 us,  0.9 sy,  0.0 ni, 98.5 id,  0.0 wa,  0.0 hi,  0.1 si,  0.0 st 
+MiB Mem :   7851.4 total,   1526.9 free,   1398.6 used,   5344.9 buff/cache     
+MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6452.8 avail Mem 
 
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.92 postgres
+    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.97 postgres
 
-2023-07-04 20:45:49 | Index Deletion
+2023-07-04 20:54:11 | Index Creation Completed
+
+
+
+
+top - 20:54:11 up 1 day,  6:12,  0 user,  load average: 0.00, 0.06, 0.08
+Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  9.4 us,  2.8 sy,  0.0 ni, 87.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :   7851.4 total,   1438.6 free,   1390.0 used,   5441.8 buff/cache     
+MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6461.5 avail Mem 
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.97 postgres
+
+top - 20:54:14 up 1 day,  6:12,  0 user,  load average: 0.00, 0.06, 0.08
+Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.2 us,  0.1 sy,  0.0 ni, 99.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :   7851.4 total,   1436.3 free,   1392.2 used,   5441.8 buff/cache     
+MiB Swap:   1536.0 total,    997.9 free,    538.1 used.   6459.2 avail Mem 
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    1 postgres  20   0  220932  27784  25484 S   0.0   0.3   0:01.97 postgres
+
+2023-07-04 20:54:15 | Index Deletion
 
 
 
