@@ -1,630 +1,490 @@
 Experiment - N: 10k, count: 1
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 216.191 ms
+Time: 215.888 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 2
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 187.779 ms
+Time: 200.628 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 3
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 183.376 ms
+Time: 197.728 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 4
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 184.314 ms
+Time: 196.511 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 5
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 180.779 ms
+Time: 213.340 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 6
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 181.402 ms
+Time: 186.018 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 7
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 178.888 ms
+Time: 196.723 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 8
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 176.835 ms
+Time: 193.546 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 9
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 184.875 ms
+Time: 206.350 ms
 SET
 DROP INDEX
 Experiment - N: 10k, count: 10
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 186.937 ms
+Time: 211.110 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 1
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 183.591 ms
+Time: 216.483 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 2
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 213.423 ms
+Time: 194.505 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 3
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 202.152 ms
+Time: 191.518 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 4
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 212.890 ms
+Time: 199.517 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 5
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 209.776 ms
+Time: 197.855 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 6
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 207.434 ms
+Time: 202.793 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 7
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 196.451 ms
+Time: 203.457 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 8
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 186.439 ms
+Time: 192.218 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 9
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 183.431 ms
+Time: 202.243 ms
 SET
 DROP INDEX
 Experiment - N: 100k, count: 10
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 205.155 ms
+Time: 200.949 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 1
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 192.813 ms
+Time: 194.954 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 2
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 223.470 ms
+Time: 186.584 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 3
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 196.015 ms
+Time: 206.649 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 4
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 195.910 ms
+Time: 197.549 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 5
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 196.008 ms
+Time: 184.731 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 6
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 184.842 ms
+Time: 196.581 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 7
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 181.783 ms
+Time: 198.834 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 8
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 199.493 ms
+Time: 202.887 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 9
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 211.495 ms
+Time: 190.284 ms
 SET
 DROP INDEX
 Experiment - N: 200k, count: 10
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 215.010 ms
+Time: 208.171 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 1
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 199.202 ms
+Time: 204.393 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 2
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 215.234 ms
+Time: 212.613 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 3
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 192.578 ms
+Time: 184.636 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 4
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 210.444 ms
+Time: 189.690 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 5
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 197.890 ms
+Time: 220.822 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 6
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 185.203 ms
+Time: 191.900 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 7
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 198.001 ms
+Time: 189.903 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 8
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 187.258 ms
+Time: 187.099 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 9
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 183.475 ms
+Time: 198.428 ms
 SET
 DROP INDEX
 Experiment - N: 400k, count: 10
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 185.888 ms
+Time: 193.136 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 1
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 180.247 ms
+Time: 235.278 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 2
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 187.719 ms
+Time: 189.741 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 3
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 179.610 ms
+Time: 190.769 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 4
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 186.897 ms
+Time: 203.305 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 5
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 181.504 ms
+Time: 199.009 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 6
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 188.627 ms
+Time: 202.243 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 7
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 206.473 ms
+Time: 201.121 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 8
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 188.120 ms
+Time: 197.470 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 9
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 195.709 ms
+Time: 227.508 ms
 SET
 DROP INDEX
 Experiment - N: 600k, count: 10
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 195.618 ms
+Time: 198.956 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 1
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 189.656 ms
+Time: 194.758 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 2
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 194.560 ms
+Time: 216.547 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 3
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 212.176 ms
+Time: 203.639 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 4
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 206.136 ms
+Time: 213.286 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 5
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 174.973 ms
+Time: 196.486 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 6
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 205.163 ms
+Time: 201.652 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 7
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 188.574 ms
+Time: 198.807 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 8
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 205.847 ms
+Time: 197.127 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 9
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 200.316 ms
+Time: 213.241 ms
 SET
 DROP INDEX
 Experiment - N: 800k, count: 10
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 194.735 ms
+Time: 215.631 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 1
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 184.393 ms
+Time: 193.120 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 2
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 213.766 ms
+Time: 203.489 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 3
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 198.244 ms
+Time: 211.513 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 4
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 193.942 ms
+Time: 205.915 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 5
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 197.893 ms
+Time: 225.440 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 6
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 194.557 ms
+Time: 221.443 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 7
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 190.236 ms
+Time: 197.371 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 8
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 212.159 ms
+Time: 200.866 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 9
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 258.399 ms
+Time: 217.493 ms
 SET
 DROP INDEX
 Experiment - N: 1m, count: 10
 SET
-DROP INDEX
-SET
 Timing is on.
 CREATE INDEX
-Time: 188.631 ms
+Time: 211.002 ms
 SET
 DROP INDEX

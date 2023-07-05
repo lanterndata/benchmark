@@ -1,9 +1,9 @@
 import sys
-from utils import get_table_name, execute_sql
+from .script_utils import get_table_name, execute_sql
 
 def delete_index(data, N, cur=None):
     table = get_table_name(data, N)
-    sql = f"DELETE INDEX IF EXISTS {table}_index"
+    sql = f"DROP INDEX IF EXISTS {table}_index"
     execute_sql(sql, cur=cur)
 
 if __name__ == '__main__':

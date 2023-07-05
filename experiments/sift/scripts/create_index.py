@@ -1,5 +1,5 @@
 import sys
-from utils import get_table_name, execute_sql
+from .script_utils import get_table_name, execute_sql
 
 def create_index(data, N, lists=100, cur=None):
     table = get_table_name(data, N)

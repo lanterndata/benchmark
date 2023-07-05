@@ -2,8 +2,8 @@ import os
 import psycopg2
 
 VALID_DATA = {
-    'sift': [],
-    'gist': [],
+    'sift': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
+    'gist': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
 }
 
 def get_table_name(data, N):
