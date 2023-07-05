@@ -1,3 +1,4 @@
+import pickle
 from urllib.parse import urlparse
 import subprocess
 import os
@@ -8,12 +9,32 @@ VALID_DATASETS = {
     'gist': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
 }
 
+def save_data(file_name, data):
+    with open(file_name, 'wb') as handle:
+        pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+def fetch_data(file_name):
+    if not os.path.exists(file_name):
+        raise FileNotFoundError(f"There is no experiment run for dataset")
+    with open(file_name, 'rb') as handle:
+        return pickle.load(handle)
+
+def print_labels(dataset, *cols):
+    print_row(dataset)
+    print('-' * len(cols) * 10)
+    print_row(*cols)
+    print('-' * len(cols) * 10)
+
+def print_row(*cols):
+    row = ''.join([col.ljust(10) for col in cols])
+    print(row)
+
 def get_table_name(dataset, N):
     if dataset not in VALID_DATASETS:
         raise Exception(f"Invalid dataset name. Valid dataset names are: {', '.join(VALID_DATASETS.keys())}")
 
     if N not in VALID_DATASETS[dataset]:
-        raise Exception(f"Invalid N. Valid N values given dataset {dataset} are: {', '.join(VALID_DATASETS[data])}")
+        raise Exception(f"Invalid N. Valid N values given dataset {dataset} are: {', '.join(VALID_DATASETS[dataset])}")
     
     return f"{dataset}_base{N}"
 
