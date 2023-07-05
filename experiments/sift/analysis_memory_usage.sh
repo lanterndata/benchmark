@@ -1,10 +1,11 @@
 #!/bin/bash
 
-N=$1
+FOLDER=$1
+N=$2
 
 # Define log file paths
-MEM_LOG="memory/${N}_mem.log"
-TOP_LOG="memory/${N}_top.log"
+MEM_LOG="${FOLDER}/${N}_mem.log"
+TOP_LOG="${FOLDER}/${N}_top.log"
 
 # Remove log files if they exist
 [ -f "$MEM_LOG" ] && rm "$MEM_LOG"
