@@ -1,7 +1,7 @@
 import sys
 from .script_utils import get_table_name, execute_sql
 
-def create_index(dataset, N, lists=100, conn=None, cur=None):
+def create_index(dataset, N, lists=10, conn=None, cur=None):
     table = get_table_name(dataset, N)
     index = f"{table}_index"
     sql = f"CREATE INDEX IF NOT EXISTS {index} ON {table} USING ivfflat (v vector_l2_ops) WITH (lists = {lists})"
