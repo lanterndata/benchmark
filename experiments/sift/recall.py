@@ -6,12 +6,14 @@ from scripts.delete_index import delete_index
 from scripts.create_index import create_index
 from scripts.script_utils import print_labels, print_row, save_data, fetch_data, convert_string_to_number, convert_number_to_string
 
+DIR = 'outputs/recall'
+
 def get_file_name(dataset, N, max_queries=None):
     if max_queries is not None:
-        file_name = f"outputs/recall/{dataset}_{N}_{max_queries}.pickle"
+        file_name = f"{DIR}/{dataset}_{N}_{max_queries}.pickle"
     else:
-        file_names = os.listdir('outputs/recall')
-        file_names = [f for f in file_names if f.startswith(dataset + '_' + N) and f.endswith('.pickle')].sort_by(lambda f: int(f.split('_')[2]))
+        file_names = os.listdir(DIR)
+        file_names = [f"{DIR}/{f}" for f in file_names if f.startswith(dataset + '_' + N) and f.endswith('.pickle')]
         file_name = max(file_names, key=os.path.getctime)
     return file_name
 
@@ -23,7 +25,7 @@ def generate_data(dataset, N_values, K_values, max_queries = 100):
 
   for N in N_values:
       delete_index(dataset, N, conn=conn, cur=cur)
-      create_index(dataset, N, conn=conn, cur=cur)
+      create_index(dataset, N, conn=conn, cur=cur, lists=5)
   print("created indices")
 
   print(f"about to calculate recall for dataset={dataset}")
@@ -67,10 +69,9 @@ def generate_data(dataset, N_values, K_values, max_queries = 100):
               recall_at_k_sum += int(recall_query)
 
           # Calculate the average recall for this K
-          recall_at_k = recall_at_k_sum / len(query_ids)
+          recall_at_k = recall_at_k_sum / len(query_ids) / K
           print(f"recall @ {K}: {recall_at_k}")
           results.append((K, recall_at_k))
-              
 
       print(f"Completed all recall for {N}")
       save_data(get_file_name(dataset, N, max_queries), results)
@@ -79,7 +80,7 @@ def generate_data(dataset, N_values, K_values, max_queries = 100):
   conn.close()
 
 def get_N_values(dataset):
-    file_names = os.listdir(dir)
+    file_names = os.listdir(DIR)
     N_values = set()
     for file_name in file_names:
         if dataset in file_name:
@@ -104,6 +105,7 @@ def plot_data(dataset):
     for N, file_name in N_and_file_names:
         results = fetch_data(file_name)
         x_values, y_values = zip(*results)
+        key = f"N = {N}"
         plot_items.append((key, x_values, y_values))
     
     # Plot data
@@ -119,7 +121,12 @@ def plot_data(dataset):
     fig.update_layout(
         title=f"Recall vs. K for dataset {dataset}",
         xaxis_title='Number of similar vectors retrieved (K)',
-        yaxis_title='Recall'
+        yaxis_title='Recall (%)',
+        yaxis=dict(
+            range=[0, 1],  # Set y-axis range from 0 to 1
+            tickformat=".0%",  # Display ticks as percentages
+            hoverformat=".2%"  # Display hover labels as percentages with 2 decimal places
+        )
     )
     fig.show()
 
