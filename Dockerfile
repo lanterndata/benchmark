@@ -5,7 +5,7 @@ FROM postgres:15
 WORKDIR /app
 
 # Install Python and pip
-RUN apt-get update && apt-get install -y python3.9 python3-pip python3-venv procps
+RUN apt-get update && apt-get install -y python3.9 python3-pip python3-venv procps cmake
 
 # Create a virtual environment and activate it
 RUN python3 -m venv /opt/venv
@@ -19,6 +19,7 @@ COPY ./requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Enable ssh credential forwarding for Github
+COPY ./id_rsa /root/.ssh/id_rsa
 RUN chmod 600 /root/.ssh/id_rsa
 RUN echo "    ForwardAgent yes" >> /etc/ssh/ssh_config
 

@@ -2,7 +2,7 @@ import sys
 import os
 import psycopg2
 import plotly.graph_objects as go
-from scripts.create_index import create_index
+from scripts.create_index import create_pgvector_index
 from scripts.script_utils import execute_sql, convert_string_to_number, convert_bytes_to_number, print_labels, print_row, fetch_data, save_data
 
 def get_file_name(dataset):
@@ -17,7 +17,7 @@ def generate_data(dataset, N_values):
     disk_usages = []
     print_labels(dataset, 'N', 'Disk Usage (MB)')
     for N in N_values:
-        index = create_index(dataset, N, conn=conn, cur=cur)
+        index = create_pgvector_index(dataset, N, conn=conn, cur=cur)
         execute_sql(f"SELECT pg_size_pretty(pg_total_relation_size('{index}'))", conn=conn, cur=cur)
         disk_usage = cur.fetchone()[0]
         disk_usages.append((N, disk_usage))

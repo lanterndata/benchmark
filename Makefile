@@ -19,4 +19,4 @@ jupyter:
 	$(DOCKER_EXEC) jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 
 psql:
-	$(DOCKER_EXEC) PGPASSWORD=postgress psql -U postgres
+	$(DOCKER_EXEC) psql -U postgres

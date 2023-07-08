@@ -5,7 +5,7 @@ import psycopg2
 import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
-from scripts.create_index import create_index
+from scripts.create_index import create_pgvector_index
 from scripts.script_utils import get_table_name, green_shades, red_shades, save_data, fetch_data, convert_number_to_string, convert_string_to_number, extract_connection_params, run_command
 
 DIR = 'outputs/latency_select'
@@ -65,7 +65,7 @@ def generate_data(dataset, N_values, K_values, should_index_values=[False, True]
       for N in N_values:
           delete_index(dataset, N, conn=conn, cur=cur)
           if should_index:
-              create_index(dataset, N, conn=conn, cur=cur)
+              create_pgvector_index(dataset, N, conn=conn, cur=cur)
       print(f"Indices {'created' if should_index else 'deleted'}")
 
       for N in N_values:

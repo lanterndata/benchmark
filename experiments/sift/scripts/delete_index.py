@@ -1,4 +1,5 @@
 import sys
+import argparse
 from .script_utils import get_table_name, execute_sql
 
 def delete_index(dataset, N, conn=None, cur=None):
@@ -7,9 +8,12 @@ def delete_index(dataset, N, conn=None, cur=None):
     execute_sql(sql, conn=conn, cur=cur)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        raise Exception('Usage: python delete_index.py sift 10k')
+    parser = argparse.ArgumentParser(description="Delete index")
+    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Dataset name")
+    parser.add_argument("--N", type=str, required=True, help="Dataset size")
+    args = parser.parse_args()
 
-    dataset = sys.argv[1]
-    N = sys.argv[2]
+    dataset = args.dataset
+    N = args.N
+
     delete_index(dataset, N)

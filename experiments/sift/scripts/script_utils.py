@@ -6,7 +6,7 @@ import psycopg2
 
 VALID_DATASETS = {
     'sift': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
-    'gist': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
+    'gist': ['100k', '200k', '400k', '600k', '800k', '1m'],
 }
 
 def save_data(file_name, data):
