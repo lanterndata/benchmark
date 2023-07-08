@@ -77,7 +77,7 @@ def get_N_values(extension, dataset):
     N_values = set()
     for file_name in file_names:
         if extension in file_name and dataset in file_name:
-            N_values.add(file_name.split('_')[2])
+            N_values.add(file_name.split('_')[2].split('.')[0])
     return list(N_values)
 
 def print_data(extension, dataset):
@@ -91,19 +91,14 @@ def print_data(extension, dataset):
       print('\n\n')
 
 def plot_data(extension, dataset):
+    fig = go.Figure()
+
     N_values = get_N_values(extension, dataset)
-    N_and_file_names = [(N, get_file_name(extension, dataset, N)) for N in N_values]
-    
-    plot_items = []
-    for N, file_name in N_and_file_names:
+    for N in N_values:
+        file_name = get_file_name(extension, dataset, N)
         results = fetch_data(file_name)
         x_values, y_values = zip(*results)
         key = f"N = {N}"
-        plot_items.append((key, x_values, y_values))
-    
-    # Plot data
-    fig = go.Figure()
-    for (key, x_values, y_values) in plot_items:
         fig.add_trace(go.Scatter(
             x=x_values,
             y=y_values,
@@ -125,12 +120,10 @@ def plot_data(extension, dataset):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Recall experiment")
-    parser.add_argument('--extension', type=str, choices=['lantern', 'pgvector'], help='Extension type')
+    parser.add_argument('--extension', type=str, choices=['lantern', 'pgvector'], required=True, help='Extension type')
     parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
     parser.add_argument("--N", type=str, required=True, help="Dataset sizes")
     parser.add_argument("--K", nargs='+', required=True, type=int, help="K values")
-    extension_group = parser.add_argument_group('pgvector extension arguments')
-    extension_group.add_argument('--lists', type=int, help='Number of lists')
     args = parser.parse_args()
     
     extension = args.extension
