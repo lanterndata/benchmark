@@ -12,6 +12,7 @@ services:
       - ./data:/app/data
       - ./experiments:/app/experiments
       - ./requirements.txt:/app/requirements.txt
+      - ./id_rsa:/root/.ssh/id_rsa
     environment:
       - DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
       - POSTGRES_DB=postgres

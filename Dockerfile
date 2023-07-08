@@ -14,24 +14,27 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Install dependencies (both PostgreSQL server and client)
 RUN apt-get update && apt-get install -y git build-essential postgresql-server-dev-all
 
-# Clone and install pgvector
-RUN git clone https://github.com/pgvector/pgvector.git /pgvector
-RUN cd /pgvector && make && make install
-
 # Copy over the Python dependencies and install them
 COPY ./requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-# Copy over the rest of the code
-COPY ./data /app/data
-COPY ./experiments /app/experiments
-COPY ./db /app/db
+# Enable ssh credential forwarding for Github
+RUN chmod 600 /root/.ssh/id_rsa
+RUN echo "    ForwardAgent yes" >> /etc/ssh/ssh_config
 
-# Create the directory for pg_hba.conf
+# Create the directory for pg_hba.conf to enable access to DB
 RUN mkdir -p /etc/postgresql/15/main
 RUN echo "local all postgres md5" > /etc/postgresql/15/main/pg_hba.conf
 RUN echo "host all postgres 127.0.0.1/32 md5" >> /etc/postgresql/15/main/pg_hba.conf
 RUN echo "host all postgres ::1/128 md5" >> /etc/postgresql/15/main/pg_hba.conf
+
+# Clone and install pgvector
+RUN git clone https://github.com/pgvector/pgvector.git /pgvector
+RUN cd /pgvector && make && make install
+
+# Clone and install lantern
+RUN export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" && git clone --recursive git@github.com:Ngalstyan4/pgembedding.git /lantern
+RUN cd /lantern && mkdir build && cd build && cmake .. && make install
 
 # Expose ports
 EXPOSE 8888
