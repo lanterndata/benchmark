@@ -1,52 +1,50 @@
 import os
-import sys
+import argparse
 import subprocess
 import statistics
 import plotly.graph_objects as go
-from scripts.delete_index import delete_index
-from scripts.script_utils import print_labels, print_row, save_data, fetch_data, convert_string_to_number
+from scripts.delete_index import get_drop_index_query, delete_index
+from scripts.create_index import get_create_index_query
+from scripts.script_utils import print_labels, print_row, save_data, fetch_data, convert_string_to_number, get_color_from_extension
 
-def get_file_name(dataset):
-    file_name = f"outputs/latency_create/{dataset}.pickle"
+DIR = "outputs/latency_create"
+SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
+
+def get_file_name(dataset, extension):
+    file_name = f"{DIR}/{dataset}_{extension}.pickle"
     return file_name
 
-def generate_data(dataset, N_values, count=10):
-    port = os.environ.get('POSTGRES_PORT')
+def generate_data(dataset, extensions, N_values, count=10):
     user = os.environ.get('POSTGRES_USER')
-    password = "postgres"
-
-    suppress_command = "SET client_min_messages TO WARNING"
     
-    for N in N_values:
-        delete_index('sift', N)
-    
-    results = []
-    for N in N_values:
-        current_results = []
+    for extension in extensions:
+      results = []
+      for N in N_values:
+          delete_index(dataset, N)
 
-        for c in range(count):
-            print(f"Experiment - dataset: {dataset}, N: {N}, count: {c}")
+          current_results = []
+          for c in range(count):
+              print(f"dataset: {dataset}, N: {N}, count: {c}")
 
-            create_index_query = f"CREATE INDEX sift_base{N}_index ON sift_base10k USING ivfflat (v vector_l2_ops) WITH (lists = 10)"
-            result = subprocess.run(["psql", "-p", port, "-U", user, "-c", suppress_command, "-c", "\\timing", "-c", create_index_query], env={"PGPASSWORD": password}, capture_output=True, text=True)
+              create_index_query = get_create_index_query(extension, dataset, N)
+              result = subprocess.run(["psql", "-U", user, "-c", SUPPRESS_COMMAND, "-c", "\\timing", "-c", create_index_query], capture_output=True, text=True)
 
-            drop_index_query = f"DROP INDEX sift_base{N}_index"
-            with open(os.devnull, "w") as devnull:
-              subprocess.run(["psql", "-p", port, "-U", user, "-c", suppress_command, "-c", drop_index_query], env={"PGPASSWORD": password}, stdout=devnull)
+              drop_index_query = get_drop_index_query(dataset, N)
+              with open(os.devnull, "w") as devnull:
+                subprocess.run(["psql", "-U", user, "-c", SUPPRESS_COMMAND, "-c", drop_index_query], stdout=devnull)
 
-            lines = result.stdout.splitlines()
-            for line in lines:
-              if line.startswith("Time:"):
-                time = float(line.split(":")[1].strip().split(" ")[0])
-                current_results.append(time)
-                break
-            
-        results.append((N, current_results))
-    
-    save_data(get_file_name(dataset), results)
-
-    print('\n\n')
-    print_data(dataset)
+              lines = result.stdout.splitlines()
+              for line in lines:
+                if line.startswith("Time:"):
+                  time = float(line.split(":")[1].strip().split(" ")[0])
+                  current_results.append(time)
+                  break
+              
+          results.append((N, current_results))
+      
+      save_data(get_file_name(dataset, extension), results)
+      print('\n\n')
+      print_data(dataset, extensions=[extension])
 
 def format_mean(times):
     return "{:.2f}".format(statistics.mean(times))
@@ -54,22 +52,43 @@ def format_mean(times):
 def format_stdev(times):
     return "{:.2f}".format(statistics.stdev(times))
 
-def print_data(dataset):
-    data = fetch_data(get_file_name(dataset))
-    print_labels(dataset, 'N', 'Time (ms)', 'Std Dev (ms)')
-    for N, times in data:
-        print_row(N, format_mean(times), format_stdev(times))
-    print('\n\n')
+def get_dir_extensions(dataset):
+    file_names = os.listdir(DIR)
+    extensions = list(set([file_name.split('_')[1].split('.')[0] for file_name in file_names if file_name.startswith(dataset)]))
+    return extensions
 
-def plot_data(dataset):
-    data = fetch_data(get_file_name(dataset))
-    N_values, times = zip(*data)
-    x_values = list(map(convert_string_to_number, N_values))
-    y_values = list(map(format_mean, times))
-    y_stdev = list(map(format_stdev, times))
-    error_y = dict(type='data', array=y_stdev, visible=True)
+def print_data(dataset, extensions=[]):
+    if len(extensions) == 0:
+       extensions = get_dir_extensions(dataset)
+    
+    for extension in extensions:
+      data = fetch_data(get_file_name(dataset, extension))
+      print_labels(f"{dataset} - {extension}", 'N', 'Time (ms)', 'Std Dev (ms)')
+      for N, times in data:
+          print_row(N, format_mean(times), format_stdev(times))
+      print('\n\n')
 
-    fig = go.Figure(data=go.Scatter(x=x_values, y=y_values, error_y=error_y, mode='lines'))
+def plot_data(dataset, extensions=[]):
+    if len(extensions) == 0:
+       extensions = get_dir_extensions(dataset)
+
+    plot_items = []
+    for extension in extensions:
+      data = fetch_data(get_file_name(dataset, extension))
+      N_values, times = zip(*data)
+      x_values = list(map(convert_string_to_number, N_values))
+      y_values = list(map(format_mean, times))
+      plot_items.append((extension, x_values, y_values))
+
+    fig = go.Figure()
+    for (extension, x_values, y_values) in plot_items:
+        fig.add_trace(go.Scatter(
+            x=x_values,
+            y=y_values,
+            marker=dict(color=get_color_from_extension(extension)),
+            mode='lines+markers',
+            name=extension
+        ))
     fig.update_layout(
         title=f"Create Index Latency over Number of Rows for {dataset}",
         xaxis=dict(title='Number of rows'),
@@ -78,9 +97,14 @@ def plot_data(dataset):
     fig.show()
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        raise Exception('Usage: python latency_create.py sift 10k,100k,1m')
+    parser = argparse.ArgumentParser(description="Latency create experiment")
+    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
+    parser.add_argument('--extension', nargs='+', type=str, choices=['none', 'lantern', 'pgvector'], required=True, help='Extension type')
+    parser.add_argument("--N", type=str, required=True, help="Dataset sizes")
+    args = parser.parse_args()
     
-    dataset = sys.argv[1]
-    N_values = sys.argv[2].split(',')
-    generate_data(dataset, N_values)
+    extensions = args.extension
+    dataset = args.dataset
+    N_values = args.N
+
+    generate_data(dataset, extensions, N_values)

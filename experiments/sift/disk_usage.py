@@ -76,7 +76,7 @@ def plot_data(dataset):
     fig.show()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Latency select experiment")
+    parser = argparse.ArgumentParser(description="Disk usage experiment")
     parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
     parser.add_argument('--extension', nargs='+', type=str, choices=['none', 'lantern', 'pgvector'], required=True, help='Extension type')
     parser.add_argument("--N", nargs='+', type=str, required=True, help="Dataset sizes")

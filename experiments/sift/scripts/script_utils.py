@@ -38,6 +38,9 @@ def get_table_name(dataset, N):
     
     return f"{dataset}_base{N}"
 
+def get_index_name(dataset, N):
+    return get_table_name(dataset, N) + "_index"
+
 def execute_sql(sql, conn=None, cur=None):
     conn_provided = conn is not None
     cur_provided = cur is not None

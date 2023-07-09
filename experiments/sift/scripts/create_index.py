@@ -1,25 +1,37 @@
 import argparse
-from .script_utils import get_table_name, execute_sql
+from .script_utils import get_table_name, get_index_name, execute_sql
 
-def create_pgvector_index(dataset, N, lists=5, conn=None, cur=None):
+def get_create_pg_vector_index_query(dataset, N):
     table = get_table_name(dataset, N)
-    index = f"{table}_index"
+    index = get_index_name(dataset, N)
     sql = f"""
       CREATE INDEX IF NOT EXISTS {index} ON {table} USING
       ivfflat (v vector_l2_ops) WITH (lists = {lists})
     """
-    execute_sql(sql, conn=conn, cur=cur)
-    return index
+    return sql
 
-def create_lantern_index(dataset, N, conn=None, cur=None):
+def create_pgvector_index(dataset, N, conn=None, cur=None):
+    sql = get_create_pg_vector_index_query(dataset, N)
+    execute_sql(sql, conn=conn, cur=cur)
+
+def get_create_lantern_index_query(dataset, N):
     table = get_table_name(dataset, N)
-    index = f"{table}_index"
+    index = get_index_name(dataset, N)
     sql = f"""
       CREATE INDEX IF NOT EXISTS {index} ON {table} USING
       embedding (v vector_l2_ops)
     """
+    return sql
+
+def create_lantern_index(dataset, N, conn=None, cur=None):
+    sql = get_create_lantern_index_query(dataset, N)
     execute_sql(sql, conn=conn, cur=cur)
-    return index
+
+def get_create_index_query(extension, *args):
+    if extension == 'lantern':
+        return get_create_lantern_index_query(*args)
+    else:
+        return get_create_pg_vector_index_query(*args)
 
 def create_index(extension, *args, **kwargs):
     if extension == 'lantern':
@@ -32,8 +44,6 @@ if __name__ == '__main__':
     parser.add_argument('--extension', type=str, choices=['lantern', 'pgvector'], help='Extension type')
     parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Dataset name")
     parser.add_argument("--N", type=str, required=True, help="Dataset size")
-    extension_group = parser.add_argument_group('pgvector arguments')
-    extension_group.add_argument('--lists', type=int, help='Number of lists')
     args = parser.parse_args()
 
     extension = args.extension
@@ -44,5 +54,4 @@ if __name__ == '__main__':
     if extension == 'lantern':
         create_lantern_index(dataset, N)
     else:
-        lists = args.lists
-        create_pgvector_index(dataset, N, lists=lists)
+        create_pgvector_index(dataset, N)

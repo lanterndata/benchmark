@@ -1,10 +1,13 @@
-import sys
 import argparse
-from .script_utils import get_table_name, execute_sql
+from .script_utils import get_index_name, execute_sql
+
+def get_drop_index_query(dataset, N):
+    index_name = get_index_name(dataset, N)
+    sql = f"DROP INDEX IF EXISTS {index_name}"
+    return sql
 
 def delete_index(dataset, N, conn=None, cur=None):
-    table = get_table_name(dataset, N)
-    sql = f"DROP INDEX IF EXISTS {table}_index"
+    sql = get_drop_index_query(dataset, N)
     execute_sql(sql, conn=conn, cur=cur)
 
 if __name__ == '__main__':
