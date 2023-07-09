@@ -23,9 +23,9 @@ def create_lantern_index(dataset, N, conn=None, cur=None):
 
 def create_index(extension, *args, **kwargs):
     if extension == 'lantern':
-        create_lantern_index(*args, **kwargs)
+        return create_lantern_index(*args, **kwargs)
     else:
-        create_pgvector_index(*args, **kwargs)
+        return create_pgvector_index(*args, **kwargs)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Create index")

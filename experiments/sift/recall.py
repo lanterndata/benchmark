@@ -91,21 +91,23 @@ def print_data(extension, dataset):
       print('\n\n')
 
 def plot_data(extension, dataset):
-    fig = go.Figure()
-
+    plot_items = []
     N_values = get_N_values(extension, dataset)
     for N in N_values:
         file_name = get_file_name(extension, dataset, N)
         results = fetch_data(file_name)
         x_values, y_values = zip(*results)
         key = f"N = {N}"
+        plot_items.append((key, x_values, y_values))
+    
+    fig = go.Figure()
+    for key, x_values, y_values in plot_items:
         fig.add_trace(go.Scatter(
             x=x_values,
             y=y_values,
             mode='lines+markers',
             name=key
         ))
-
     fig.update_layout(
         title=f"Recall vs. K for extension {extension} and dataset {dataset}",
         xaxis_title='Number of similar vectors retrieved (K)',
@@ -120,9 +122,9 @@ def plot_data(extension, dataset):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Recall experiment")
-    parser.add_argument('--extension', type=str, choices=['lantern', 'pgvector'], required=True, help='Extension type')
     parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
-    parser.add_argument("--N", type=str, required=True, help="Dataset sizes")
+    parser.add_argument('--extension', type=str, choices=['lantern', 'pgvector'], required=True, help='Extension type')
+    parser.add_argument("--N", nargs='+', type=str, required=True, help="Dataset sizes")
     parser.add_argument("--K", nargs='+', required=True, type=int, help="K values")
     args = parser.parse_args()
     

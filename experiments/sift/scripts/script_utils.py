@@ -19,8 +19,8 @@ def fetch_data(file_name):
     with open(file_name, 'rb') as handle:
         return pickle.load(handle)
 
-def print_labels(dataset, *cols):
-    print_row(dataset)
+def print_labels(title, *cols):
+    print_row(title)
     print('-' * len(cols) * 10)
     print_row(*cols)
     print('-' * len(cols) * 10)
@@ -138,3 +138,11 @@ blue_shades = [
     'rgb(0,0,204)',
     'rgb(0,0,153)',
 ]
+
+def get_color_from_extension(extension):
+    if extension == 'lantern':
+        return green_shades[0]
+    elif extension == 'pgvector':
+        return blue_shades[0]
+    else:
+        return red_shades[0]
