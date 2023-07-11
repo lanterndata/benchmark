@@ -1,0 +1,26 @@
+The set of files contained in this directory is the groundtruth for the ANN_SIFT1B dataset, 
+which comprises
+- 1 billion vector for the database into which the search is performed
+- 10000 query vectors
+
+The learning set (100 million vectors) is not used to compute this groundtruth. 
+The groundtruth is provided with respect to the Euclidean distance. 
+
+The groundtruth has been performed assuming that the set of vectors is 
+- the billion-sized set for vectors
+- subsets of varying sizes: from n=1M to 500M vectors. In that case, the first 
+  n vectors are used as the database to be searched. 
+ 
+For each dataset size n, we provide
+1) the set of squared distances associated with the k nearest neighbors, 
+   in increasing order (the first one is the first nearest neighbors).
+   This file is called "dis_N.fvecs", with N the number of vectors in the subset. 
+   The format is .fvecs, see the matlab file to see its structure (functions are 
+   given in the yael library to read this kind of files)
+2) the corresponding of indexes of the k nearest neighbors, ordered based on 
+   their increasing distance. Note that the ideas starts from 0 in the dataset, 
+   therefore for a set of 1 millions vectors, ids range from 0 to 999999. 
+   The file is called "idx_N.ivecs", and is in the ivecs format (same as fvecs, 
+   but with integer instead of floating point numbers).
+ 
+
