@@ -1,6 +1,8 @@
 import sys
 import numpy as np
 import csv
+import time
+import datetime
 
 def vec_to_csv(input_file, output_file):
     # Read the dimension from the first 4 bytes of the file
@@ -22,6 +24,9 @@ def vec_to_csv(input_file, output_file):
     else:
         raise Exception("unknown file format %s in %s" % (filesuffix, input_file))
 
+    time_start = time.time()
+    vectors_written = 0
+
     with open(input_file, 'rb') as f:
         with open(output_file, 'w', newline='') as f_out:
             writer = csv.writer(f_out)            
@@ -35,6 +40,10 @@ def vec_to_csv(input_file, output_file):
                 if elem_type == np.int32:
                     row = row.replace('[', '{').replace(']', '}')
                 writer.writerow([row])
+
+                vectors_written += 1
+                if vectors_written % 100000 == 0 and vectors_written > 0:
+                    print(f"{vectors_written} vectors written. Time elapsed: {datetime.timedelta(seconds=time.time() - time_start)}")
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
