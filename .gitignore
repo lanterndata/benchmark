@@ -6,6 +6,7 @@ db/data
 *.tsv
 *.ivecs
 *.fvecs
+*.bvecs
 *.csv
 
 # Python
