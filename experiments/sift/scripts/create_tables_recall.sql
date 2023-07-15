@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS gist_truth1m (
   indices INTEGER[]
 );
 
-\COPY gist_truth1m (indices) FROM '/app/data/gist/gist_groundtruth.csv' WITH csv;
+\COPY gist_truth1m (indices) FROM '/app/data/gist/gist_truth.csv' WITH csv;
 
 CREATE TABLE IF NOT EXISTS sift_query1b (
   id SERIAL PRIMARY KEY,
