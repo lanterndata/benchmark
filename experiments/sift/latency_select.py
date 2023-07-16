@@ -12,8 +12,8 @@ from scripts.script_utils import (
 
 DIR = 'outputs/latency_select'
 
-def get_pgbench_file_name(extension, dataset, N, K):
-    return f"{DIR}/{dataset}_{extension}_{N}_K{K}.txt"
+def get_pgbench_file_name(extension, dataset, N, K, error=False):
+    return f"{DIR}/{dataset}_{extension}_{N}_K{K}{'_error' if error else ''}.txt"
 
 def generate_data(dataset, extensions, N_values, K_values):
     db_connection_string = os.environ.get('DATABASE_URL')
@@ -45,8 +45,9 @@ def generate_data(dataset, extensions, N_values, K_values):
                   tmp_file_path = tmp_file.name
 
               output_file = get_pgbench_file_name(extension, dataset, N, K)
+              error_file = get_pgbench_file_name(extension, dataset, N, K, error=True)
               host, port, user, password, database = extract_connection_params(db_connection_string)
-              command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 5 -j 5 -t 15 -r > {output_file} 2>/dev/null'
+              command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 5 -j 5 -t 15 -r > {output_file} 2>{error_file}'
               run_command(command)
 
               with open(output_file, "r") as file:
