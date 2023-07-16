@@ -35,7 +35,7 @@ RUN cd /pgvector && make && make install
 
 # Clone and install lantern
 RUN export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" && git clone --recursive git@github.com:lanterndata/lanterndb.git /lantern
-RUN cd /lantern && mkdir build && cd build && cmake .. && make install
+RUN cd /lantern && git checkout dev && mkdir build && cd build && cmake .. && make install
 
 # Expose ports
 EXPOSE 8888
