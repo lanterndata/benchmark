@@ -1,5 +1,5 @@
 pgbench (15.3 (Debian 15.3-1.pgdg120+1))
-transaction type: /tmp/tmp4h5uclvp
+transaction type: /tmp/tmpmaa568ij
 scaling factor: 1
 query mode: simple
 number of clients: 5
@@ -8,9 +8,9 @@ maximum number of tries: 1
 number of transactions per client: 15
 number of transactions actually processed: 75/75
 number of failed transactions: 0 (0.000%)
-latency average = 17.146 ms
-initial connection time = 8.240 ms
-tps = 291.614338 (without initial connection time)
+latency average = 56.193 ms
+initial connection time = 10.058 ms
+tps = 88.979477 (without initial connection time)
 statement latencies in milliseconds and failures:
-         0.004           0  \set id random(1, 10000)
-        15.953           0  SELECT *
+         0.254           0  \set id random(1, 10000)
+        51.296           0  SELECT *

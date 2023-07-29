@@ -1,0 +1,908 @@
+pgbench: pghost: localhost pgport: 5432 nclients: 5 nxacts: 15 dbName: postgres
+starting vacuum...pgbench: error: ERROR:  relation "pgbench_branches" does not exist
+pgbench: detail: (ignoring this error and continuing anyway)
+pgbench: error: ERROR:  relation "pgbench_tellers" does not exist
+pgbench: detail: (ignoring this error and continuing anyway)
+pgbench: error: ERROR:  relation "pgbench_history" does not exist
+pgbench: detail: (ignoring this error and continuing anyway)
+end.
+pgbench:pgbench:pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+ client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench:  client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9787
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9611
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9917
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2371
+                  )
+                  LIMIT 4;
+pgbench: pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 6989
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+client 2 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2366
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2748
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9310
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8271
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 4002
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8266
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 7979
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 7491
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2815
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8049
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2423
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2868
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9856
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 102
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 4323
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 6510
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 778
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 6292
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 1441
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 7036
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9636
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 4562
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 7227
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 4622
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 458
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2120
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2871
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 1417
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 3990
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 7039
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 3385
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 4498
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 280
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 3166
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9118
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 3620
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8889
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 5051
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2905
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8887
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9760
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 5439
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 3567
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 7041
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 6582
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8099
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 563
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2252
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 4694
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 4246
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8788
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 7581
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 3170
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8372
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 1815
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 1271
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 1792
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 6387
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 1879
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2190
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 2368
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 9051
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 3088
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 6638
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 5453
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 1943
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 217
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 6343
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 793
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpqpje1lp_"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base1m
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base1m
+                      WHERE id = 8967
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving

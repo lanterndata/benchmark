@@ -1,7 +1,7 @@
 import argparse
 from .script_utils import get_table_name, get_index_name, execute_sql
 
-def get_create_pg_vector_index_query(dataset, N):
+def get_create_pg_vector_index_query(dataset, N, lists=100):
     table = get_table_name(dataset, N)
     index = get_index_name(dataset, N)
     sql = f"""

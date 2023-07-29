@@ -1,0 +1,1605 @@
+pgbench: pghost: localhost pgport: 5432 nclients: 5 nxacts: 15 dbName: postgres
+starting vacuum...pgbench: error: ERROR:  relation "pgbench_branches" does not exist
+pgbench: detail: (ignoring this error and continuing anyway)
+pgbench: error: ERROR:  relation "pgbench_tellers" does not exist
+pgbench: detail: (ignoring this error and continuing anyway)
+pgbench: error: ERROR:  relation "pgbench_history" does not exist
+pgbench: detail: (ignoring this error and continuing anyway)
+end.
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: pgbench:pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6907
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9155
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6641
+                  )
+                  LIMIT 4;
+pgbench: pgbench: client 1 receiving
+client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench:  client 4 executing script "/tmp/tmpgokkg1dw"
+client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 7425
+                  )
+                  LIMIT 4;
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 5330
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 3 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  cost estimate
+pgbench: client 4 receiving
+pgbench: client 2 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2656
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 2 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8953
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9503
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 938
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6379
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2326
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9962
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6122
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 7081
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8326
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 667
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 687
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8945
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench:pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9613
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+ client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2206
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6949
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2320
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 1331
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 7720
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 4537
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 7228
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2673
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 1583
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+pgbench: INFO:  returning small cost to always use the index
+client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 7633
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 1778
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 4122
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench:pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 527
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+ client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 3444
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+pgbench: INFO:  returning small cost to always use the index
+client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 433
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 1070
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8374
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 5868
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+pgbench: client 4 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 1034
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6414
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8322
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 5989
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 908
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 501
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2372
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 5387
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+pgbench:INFO:  cost estimate
+ client 1 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 0 receiving
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6885
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8617
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6990
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 1875
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: pgbench: client 3 receiving
+client 1 receiving
+INFO:  returning small cost to always use the index
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 4157
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9167
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 3813
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 4784
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9611
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 3184
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: pgbench: client 0 receiving
+INFO:  usearch index initialized
+client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8047
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2374
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 3780
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9969
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 2 receiving
+pgbench:pgbench: client 4 receiving
+ client 0 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2791
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 3300
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 2 receiving
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 0 receiving
+INFO:  usearch index initialized
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8169
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6814
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6588
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8550
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+INFO:  cost estimate
+pgbench: client 2 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 2 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 receiving
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+pgbench: client 0 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 executing \set id
+pgbench: client 0 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 5391
+                  )
+                  LIMIT 4;
+pgbench: client 0 receiving
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 0 receiving
+INFO:  cost estimate
+pgbench: client 0 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 0 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 0 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6176
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 0 receiving
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2973
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 3 receiving
+pgbench: client 3 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 3 executing \set id
+pgbench: client 3 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 7777
+                  )
+                  LIMIT 4;
+pgbench: client 3 receiving
+pgbench: client 3 receiving
+INFO:  cost estimate
+pgbench: client 3 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 3 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 3 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench:pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 8855
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 2 receiving
+pgbench: client 2 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 0 receiving
+pgbench: client 1 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+INFO:  usearch index initialized
+ client 3 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 2 executing \set id
+pgbench: client 2 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6714
+                  )
+                  LIMIT 4;
+pgbench: client 2 receiving
+pgbench: client 2 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+pgbench: client 2 receiving
+INFO:  usearch index initialized
+INFO:  usearch index initialized
+pgbench: client 3 receiving
+pgbench: client 1 receiving
+pgbench: client 1 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 1 executing \set id
+pgbench: client 1 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 6513
+                  )
+                  LIMIT 4;
+pgbench: client 1 receiving
+pgbench: client 2 receiving
+pgbench: client 1 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 1 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 1 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 9943
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 1 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 1 receiving
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 3939
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+pgbench: client 4 receiving
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+pgbench: client 4 receiving
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
+pgbench: client 4 executing script "/tmp/tmpgokkg1dw"
+pgbench: client 4 executing \set id
+pgbench: client 4 sending SELECT *
+                  FROM sift_base400k
+                  ORDER BY v <-> (
+                      SELECT v
+                      FROM sift_base400k
+                      WHERE id = 2636
+                  )
+                  LIMIT 4;
+pgbench: client 4 receiving
+pgbench: client 4 receiving
+INFO:  cost estimate
+INFO:  returning small cost to always use the index
+pgbench: client 4 receiving
+INFO:  began scanning with 0 keys and 1 orderbys
+INFO:  starting scan with dimensions=128 M=16 efConstruction=128 ef=64
+pgbench: client 4 receiving
+INFO:  usearch index initialized
+pgbench: client 4 receiving
