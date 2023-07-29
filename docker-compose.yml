@@ -9,6 +9,7 @@ services:
     volumes:
       - ./db/data:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/scripts:/app/db/scripts
       - ./data:/app/data
       - ./experiments:/app/experiments
       - ./requirements.txt:/app/requirements.txt
