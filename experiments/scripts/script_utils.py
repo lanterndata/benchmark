@@ -23,18 +23,6 @@ def fetch_data(file_name):
     with open(file_name, 'rb') as handle:
         return pickle.load(handle)
 
-# Print
-
-def print_labels(title, *cols):
-    print_row(title)
-    print('-' * len(cols) * 10)
-    print_row(*cols)
-    print('-' * len(cols) * 10)
-
-def print_row(*cols):
-    row = ''.join([col.ljust(10) for col in cols])
-    print(row)
-
 # Get names
 
 def get_table_name(dataset, N):

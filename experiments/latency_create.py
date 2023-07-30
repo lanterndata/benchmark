@@ -5,9 +5,10 @@ import statistics
 import plotly.graph_objects as go
 from scripts.delete_index import get_drop_index_query, delete_index
 from scripts.create_index import get_create_index_query
-from scripts.script_utils import print_labels, print_row, save_data, fetch_data
+from scripts.script_utils import save_data, fetch_data
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number
+from utils.print import print_labels, print_row
 
 DIR = "outputs/latency_create"
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"

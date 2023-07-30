@@ -4,9 +4,10 @@ import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_index
 from scripts.delete_index import delete_index
-from scripts.script_utils import execute_sql, print_labels, print_row, fetch_data, save_data
+from scripts.script_utils import execute_sql, fetch_data, save_data
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number, convert_bytes_to_number
+from utils.print import print_labels, print_row
 
 DIR = 'outputs/disk'
 

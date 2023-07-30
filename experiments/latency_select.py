@@ -6,9 +6,10 @@ import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, extract_connection_params, run_command
+from scripts.script_utils import get_table_name, run_command
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_number_to_string, convert_string_to_number
+from utils.db import extract_connection_params
 
 DIR = 'outputs/latency_select'
 

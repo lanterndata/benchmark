@@ -4,7 +4,8 @@ import psycopg2
 import plotly.graph_objects as go
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import print_labels, print_row, save_data, fetch_data
+from scripts.script_utils import save_data, fetch_data
+from utils.print import print_labels, print_row
 
 DIR = 'outputs/recall'
 MAX_QUERIES = 50
