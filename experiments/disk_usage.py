@@ -4,10 +4,11 @@ import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_index
 from scripts.delete_index import delete_index
-from scripts.script_utils import execute_sql, fetch_data, save_data
+from scripts.script_utils import execute_sql
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number, convert_bytes_to_number
 from utils.print import print_labels, print_row
+from utils.pickle import save_pickle, fetch_pickle
 
 DIR = 'outputs/disk'
 
@@ -31,7 +32,7 @@ def generate_data(dataset, extensions, N_values):
           disk_usages.append((N, disk_usage))
           print_row(N, disk_usage)
       print('\n\n')
-      save_data(get_file_name(dataset, extension), disk_usages)
+      save_pickle(get_file_name(dataset, extension), disk_usages)
     
     cur.close()
     conn.close()
@@ -41,7 +42,7 @@ def print_data(dataset):
     for file_name in file_names:
       if not file_name.startswith(dataset):
           continue
-      data = fetch_data(DIR + '/' + file_name)
+      data = fetch_pickle(DIR + '/' + file_name)
       print_labels(file_name.replace('_', ' - '))
       print_labels('N', 'Disk Usage (MB)')
       for N, disk_usage in data:
@@ -55,7 +56,7 @@ def plot_data(dataset):
     for file_name in file_names:
       if not file_name.startswith(dataset):
           continue
-      data = fetch_data(DIR + '/' + file_name)
+      data = fetch_pickle(DIR + '/' + file_name)
       extension = file_name.split('_')[-1].split('.')[0]
       N_values, disk_usages = zip(*data)
       x_values = list(map(convert_string_to_number, N_values))

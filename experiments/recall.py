@@ -4,8 +4,8 @@ import psycopg2
 import plotly.graph_objects as go
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import save_data, fetch_data
 from utils.print import print_labels, print_row
+from utils.pickle import save_pickle, fetch_pickle
 
 DIR = 'outputs/recall'
 MAX_QUERIES = 50
@@ -68,7 +68,7 @@ def generate_data(extension, dataset, N_values, K_values):
           results.append((K, recall_at_k))
 
       print(f"Completed all recall for {N}")
-      save_data(get_file_name(extension, dataset, N), results)
+      save_pickle(get_file_name(extension, dataset, N), results)
 
   cur.close()
   conn.close()
@@ -84,7 +84,7 @@ def get_N_values(extension, dataset):
 def print_data(extension, dataset):
     N_values = get_N_values(extension, dataset)
     for N in N_values:
-      data = fetch_data(get_file_name(extension, dataset, N))
+      data = fetch_pickle(get_file_name(extension, dataset, N))
       print_labels(dataset, N)
       print_labels('K', 'Recall')
       for K, recall in data:
@@ -96,7 +96,7 @@ def plot_data(extension, dataset):
     N_values = get_N_values(extension, dataset)
     for N in N_values:
         file_name = get_file_name(extension, dataset, N)
-        results = fetch_data(file_name)
+        results = fetch_pickle(file_name)
         x_values, y_values = zip(*results)
         key = f"N = {N}"
         plot_items.append((key, x_values, y_values))

@@ -11,18 +11,6 @@ VALID_DATASETS = {
     'gist': ['100k', '200k', '400k', '600k', '800k', '1m'],
 }
 
-# Save / fetch pickled data
-
-def save_data(file_name, data):
-    with open(file_name, 'wb') as handle:
-        pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-def fetch_data(file_name):
-    if not os.path.exists(file_name):
-        raise FileNotFoundError(f"There is no experiment run for dataset")
-    with open(file_name, 'rb') as handle:
-        return pickle.load(handle)
-
 # Get names
 
 def get_table_name(dataset, N):

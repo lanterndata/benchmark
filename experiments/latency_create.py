@@ -5,10 +5,10 @@ import statistics
 import plotly.graph_objects as go
 from scripts.delete_index import get_drop_index_query, delete_index
 from scripts.create_index import get_create_index_query
-from scripts.script_utils import save_data, fetch_data
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number
 from utils.print import print_labels, print_row
+from utils.pickle import save_pickle, fetch_pickle
 
 DIR = "outputs/latency_create"
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
@@ -45,7 +45,7 @@ def generate_data(dataset, extensions, N_values, count=10):
               
           results.append((N, current_results))
       
-      save_data(get_file_name(dataset, extension), results)
+      save_pickle(get_file_name(dataset, extension), results)
       print('\n\n')
       print_data(dataset, extensions=[extension])
 
@@ -65,7 +65,7 @@ def print_data(dataset, extensions=[]):
        extensions = get_dir_extensions(dataset)
     
     for extension in extensions:
-      data = fetch_data(get_file_name(dataset, extension))
+      data = fetch_pickle(get_file_name(dataset, extension))
       print_labels(f"{dataset} - {extension}", 'N', 'Time (ms)', 'Std Dev (ms)')
       for N, times in data:
           print_row(N, format_mean(times), format_stdev(times))
@@ -77,7 +77,7 @@ def plot_data(dataset, extensions=[]):
 
     plot_items = []
     for extension in extensions:
-      data = fetch_data(get_file_name(dataset, extension))
+      data = fetch_pickle(get_file_name(dataset, extension))
       N_values, times = zip(*data)
       x_values = list(map(convert_string_to_number, N_values))
       y_values = list(map(format_mean, times))
