@@ -6,7 +6,7 @@ def get_create_pg_vector_index_query(dataset, N, lists=100):
     index = get_index_name(dataset, N)
     sql = f"""
       CREATE INDEX IF NOT EXISTS {index} ON {table} USING
-      ivfflat (v vector_l2_ops) WITH (lists = {lists})
+      ivfflat (v) WITH (lists = {lists})
     """
     return sql
 
@@ -19,7 +19,7 @@ def get_create_lantern_index_query(dataset, N):
     index = get_index_name(dataset, N)
     sql = f"""
       CREATE INDEX IF NOT EXISTS {index} ON {table} USING
-      embedding (v vector_l2_ops)
+      hnsw (v)
     """
     return sql
 
