@@ -4,10 +4,14 @@ import subprocess
 import os
 import psycopg2
 
+# Allowed parameters
+
 VALID_DATASETS = {
     'sift': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
     'gist': ['100k', '200k', '400k', '600k', '800k', '1m'],
 }
+
+# Save / fetch pickled data
 
 def save_data(file_name, data):
     with open(file_name, 'wb') as handle:
@@ -19,6 +23,8 @@ def fetch_data(file_name):
     with open(file_name, 'rb') as handle:
         return pickle.load(handle)
 
+# Print
+
 def print_labels(title, *cols):
     print_row(title)
     print('-' * len(cols) * 10)
@@ -28,6 +34,8 @@ def print_labels(title, *cols):
 def print_row(*cols):
     row = ''.join([col.ljust(10) for col in cols])
     print(row)
+
+# Get names
 
 def get_table_name(dataset, N):
     if dataset not in VALID_DATASETS:
@@ -40,6 +48,18 @@ def get_table_name(dataset, N):
 
 def get_index_name(dataset, N):
     return get_table_name(dataset, N) + "_index"
+
+# Database utils
+
+def extract_connection_params(db_url):
+    parsed_url = urlparse(db_url)
+    host = parsed_url.hostname
+    port = parsed_url.port
+    user = parsed_url.username
+    password = parsed_url.password
+    database = parsed_url.path.lstrip("/")
+
+    return host, port, user, password, database
 
 def execute_sql(sql, conn=None, cur=None):
     conn_provided = conn is not None
@@ -61,6 +81,7 @@ def execute_sql(sql, conn=None, cur=None):
     if not conn_provided:
         conn.close()
 
+# Number utils
 
 def convert_string_to_number(s):
     s = s.strip().lower()  # remove spaces and convert to lowercase
@@ -99,21 +120,15 @@ def convert_bytes_to_number(bytes):
         return float(bytes.replace(' MB', ''))
     else:
         return None
-  
-def extract_connection_params(db_url):
-    parsed_url = urlparse(db_url)
-    host = parsed_url.hostname
-    port = parsed_url.port
-    user = parsed_url.username
-    password = parsed_url.password
-    database = parsed_url.path.lstrip("/")
 
-    return host, port, user, password, database
+# Bash utils
 
 def run_command(command):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
     return output.decode(), error.decode()
+
+# Colors
 
 green_shades = [
     'rgb(153,255,153)', 
