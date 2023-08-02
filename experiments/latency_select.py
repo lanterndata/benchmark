@@ -6,122 +6,116 @@ import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, run_command, extract_connection_params
+from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, generate_missing_results as generate_missing_results_util, VALID_EXTENSIONS, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql
 from utils.colors import get_color_from_extension
-from utils.numbers import convert_number_to_string, convert_string_to_number
+from scripts.number_utils import convert_string_to_number
 
-DIR = 'outputs/latency_select'
-
-def get_pgbench_file_name(extension, dataset, N, K, error=False):
-    return f"{DIR}/{dataset}_{extension}_{N}_K{K}{'_error' if error else ''}.txt"
-
-def generate_data(dataset, extensions, N_values, K_values):
+def generate_result(extension, dataset, N, K_values):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
-    for extension in extensions:
-      for N in N_values:
-          delete_index(dataset, N, conn=conn, cur=cur)
-          if extension != 'none':
-              create_index(extension, dataset, N, conn=conn, cur=cur)
+    delete_index(dataset, N, conn=conn, cur=cur)
+    if extension != 'none':
+        create_index(extension, dataset, N, conn=conn, cur=cur)
 
-          for K in K_values:
-              table = get_table_name(dataset, N)
-              query = f"""
-                  \set id random(1, 10000)
-      
-                  SELECT *
-                  FROM {table}
-                  ORDER BY v <-> (
-                      SELECT v
-                      FROM {table}
-                      WHERE id = :id
-                  )
-                  LIMIT {K};
-              """
-              with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
-                  tmp_file.write(query)
-                  tmp_file_path = tmp_file.name
+    for K in K_values:
+        table = get_table_name(dataset, N)
+        query = f"""
+            \set id random(1, 10000)
 
-              output_file = get_pgbench_file_name(extension, dataset, N, K)
-              error_file = get_pgbench_file_name(extension, dataset, N, K, error=True)
-              host, port, user, password, database = extract_connection_params(db_connection_string)
-              command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 5 -j 5 -t 15 -r > {output_file} 2>{error_file}'
-              run_command(command)
+            SELECT *
+            FROM {table}
+            ORDER BY v <-> (
+                SELECT v
+                FROM {table}
+                WHERE id = :id
+            )
+            LIMIT {K};
+        """
+        with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
+            tmp_file.write(query)
+            tmp_file_path = tmp_file.name
 
-              with open(output_file, "r") as file:
-                  print(file.read())
-              print(f"Finished pgbench with dataset={dataset}, N={N}, extension={extension}, K={K}\n")
-          
-          if extension != 'none':
-              delete_index(dataset, N, conn=conn, cur=cur)
+        host, port, user, password, database = extract_connection_params(db_connection_string)
+        command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
+        stdout, stderr = run_command(command)
+
+        result = {
+            'database': extension,
+            'dataset': dataset,
+            'n': convert_string_to_number(N),
+            'k': K,
+            'out': stdout,
+            'err': stderr,
+            'conn': conn,
+            'cur': cur,
+        }
+
+        # Extract latency average using regular expression
+        latency_average = None
+        latency_average_match = re.search(r'latency average = (\d+\.\d+) ms', stdout)
+        if latency_average_match:
+            latency_average = float(latency_average_match.group(1))
+            save_result(
+                metric_type='select (latency ms)',
+                metric_value=latency_average,
+                **result
+            )
+
+        # Extract TPS (Transactions Per Second) using regular expression
+        tps = None
+        tps_match = re.search(r'tps = (\d+\.\d+)', stdout)
+        if tps_match:
+            tps = float(tps_match.group(1))
+            save_result(
+                metric_type='select (tps)',
+                metric_value=tps,
+                **result
+            )
+
+        print(stdout)
+        print(f"Finished pgbench with dataset={dataset}, N={N}, extension={extension}, K={K}\n")
+    
+    if extension != 'none':
+        delete_index(dataset, N, conn=conn, cur=cur)
 
     cur.close()
     conn.close()
 
-def parse_data(dataset):
-    N_values = set()
-    K_values = set()
-    extensions = set()
-
-    latency_values = {}
-    tps_values = {}
-
-    file_names = os.listdir(DIR)
-
-    for file_name in file_names:
-        if dataset not in file_name:
-            continue
-        key = file_name.split('.')[0]
-        parts = key.split('_')
-        if len(parts) != 4:
-            continue
-        extensions.add(parts[1])
-        N_values.add(convert_string_to_number(parts[2]))
-        K_values.add(int(parts[3][1:]))
-
-        # Read the file and extract the latency average value
-        with open(f"{DIR}/{file_name}", 'r') as file:
-            file_content = file.read()
-
-            # Extract latency average using regular expression
-            latency_average_match = re.search(r'latency average = (\d+\.\d+) ms', file_content)
-            if latency_average_match:
-                latency_values[key] = float(latency_average_match.group(1))
-
-            # Extract TPS (Transactions Per Second) using regular expression
-            tps_match = re.search(r'tps = (\d+\.\d+)', file_content)
-            if tps_match:
-                tps_values[key] = float(tps_match.group(1))
-    
-    extensions = list(filter(lambda e: e in extensions, ['lantern', 'pgvector', 'none']))
-    N_values = sorted(list(N_values))
-    K_values = sorted(list(K_values))
-
-    return extensions, N_values, K_values, latency_values, tps_values
+def generate_missing_results():
+    generate_missing_results_util('select (latency ms)', generate_result, with_k=True)
+    generate_missing_results_util('select (tps)', generate_result, with_k=True)
 
 full_strings = {
     'N': 'Number of rows (N)',
     'K': 'Number of similar vectors (K)'
 }
 
-def generate_plot(dataset, param_values, x, y, key_to_values_dict, fixed, fixed_value):
+def generate_plot(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     # Process data
     plot_items = []
-    for extension in param_values['extensions']:
+    for extension in VALID_EXTENSIONS:
         x_values = []
         y_values = []
-        for param_x in param_values[x]:
-            key_params = {}
-            key_params[x] = param_x
-            key_params[fixed] = fixed_value
-
-            pgbench_file_name = get_pgbench_file_name(extension, dataset, convert_number_to_string(key_params['N']), key_params['K'])
-            key = pgbench_file_name.split('.')[0].split('/')[-1]
-            if key in key_to_values_dict:
-                x_values.append(param_x)
-                y_values.append(key_to_values_dict[key])
+        for x_param in x_params:
+            sql = f"""
+                SELECT
+                    metric_value
+                FROM
+                    experiment_results
+                WHERE
+                    metric_type = %s
+                    AND database = %s
+                    AND dataset = %s
+                    AND {x} = %s
+                    AND {fixed} = %s
+            """
+            data = (metric_type, extension, dataset, x_param, fixed_value)
+            value = execute_sql(sql, data, select_one=True)
+            if value is not None:
+                x_values.append(x_param)
+                y_values.append(value)
         if len(x_values) > 0:
             color = get_color_from_extension(extension)
             plot_items.append((extension, x_values, y_values, color))
@@ -143,23 +137,18 @@ def generate_plot(dataset, param_values, x, y, key_to_values_dict, fixed, fixed_
     )
     fig.show()
 
-def plot_data(dataset):
-    extensions, N_values, K_values, latency_values, tps_values = parse_data(dataset)
-    param_values = {
-        'extensions': extensions,
-        'N': N_values,
-        'K': K_values
-    }
-    generate_plot(dataset, param_values, x='N', y='Latency (ms)', key_to_values_dict=latency_values, fixed='K', fixed_value=4)
-    generate_plot(dataset, param_values, x='K', y='Latency (ms)', key_to_values_dict=latency_values, fixed='N', fixed_value=100000)
-    generate_plot(dataset, param_values, x='N', y='Transactions / second', key_to_values_dict=tps_values, fixed='K', fixed_value=4)
-    generate_plot(dataset, param_values, x='K', y='Transactions / second', key_to_values_dict=tps_values, fixed='N', fixed_value=100000)
+def generate_plots(dataset):
+    N_values = list(map(convert_string_to_number, VALID_DATASETS[dataset]))
+    generate_plot(metric_type='select (latency ms)', dataset=dataset, x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
+    generate_plot(metric_type='select (latency ms)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
+    generate_plot(metric_type='select (tps)', dataset=dataset, x_params=N_values, x='N', y='transactions / second', fixed='K', fixed_value=5)
+    generate_plot(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='transactions / second', fixed='N', fixed_value=100000)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Latency select experiment")
-    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
-    parser.add_argument('--extension', nargs='+', type=str, choices=['none', 'lantern', 'pgvector'], required=True, help='Extension type')
-    parser.add_argument("--N", type=str, required=True, help="Dataset sizes")
+    parser = argparse.ArgumentParser(description="latency select experiment")
+    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="output file name (required)")
+    parser.add_argument('--extension', nargs='+', type=str, choices=['none', 'lantern', 'pgvector'], required=True, help='extension type')
+    parser.add_argument("--N", type=str, required=True, help="dataset sizes")
     parser.add_argument("--K", nargs='+', required=True, type=int, help="K values")
     args = parser.parse_args()
     
@@ -168,4 +157,6 @@ if __name__ == '__main__':
     N_values = args.N
     K_values = args.K
 
-    generate_data(dataset, extensions, N_values, K_values)
+    for extension in extensions:
+      for N in N_values:
+        generate_data(dataset, extensions, N_values, K_values)

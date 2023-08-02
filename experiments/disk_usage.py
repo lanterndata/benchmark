@@ -6,7 +6,7 @@ from scripts.create_index import create_index
 from scripts.delete_index import delete_index
 from scripts.script_utils import execute_sql
 from utils.colors import get_color_from_extension
-from utils.numbers import convert_string_to_number, convert_bytes_to_number
+from scripts.number_utils import convert_string_to_number, convert_bytes_to_number
 from utils.print import print_labels, print_row
 from utils.pickle import save_pickle, fetch_pickle
 

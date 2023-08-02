@@ -8,7 +8,6 @@ services:
       - 8888:8888
     volumes:
       - ./db/data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
       - ./db/scripts:/app/db/scripts
       - ./data:/app/data
       - ./experiments:/app/experiments
