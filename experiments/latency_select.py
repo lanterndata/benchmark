@@ -95,7 +95,7 @@ full_strings = {
 def generate_plot(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     # Process data
     plot_items = []
-    for extension in VALID_EXTENSIONS:
+    for extension in VALID_EXTENSIONS.keys():
         x_values = []
         y_values = []
         for x_param in x_params:
