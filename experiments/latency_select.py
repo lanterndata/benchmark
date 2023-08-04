@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, generate_missing_results as generate_missing_results_util, VALID_EXTENSIONS, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql
+from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_EXTENSIONS, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
 
@@ -83,10 +83,6 @@ def generate_result(extension, dataset, N, K_values):
     cur.close()
     conn.close()
 
-def generate_missing_results():
-    generate_missing_results_util('select (latency ms)', generate_result, with_k=True)
-    generate_missing_results_util('select (tps)', generate_result, with_k=True)
-
 full_strings = {
     'N': 'Number of rows (N)',
     'K': 'Number of similar vectors (K)'
@@ -95,7 +91,7 @@ full_strings = {
 def generate_plot(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     # Process data
     plot_items = []
-    for extension in VALID_EXTENSIONS.keys():
+    for extension in VALID_EXTENSIONS:
         x_values = []
         y_values = []
         for x_param in x_params:

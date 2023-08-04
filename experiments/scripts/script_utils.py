@@ -8,11 +8,7 @@ from .number_utils import convert_number_to_string
 
 # Allowed parameters
 
-VALID_EXTENSIONS = {
-    'none': None,
-    'pgvector': None,
-    'lantern': None,
-}
+VALID_EXTENSIONS = ['none', 'pgvector', 'lantern']
 
 VALID_DATASETS = {
     'sift': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
@@ -94,29 +90,35 @@ def run_command(command):
     output, error = process.communicate()
     return output.decode(), error.decode()
 
-# Results
+# Parameter sets
 
-def get_missing_parameter_sets(metric_type, with_k=False):
-    missing_parameter_sets = []
-
+def get_found_parameter_sets(metric_type, with_k=False):
     if with_k:
-        sql = 'SELECT database, version, dataset, n, k FROM experiment_results WHERE metric_type = %s'
+        sql = 'SELECT database, dataset, n, k FROM experiment_results WHERE metric_type = %s'
     else:
-        sql = 'SELECT database, version, dataset, n FROM experiment_results WHERE metric_type = %s'
+        sql = 'SELECT database, dataset, n FROM experiment_results WHERE metric_type = %s'
   
     found_parameter_sets = execute_sql(sql, data=(metric_type,), select=True)
     found_parameter_sets = {(database, dataset, convert_number_to_string(n), *rest) for (database, dataset, n, *rest) in found_parameter_sets}
+    return found_parameter_sets
+
+def get_extension_parameter_sets(extension, with_k=False):
+    valid_parameter_sets = []
+    for dataset in VALID_DATASETS.keys():
+        for N in VALID_DATASETS[dataset]:
+            if with_k:
+                for K in SUGGESTED_K_VALUES:
+                    valid_parameter_sets.append((extension, dataset, N, K))
+            else:
+                valid_parameter_sets.append((extension, dataset, N))
+    return valid_parameter_sets
+
+def get_missing_parameter_sets(metric_type, with_k=False):
+    found_parameter_sets = get_found_parameter_sets(metric_type, with_k=with_k)
 
     valid_parameter_sets = []
-
-    for extension, version in VALID_EXTENSIONS.items():
-        for dataset in VALID_DATASETS.keys():
-            for N in VALID_DATASETS[dataset]:
-                if with_k:
-                    for K in SUGGESTED_K_VALUES:
-                        valid_parameter_sets.append((extension, version, dataset, N, K))
-                else:
-                    valid_parameter_sets.append((extension, version, dataset, N))
+    for extension in VALID_EXTENSIONS:
+        valid_parameter_sets.extend(get_extension_parameter_sets(extension, with_k=with_k))
 
     missing_parameter_sets = [parameter_set for parameter_set in valid_parameter_sets if parameter_set not in found_parameter_sets]
     return missing_parameter_sets
@@ -131,7 +133,19 @@ def group_parameter_sets_with_k(parameter_sets):
         else:
             grouped_dict[key] = [K]
     return [(*key, values) for key, values in grouped_dict.items()]
-    
+
+# Results
+
+def generate_extension_results(extension, with_k=False):
+    parameter_sets = get_extension_parameter_sets(extension, with_k=with_k)
+    if with_k:
+        parameter_sets = group_parameter_sets_with_k(parameter_sets)
+    for parameter_set in parameter_sets:
+      print(parameter_set)
+    print()
+    for parameter_set in parameter_sets:
+        generate_result(*parameter_set)
+
 def generate_missing_results(metric_type, generate_result, with_k=False):
     parameter_sets = get_missing_parameter_sets(metric_type, with_k=with_k)
     if with_k:
@@ -146,7 +160,7 @@ def generate_missing_results(metric_type, generate_result, with_k=False):
     else:
         print('No missing parameter sets')
 
-COLUMNS = ['database', 'version', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
+COLUMNS = ['database', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
 
 def dump_results_to_csv():
     sql = f"SELECT {', '.join(COLUMNS[:-2])} FROM experiment_results"
@@ -161,7 +175,8 @@ def dump_results_to_csv():
 def save_result(metric_type, metric_value, database, dataset, n, k, out, err, conn=None, cur=None):
     columns = ', '.join(COLUMNS)
     placeholders = ', '.join(['%s'] * len(COLUMNS))
-    sql = f"INSERT INTO experiment_results ({columns}) VALUES ({placeholders})"
-    data = (metric_type, metric_value, database, dataset, n, k, out, err)
+    updates = ', '.join(map(lambda col: f"{col} = EXCLUDED.{col}", COLUMNS))
+    sql = f"INSERT INTO experiment_results ({columns}) VALUES ({placeholders}) ON CONFLICT ON CONSTRAINT unique_result DO UPDATE SET {updates}"
+    data = (database, dataset, n, k, metric_type, metric_value, out, err)
     execute_sql(sql, data, conn=conn, cur=cur)
     dump_results_to_csv()
