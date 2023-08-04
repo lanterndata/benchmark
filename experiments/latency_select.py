@@ -41,7 +41,7 @@ def generate_result(extension, dataset, N, K_values):
         command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
         stdout, stderr = run_command(command)
 
-        result = {
+        save_result_params = {
             'database': extension,
             'dataset': dataset,
             'n': convert_string_to_number(N),
@@ -60,7 +60,7 @@ def generate_result(extension, dataset, N, K_values):
             save_result(
                 metric_type='select (latency ms)',
                 metric_value=latency_average,
-                **result
+                **save_result_params
             )
 
         # Extract TPS (Transactions Per Second) using regular expression
@@ -71,7 +71,7 @@ def generate_result(extension, dataset, N, K_values):
             save_result(
                 metric_type='select (tps)',
                 metric_value=tps,
-                **result
+                **save_result_params
             )
 
         print(stdout)
@@ -88,7 +88,7 @@ full_strings = {
     'K': 'Number of similar vectors (K)'
 }
 
-def generate_plot(metric_type, dataset, x_params, x, y, fixed, fixed_value):
+def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     # Process data
     plot_items = []
     for extension in VALID_EXTENSIONS:
@@ -133,12 +133,12 @@ def generate_plot(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     )
     fig.show()
 
-def generate_plots(dataset):
+def plot_results(dataset):
     N_values = list(map(convert_string_to_number, VALID_DATASETS[dataset]))
-    generate_plot(metric_type='select (latency ms)', dataset=dataset, x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
-    generate_plot(metric_type='select (latency ms)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
-    generate_plot(metric_type='select (tps)', dataset=dataset, x_params=N_values, x='N', y='transactions / second', fixed='K', fixed_value=5)
-    generate_plot(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='transactions / second', fixed='N', fixed_value=100000)
+    plot_result(metric_type='select (latency ms)', dataset=dataset, x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
+    plot_result(metric_type='select (latency ms)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
+    plot_result(metric_type='select (tps)', dataset=dataset, x_params=N_values, x='N', y='transactions / second', fixed='K', fixed_value=5)
+    plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='transactions / second', fixed='N', fixed_value=100000)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="latency select experiment")

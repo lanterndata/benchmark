@@ -5,98 +5,101 @@ import plotly.graph_objects as go
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
 from utils.print import print_labels, print_row
-from utils.pickle import save_pickle, fetch_pickle
+from scripts.script_utils import execute_sql, save_result
+from scripts.number_utils import convert_string_to_number
 
-DIR = 'outputs/recall'
 MAX_QUERIES = 50
 
-def get_file_name(extension, dataset, N):
-    file_name = f"{DIR}/{extension}_{dataset}_{N}.pickle"
-    return file_name
-
-def generate_data(extension, dataset, N_values, K_values):
+def generate_result(extension, dataset, N, K_values):
   # Establish connection
   db_connection_string = os.environ.get('DATABASE_URL')
   conn = psycopg2.connect(db_connection_string)
   cur = conn.cursor()
 
-  print(f"about to calculate recall for extension={extension}, dataset={dataset}")
-  for N in N_values:
-      delete_index(dataset, N, conn=conn, cur=cur)
-      create_index(extension, dataset, N, conn=conn, cur=cur)
+  delete_index(dataset, N, conn=conn, cur=cur)
+  create_index(extension, dataset, N, conn=conn, cur=cur)
 
-      results = []
-      print(f"about to calculate recall for extension={extension}, dataset={dataset}, N={N}")
+  for K in K_values:
+      base_table_name = f"{dataset}_base{N}"
+      truth_table_name = f"{dataset}_truth{N}"
+      query_table_name = f"{dataset}_query{N}"
 
-      for K in K_values:
-          base_table_name = f"{dataset}_base{N}"
-          truth_table_name = f"{dataset}_truth{N}"
-          query_table_name = f"{dataset}_query{N}"
+      cur.execute(f"SELECT id FROM {query_table_name} LIMIT {MAX_QUERIES}")
+      query_ids = cur.fetchall()
 
-          cur.execute(f"SELECT id FROM {query_table_name} LIMIT {MAX_QUERIES}")
-          query_ids = cur.fetchall()
-
-          recall_at_k_sum = 0
-          for query_id, in query_ids:
-              cur.execute(f"""
-                  SELECT
-                      CARDINALITY(ARRAY(SELECT UNNEST(base_ids) INTERSECT SELECT UNNEST(truth_ids)))
+      recall_at_k_sum = 0
+      for query_id, in query_ids:
+          cur.execute(f"""
+              SELECT
+                  CARDINALITY(ARRAY(SELECT UNNEST(base_ids) INTERSECT SELECT UNNEST(truth_ids)))
+              FROM 
+              (
+                  SELECT 
+                      q.id AS query_id,
+                      (SELECT ARRAY_AGG(b.id ORDER BY q.v <-> b.v) FROM {base_table_name} b LIMIT {K}) AS base_ids,
+                      t.indices[1:{K}] AS truth_ids
                   FROM 
-                  (
-                      SELECT 
-                          q.id AS query_id,
-                          (SELECT ARRAY_AGG(b.id ORDER BY q.v <-> b.v) FROM {base_table_name} b LIMIT {K}) AS base_ids,
-                          t.indices[1:{K}] AS truth_ids
-                      FROM 
-                          {query_table_name} q
-                      JOIN 
-                          {truth_table_name} t
-                      ON 
-                          q.id = t.id
-                  ) subquery
-                  WHERE
-                      query_id = {query_id}
-              """)
-              recall_query = cur.fetchone()[0]
+                      {query_table_name} q
+                  JOIN 
+                      {truth_table_name} t
+                  ON 
+                      q.id = t.id
+              ) subquery
+              WHERE
+                  query_id = {query_id}
+          """)
+          recall_query = cur.fetchone()[0]
+          recall_at_k_sum += int(recall_query)
 
-              print(f"recall @ {K} for query_id {query_id}: {recall_query}")
-              recall_at_k_sum += int(recall_query)
-
-          # Calculate the average recall for this K
-          recall_at_k = recall_at_k_sum / len(query_ids) / K
-          print(f"recall @ {K}: {recall_at_k}")
-          results.append((K, recall_at_k))
-
-      print(f"Completed all recall for {N}")
-      save_pickle(get_file_name(extension, dataset, N), results)
+      # Calculate the average recall for this K
+      recall_at_k = recall_at_k_sum / len(query_ids) / K
+      print(f"dataset={dataset}, extension={extension}, N={N} | recall @ {K}: {recall_at_k}")
+      save_result(
+        metric_type='recall',
+        metric_value=recall_at_k,
+        database=extension,
+        dataset=dataset,
+        n=convert_string_to_number(N),
+        k=K,
+        conn=conn,
+        cur=cur,
+      )
 
   cur.close()
   conn.close()
 
-def get_N_values(extension, dataset):
-    file_names = os.listdir(DIR)
-    N_values = set()
-    for file_name in file_names:
-        if extension in file_name and dataset in file_name:
-            N_values.add(file_name.split('_')[2].split('.')[0])
-    return list(N_values)
+def get_k_recall(extension, dataset, N):
+    sql = """
+        SELECT
+            K,
+            recall
+        FROM
+            experiment_results
+        WHERE
+            metric_type = 'recall'
+            AND extension = %s
+            AND dataset = %s
+            AND N = %s
+        ORDER BY
+            K
+    """
+    data = (extension, dataset, N)
+    values = execute_sql(sql, data)
+    return values
 
-def print_data(extension, dataset):
-    N_values = get_N_values(extension, dataset)
+def print_results(extension, dataset):
     for N in N_values:
-      data = fetch_pickle(get_file_name(extension, dataset, N))
+      results = get_k_recall(extension, dataset, N)
       print_labels(dataset, N)
       print_labels('K', 'Recall')
-      for K, recall in data:
+      for K, recall in results:
           print_row(K, recall)
       print('\n\n')
 
-def plot_data(extension, dataset):
+def plot_results(extension, dataset):
     plot_items = []
-    N_values = get_N_values(extension, dataset)
     for N in N_values:
-        file_name = get_file_name(extension, dataset, N)
-        results = fetch_pickle(file_name)
+        results = get_k_recall(extension, dataset, N)
         x_values, y_values = zip(*results)
         key = f"N = {N}"
         plot_items.append((key, x_values, y_values))

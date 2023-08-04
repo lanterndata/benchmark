@@ -376,3 +376,10 @@ pgvector,gist,1000000,40,select (tps),40.217847
 pgvector,gist,1000000,80,select (latency ms),237.126
 pgvector,gist,1000000,80,select (tps),33.737319
 lantern,sift,10000,5,select (latency ms),6.198
+none,sift,10000,1,recall,1.0
+none,sift,10000,3,recall,1.0
+none,sift,10000,5,recall,1.0
+none,sift,10000,10,recall,1.0
+none,sift,10000,20,recall,1.0
+none,sift,10000,40,recall,0.9994999999999999
+none,sift,10000,80,recall,0.99975
