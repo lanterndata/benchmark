@@ -30,13 +30,13 @@ def create_lantern_index(dataset, N, conn=None, cur=None):
 def get_create_index_query(extension, *args):
     if extension == 'lantern':
         return get_create_lantern_index_query(*args)
-    else:
+    elif extension == 'pgvector':
         return get_create_pg_vector_index_query(*args)
 
 def create_index(extension, *args, **kwargs):
     if extension == 'lantern':
         return create_lantern_index(*args, **kwargs)
-    else:
+    elif extension == 'pgvector':
         return create_pgvector_index(*args, **kwargs)
 
 if __name__ == '__main__':

@@ -16,8 +16,7 @@ def generate_result(extension, dataset, N, K_values):
     cur = conn.cursor()
 
     delete_index(dataset, N, conn=conn, cur=cur)
-    if extension != 'none':
-        create_index(extension, dataset, N, conn=conn, cur=cur)
+    create_index(extension, dataset, N, conn=conn, cur=cur)
 
     for K in K_values:
         table = get_table_name(dataset, N)

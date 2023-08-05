@@ -7,6 +7,8 @@ def get_drop_index_query(dataset, N):
     return sql
 
 def delete_index(dataset, N, conn=None, cur=None):
+    if dataset == 'none':
+      return
     sql = get_drop_index_query(dataset, N)
     execute_sql(sql, conn=conn, cur=cur)
 

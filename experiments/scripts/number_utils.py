@@ -30,8 +30,8 @@ def convert_number_to_string(num):
 
 def convert_bytes_to_number(bytes):
     if 'kB' in bytes:
-        return float(bytes.replace(' kB', '')) / 1024
+        return float(bytes.replace(' kB', '')) * 1000
     elif 'MB' in bytes:
-        return float(bytes.replace(' MB', ''))
+        return float(bytes.replace(' MB', '')) * 1000 * 1000
     else:
         return None

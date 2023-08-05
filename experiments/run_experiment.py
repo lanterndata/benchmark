@@ -1,6 +1,7 @@
 from scripts.script_utils import execute_sql, convert_number_to_string, VALID_METRICS, METRICS_WITH_K, VALID_EXTENSIONS, VALID_DATASETS, VALID_QUERY_DATASETS, SUGGESTED_K_VALUES
 import recall_experiment
 import select_experiment
+import disk_usage_experiment
 
 # Parameter sets
 
@@ -31,6 +32,8 @@ def get_missing_parameter_sets(metric_type):
 
     valid_parameter_sets = []
     for extension in VALID_EXTENSIONS:
+        if metric_type == 'disk usage (bytes)' and extension == 'none':
+            continue
         valid_parameter_sets.extend(get_extension_parameter_sets(extension, metric_type))
 
     missing_parameter_sets = [parameter_set for parameter_set in valid_parameter_sets if parameter_set not in found_parameter_sets]
@@ -50,12 +53,14 @@ def group_parameter_sets_with_k(parameter_sets):
 # Generate results
 
 def get_generate_result(metric_type):
-  if metric_type == 'select (tps)':
-    return select_experiment.generate_result
-  if metric_type == 'select (latency ms)':
-    return select_experiment.generate_result
-  if metric_type == 'recall':
-    return recall_experiment.generate_result
+    if metric_type == 'select (tps)':
+        return select_experiment.generate_result
+    if metric_type == 'select (latency ms)':
+        return select_experiment.generate_result
+    if metric_type == 'recall':
+        return recall_experiment.generate_result
+    if metric_type == 'disk usage (bytes)':
+        return disk_usage_experiment.generate_result
 
 def generate_extension_results(extension, metric_type):
     assert extension in VALID_EXTENSIONS
