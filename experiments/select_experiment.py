@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_EXTENSIONS, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql
+from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql, VALID_EXTENSIONS_AND_NONE
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
 
@@ -90,7 +90,7 @@ full_strings = {
 def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     # Process data
     plot_items = []
-    for extension in VALID_EXTENSIONS:
+    for extension in VALID_EXTENSIONS_AND_NONE:
         x_values = []
         y_values = []
         for x_param in x_params:

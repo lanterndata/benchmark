@@ -20,13 +20,13 @@ def generate_result(extension, dataset, N):
     execute_sql(f"SELECT pg_size_pretty(pg_total_relation_size('{index}'))", conn=conn, cur=cur)
     disk_usage = cur.fetchone()[0]
     save_result(
-      metric_type='disk usage (bytes)',
-      metric_value=convert_bytes_to_number(disk_usage),
-      database=extension,
-      dataset=dataset,
-      n=convert_string_to_number(N),
-      conn=conn,
-      cur=cur,
+        metric_type='disk usage (bytes)',
+        metric_value=convert_bytes_to_number(disk_usage),
+        database=extension,
+        dataset=dataset,
+        n=convert_string_to_number(N),
+        conn=conn,
+        cur=cur,
     )
     print(f"dataset={dataset}, extension={extension}, N={N} | disk usage {disk_usage}")
     
@@ -64,7 +64,6 @@ def print_results(dataset):
 
 def plot_results(dataset):
     plot_items = []
-
     for extension in VALID_EXTENSIONS:
       results = get_n_disk_usage(extension, dataset)
       if len(results) == 0:

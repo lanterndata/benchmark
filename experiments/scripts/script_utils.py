@@ -8,11 +8,13 @@ from .number_utils import convert_number_to_string
 
 # Allowed parameters
 
-VALID_METRICS = ['select (latency ms)', 'select (tps)', 'recall', 'disk usage (bytes)']
-
 METRICS_WITH_K = ['select (latency ms)', 'select (tps)', 'recall']
 
-VALID_EXTENSIONS = ['none', 'pgvector', 'lantern']
+VALID_METRICS = METRICS_WITH_K + ['disk usage (bytes)', 'create (latency ms)']
+
+VALID_EXTENSIONS = ['pgvector', 'lantern']
+
+VALID_EXTENSIONS_AND_NONE = ['none'] + VALID_EXTENSIONS
 
 VALID_DATASETS = {
     'sift': ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],

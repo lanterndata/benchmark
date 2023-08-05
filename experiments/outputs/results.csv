@@ -1,336 +1,339 @@
 database,dataset,n,k,metric_type,metric_value
-pgvector,gist,100000,,disk usage (bytes),384000000.0
-pgvector,gist,200000,,disk usage (bytes),768000000.0
+pgvector,sift,10000,,create (latency ms),618.2623
+pgvector,sift,200000,,create (latency ms),7142.9451
+pgvector,sift,100000,,create (latency ms),2674.0112
 pgvector,gist,400000,,disk usage (bytes),1538000000.0
-pgvector,sift,100000,,disk usage (bytes),30000000.0
+pgvector,gist,200000,,disk usage (bytes),768000000.0
+pgvector,gist,100000,,disk usage (bytes),384000000.0
+pgvector,sift,1000000,,disk usage (bytes),294000000.0
 pgvector,sift,10000,,disk usage (bytes),3496000.0
+pgvector,sift,100000,,disk usage (bytes),30000000.0
+pgvector,sift,800000,,disk usage (bytes),236000000.0
+pgvector,sift,200000,,disk usage (bytes),60000000.0
 pgvector,sift,600000,,disk usage (bytes),177000000.0
 pgvector,sift,400000,,disk usage (bytes),119000000.0
-pgvector,sift,200000,,disk usage (bytes),60000000.0
-pgvector,sift,1000000,,disk usage (bytes),294000000.0
-pgvector,sift,800000,,disk usage (bytes),236000000.0
-none,gist,1000000,1,recall,1.0
+none,gist,1000000,80,recall,1.0
+none,gist,1000000,20,recall,1.0
 none,gist,1000000,10,recall,1.0
 none,gist,1000000,5,recall,1.0
-none,gist,1000000,80,recall,1.0
 none,gist,1000000,3,recall,1.0
+none,gist,1000000,1,recall,1.0
 none,gist,1000000,40,recall,1.0
-none,gist,1000000,20,recall,1.0
-none,sift,1000000,3,recall,1.0
-none,sift,1000000,1,recall,1.0
-none,sift,10000,80,recall,0.99975
-none,sift,10000,3,recall,1.0
-none,sift,10000,40,recall,0.9994999999999999
-none,sift,10000,20,recall,1.0
 none,sift,10000,10,recall,1.0
-none,sift,1000000,80,recall,1.0
-none,sift,1000000,40,recall,1.0
-none,sift,1000000,20,recall,1.0
+none,sift,10000,3,recall,1.0
+none,sift,10000,20,recall,1.0
 none,sift,10000,1,recall,1.0
-none,sift,1000000,10,recall,1.0
+none,sift,10000,40,recall,0.9994999999999999
+none,sift,1000000,40,recall,1.0
+none,sift,10000,80,recall,0.99975
+none,sift,1000000,20,recall,1.0
+none,sift,1000000,80,recall,1.0
 none,sift,1000000,5,recall,1.0
+none,sift,1000000,1,recall,1.0
+none,sift,1000000,10,recall,1.0
+none,sift,1000000,3,recall,1.0
 none,sift,10000,5,recall,1.0
 pgvector,sift,1000000,10,recall,1.0
-pgvector,sift,10000,80,recall,0.99975
-pgvector,sift,1000000,1,recall,1.0
-pgvector,sift,1000000,3,recall,1.0
-pgvector,sift,1000000,5,recall,1.0
-pgvector,sift,1000000,20,recall,1.0
-pgvector,sift,1000000,40,recall,1.0
 pgvector,sift,1000000,80,recall,1.0
-pgvector,sift,10000,1,recall,1.0
-pgvector,sift,10000,3,recall,1.0
-pgvector,sift,10000,5,recall,1.0
-pgvector,sift,10000,10,recall,1.0
-pgvector,sift,10000,20,recall,1.0
+pgvector,sift,1000000,40,recall,1.0
+pgvector,sift,1000000,20,recall,1.0
+pgvector,sift,1000000,5,recall,1.0
+pgvector,sift,1000000,3,recall,1.0
+pgvector,sift,1000000,1,recall,1.0
+pgvector,sift,10000,80,recall,0.99975
 pgvector,sift,10000,40,recall,0.9994999999999999
-lantern,sift,10000,10,select (latency ms),5.652
-lantern,sift,10000,1,select (latency ms),6.69
-lantern,sift,10000,40,select (latency ms),6.3
-lantern,sift,10000,5,select (latency ms),8.473
+pgvector,sift,10000,20,recall,1.0
+pgvector,sift,10000,10,recall,1.0
+pgvector,sift,10000,5,recall,1.0
+pgvector,sift,10000,3,recall,1.0
+pgvector,sift,10000,1,recall,1.0
 lantern,sift,10000,20,select (latency ms),5.814
+lantern,sift,10000,5,select (latency ms),8.473
 lantern,sift,10000,3,select (latency ms),5.645
 lantern,sift,10000,80,select (latency ms),7.58
-none,gist,600000,20,select (latency ms),21486.688
-none,gist,200000,10,select (latency ms),7221.872
-none,gist,600000,40,select (latency ms),22301.946
-none,gist,200000,5,select (latency ms),7024.381
-none,gist,600000,80,select (latency ms),21732.677
-none,gist,200000,3,select (latency ms),7257.969
-none,gist,800000,1,select (latency ms),31540.358
-none,gist,200000,1,select (latency ms),7115.754
-none,gist,800000,3,select (latency ms),29670.546
-none,gist,100000,80,select (latency ms),3440.576
-none,gist,800000,5,select (latency ms),29344.76
-none,gist,100000,40,select (latency ms),3570.821
-none,gist,800000,10,select (latency ms),29480.704
-none,gist,100000,20,select (latency ms),3449.977
-none,gist,800000,20,select (latency ms),28798.838
-none,gist,100000,10,select (latency ms),3489.208
-none,gist,800000,40,select (latency ms),29177.857
-none,gist,100000,5,select (latency ms),3595.744
-none,gist,800000,80,select (latency ms),29552.791
-none,gist,100000,3,select (latency ms),3579.409
-none,gist,1000000,1,select (latency ms),39646.112
-none,gist,100000,1,select (latency ms),3514.977
-none,gist,1000000,10,select (latency ms),37518.691
-none,gist,1000000,40,select (latency ms),38000.586
-none,gist,600000,1,select (latency ms),24706.542
-none,gist,400000,3,select (latency ms),15006.991
-none,gist,400000,80,select (latency ms),14805.653
-none,gist,400000,5,select (latency ms),14998.577
-none,gist,400000,40,select (latency ms),14748.91
-none,gist,400000,10,select (latency ms),15016.836
-none,gist,400000,20,select (latency ms),14484.004
-none,gist,400000,1,select (latency ms),14479.09
-none,gist,1000000,3,select (latency ms),36108.388
-none,gist,600000,3,select (latency ms),22795.909
-none,gist,1000000,5,select (latency ms),37642.886
-none,gist,200000,80,select (latency ms),8561.368
-none,gist,600000,5,select (latency ms),22108.15
-none,gist,200000,40,select (latency ms),7772.634
+lantern,sift,10000,10,select (latency ms),5.652
+lantern,sift,10000,40,select (latency ms),6.3
+lantern,sift,10000,1,select (latency ms),6.69
 none,gist,600000,10,select (latency ms),21732.325
-none,gist,1000000,20,select (latency ms),37033.53
-none,gist,200000,20,select (latency ms),7156.929
+none,gist,100000,1,select (latency ms),3514.977
+none,gist,100000,3,select (latency ms),3579.409
+none,gist,100000,5,select (latency ms),3595.744
+none,gist,100000,10,select (latency ms),3489.208
+none,gist,100000,20,select (latency ms),3449.977
+none,gist,100000,40,select (latency ms),3570.821
+none,gist,100000,80,select (latency ms),3440.576
+none,gist,200000,1,select (latency ms),7115.754
 none,gist,1000000,80,select (latency ms),38735.434
-none,sift,100000,10,select (latency ms),192.798
-none,sift,100000,20,select (latency ms),174.962
-none,sift,100000,40,select (latency ms),174.835
-none,sift,100000,80,select (latency ms),176.688
-none,sift,200000,1,select (latency ms),345.451
-none,sift,200000,3,select (latency ms),321.581
-none,sift,200000,5,select (latency ms),321.173
-none,sift,200000,10,select (latency ms),350.627
-none,sift,200000,20,select (latency ms),322.514
-none,sift,200000,40,select (latency ms),323.415
-none,sift,10000,1,select (latency ms),14.815
-none,sift,200000,80,select (latency ms),324.615
-none,sift,400000,1,select (latency ms),754.019
-none,sift,400000,3,select (latency ms),695.662
-none,sift,400000,5,select (latency ms),691.974
-none,sift,400000,10,select (latency ms),696.277
-none,sift,400000,20,select (latency ms),694.634
-none,sift,400000,40,select (latency ms),701.983
-none,sift,400000,80,select (latency ms),709.752
-none,sift,600000,1,select (latency ms),1204.419
-none,sift,600000,3,select (latency ms),1119.256
-none,sift,600000,5,select (latency ms),1071.684
-none,sift,600000,10,select (latency ms),1124.202
-none,sift,600000,20,select (latency ms),1060.273
-none,sift,600000,40,select (latency ms),1058.634
-none,sift,600000,80,select (latency ms),1065.55
-none,sift,800000,1,select (latency ms),1546.35
-none,sift,800000,3,select (latency ms),1430.278
-none,sift,800000,5,select (latency ms),1437.843
-none,sift,800000,10,select (latency ms),1435.135
-none,sift,800000,20,select (latency ms),1432.781
-none,sift,800000,40,select (latency ms),1438.293
-none,sift,800000,80,select (latency ms),1438.997
-none,sift,1000000,1,select (latency ms),1920.251
-none,sift,1000000,3,select (latency ms),1809.915
-none,sift,1000000,5,select (latency ms),1799.568
-none,sift,1000000,10,select (latency ms),1795.448
-none,sift,1000000,20,select (latency ms),1807.136
-none,sift,1000000,40,select (latency ms),1806.194
-none,sift,1000000,80,select (latency ms),1799.714
-none,sift,10000,3,select (latency ms),14.472
-none,sift,10000,5,select (latency ms),14.378
-none,sift,10000,10,select (latency ms),14.86
-none,sift,10000,20,select (latency ms),14.727
-none,sift,10000,40,select (latency ms),15.368
-none,sift,10000,80,select (latency ms),16.349
+none,gist,200000,3,select (latency ms),7257.969
+none,gist,1000000,40,select (latency ms),38000.586
+none,gist,200000,5,select (latency ms),7024.381
+none,gist,1000000,20,select (latency ms),37033.53
+none,gist,200000,10,select (latency ms),7221.872
+none,gist,1000000,10,select (latency ms),37518.691
+none,gist,200000,20,select (latency ms),7156.929
+none,gist,1000000,5,select (latency ms),37642.886
+none,gist,200000,40,select (latency ms),7772.634
+none,gist,1000000,3,select (latency ms),36108.388
+none,gist,200000,80,select (latency ms),8561.368
+none,gist,1000000,1,select (latency ms),39646.112
+none,gist,400000,1,select (latency ms),14479.09
+none,gist,800000,80,select (latency ms),29552.791
+none,gist,400000,3,select (latency ms),15006.991
+none,gist,800000,40,select (latency ms),29177.857
+none,gist,400000,5,select (latency ms),14998.577
+none,gist,800000,20,select (latency ms),28798.838
+none,gist,400000,10,select (latency ms),15016.836
+none,gist,800000,10,select (latency ms),29480.704
+none,gist,400000,20,select (latency ms),14484.004
+none,gist,800000,5,select (latency ms),29344.76
+none,gist,400000,40,select (latency ms),14748.91
+none,gist,800000,3,select (latency ms),29670.546
+none,gist,400000,80,select (latency ms),14805.653
+none,gist,800000,1,select (latency ms),31540.358
+none,gist,600000,1,select (latency ms),24706.542
+none,gist,600000,80,select (latency ms),21732.677
+none,gist,600000,3,select (latency ms),22795.909
+none,gist,600000,5,select (latency ms),22108.15
+none,gist,600000,40,select (latency ms),22301.946
+none,gist,600000,20,select (latency ms),21486.688
 none,sift,100000,1,select (latency ms),140.612
-none,sift,100000,3,select (latency ms),181.348
+none,sift,10000,20,select (latency ms),14.727
+none,sift,10000,1,select (latency ms),14.815
+none,sift,10000,5,select (latency ms),14.378
+none,sift,10000,80,select (latency ms),16.349
+none,sift,10000,10,select (latency ms),14.86
+none,sift,10000,40,select (latency ms),15.368
+none,sift,10000,3,select (latency ms),14.472
+none,sift,600000,1,select (latency ms),1204.419
+none,sift,400000,80,select (latency ms),709.752
+none,sift,600000,3,select (latency ms),1119.256
+none,sift,400000,40,select (latency ms),701.983
+none,sift,600000,5,select (latency ms),1071.684
+none,sift,400000,20,select (latency ms),694.634
+none,sift,600000,10,select (latency ms),1124.202
+none,sift,400000,10,select (latency ms),696.277
+none,sift,600000,20,select (latency ms),1060.273
+none,sift,400000,5,select (latency ms),691.974
+none,sift,600000,40,select (latency ms),1058.634
+none,sift,400000,3,select (latency ms),695.662
+none,sift,600000,80,select (latency ms),1065.55
+none,sift,400000,1,select (latency ms),754.019
+none,sift,800000,1,select (latency ms),1546.35
+none,sift,200000,80,select (latency ms),324.615
+none,sift,800000,3,select (latency ms),1430.278
+none,sift,200000,40,select (latency ms),323.415
+none,sift,800000,5,select (latency ms),1437.843
+none,sift,200000,20,select (latency ms),322.514
+none,sift,800000,10,select (latency ms),1435.135
+none,sift,200000,10,select (latency ms),350.627
+none,sift,800000,20,select (latency ms),1432.781
+none,sift,200000,5,select (latency ms),321.173
+none,sift,800000,40,select (latency ms),1438.293
+none,sift,200000,3,select (latency ms),321.581
+none,sift,800000,80,select (latency ms),1438.997
+none,sift,200000,1,select (latency ms),345.451
+none,sift,1000000,1,select (latency ms),1920.251
+none,sift,100000,80,select (latency ms),176.688
+none,sift,1000000,3,select (latency ms),1809.915
+none,sift,100000,40,select (latency ms),174.835
+none,sift,1000000,5,select (latency ms),1799.568
+none,sift,100000,20,select (latency ms),174.962
+none,sift,1000000,10,select (latency ms),1795.448
+none,sift,100000,10,select (latency ms),192.798
+none,sift,1000000,20,select (latency ms),1807.136
 none,sift,100000,5,select (latency ms),222.771
-pgvector,gist,200000,5,select (latency ms),47.741
-pgvector,gist,1000000,3,select (latency ms),195.496
-pgvector,gist,1000000,5,select (latency ms),184.045
-pgvector,gist,200000,3,select (latency ms),35.427
-pgvector,gist,1000000,10,select (latency ms),203.993
-pgvector,gist,200000,1,select (latency ms),37.536
-pgvector,gist,600000,1,select (latency ms),140.33
-pgvector,gist,100000,80,select (latency ms),49.933
-pgvector,gist,400000,80,select (latency ms),99.527
-pgvector,gist,800000,1,select (latency ms),357.364
-pgvector,gist,400000,5,select (latency ms),68.089
-pgvector,gist,800000,40,select (latency ms),168.347
-pgvector,gist,100000,40,select (latency ms),37.792
-pgvector,gist,600000,80,select (latency ms),139.267
-pgvector,gist,100000,20,select (latency ms),33.879
-pgvector,gist,800000,5,select (latency ms),118.581
-pgvector,gist,100000,10,select (latency ms),22.309
-pgvector,gist,800000,10,select (latency ms),183.876
-pgvector,gist,100000,5,select (latency ms),19.915
-pgvector,gist,800000,3,select (latency ms),128.38
-pgvector,gist,400000,3,select (latency ms),71.545
-pgvector,gist,600000,40,select (latency ms),164.618
-pgvector,gist,100000,3,select (latency ms),23.397
-pgvector,gist,800000,80,select (latency ms),198.046
+none,sift,1000000,40,select (latency ms),1806.194
+none,sift,100000,3,select (latency ms),181.348
+none,sift,1000000,80,select (latency ms),1799.714
+pgvector,gist,200000,80,select (latency ms),74.658
 pgvector,gist,100000,1,select (latency ms),22.132
-pgvector,gist,600000,20,select (latency ms),116.249
-pgvector,gist,1000000,20,select (latency ms),196.483
-pgvector,gist,600000,5,select (latency ms),110.723
-pgvector,gist,600000,10,select (latency ms),127.346
-pgvector,gist,800000,20,select (latency ms),151.771
-pgvector,gist,1000000,40,select (latency ms),198.917
+pgvector,gist,100000,3,select (latency ms),23.397
+pgvector,gist,100000,5,select (latency ms),19.915
+pgvector,gist,100000,10,select (latency ms),22.309
+pgvector,gist,100000,20,select (latency ms),33.879
+pgvector,gist,100000,40,select (latency ms),37.792
+pgvector,gist,100000,80,select (latency ms),49.933
+pgvector,gist,200000,1,select (latency ms),37.536
+pgvector,gist,200000,3,select (latency ms),35.427
+pgvector,gist,200000,5,select (latency ms),47.741
+pgvector,gist,200000,10,select (latency ms),35.979
+pgvector,gist,200000,20,select (latency ms),47.435
 pgvector,gist,200000,40,select (latency ms),55.444
 pgvector,gist,400000,1,select (latency ms),83.559
-pgvector,gist,400000,40,select (latency ms),74.293
-pgvector,gist,1000000,80,select (latency ms),237.126
-pgvector,gist,200000,80,select (latency ms),74.658
-pgvector,gist,200000,20,select (latency ms),47.435
-pgvector,gist,400000,20,select (latency ms),68.737
-pgvector,gist,200000,10,select (latency ms),35.979
-pgvector,gist,600000,3,select (latency ms),105.373
+pgvector,gist,400000,3,select (latency ms),71.545
+pgvector,gist,400000,5,select (latency ms),68.089
 pgvector,gist,400000,10,select (latency ms),74.139
+pgvector,gist,400000,20,select (latency ms),68.737
+pgvector,gist,400000,40,select (latency ms),74.293
+pgvector,gist,400000,80,select (latency ms),99.527
+pgvector,gist,600000,1,select (latency ms),140.33
+pgvector,gist,600000,3,select (latency ms),105.373
+pgvector,gist,600000,5,select (latency ms),110.723
+pgvector,gist,600000,10,select (latency ms),127.346
+pgvector,gist,600000,20,select (latency ms),116.249
+pgvector,gist,600000,40,select (latency ms),164.618
+pgvector,gist,600000,80,select (latency ms),139.267
+pgvector,gist,800000,1,select (latency ms),357.364
+pgvector,gist,800000,3,select (latency ms),128.38
+pgvector,gist,800000,5,select (latency ms),118.581
+pgvector,gist,800000,10,select (latency ms),183.876
+pgvector,gist,800000,20,select (latency ms),151.771
+pgvector,gist,800000,40,select (latency ms),168.347
+pgvector,gist,800000,80,select (latency ms),198.046
 pgvector,gist,1000000,1,select (latency ms),188.457
+pgvector,gist,1000000,3,select (latency ms),195.496
+pgvector,gist,1000000,5,select (latency ms),184.045
+pgvector,gist,1000000,10,select (latency ms),203.993
+pgvector,gist,1000000,20,select (latency ms),196.483
+pgvector,gist,1000000,40,select (latency ms),198.917
+pgvector,gist,1000000,80,select (latency ms),237.126
+pgvector,sift,600000,1,select (latency ms),59.029
+pgvector,sift,400000,80,select (latency ms),119.356
+pgvector,sift,400000,40,select (latency ms),105.469
+pgvector,sift,600000,10,select (latency ms),61.888
+pgvector,sift,400000,3,select (latency ms),99.171
+pgvector,sift,600000,5,select (latency ms),63.159
 pgvector,sift,400000,5,select (latency ms),100.028
+pgvector,sift,600000,3,select (latency ms),59.051
 pgvector,sift,400000,10,select (latency ms),99.856
 pgvector,sift,400000,20,select (latency ms),101.703
-pgvector,sift,400000,40,select (latency ms),105.469
-pgvector,sift,1000000,1,select (latency ms),107.618
-pgvector,sift,400000,80,select (latency ms),119.356
-pgvector,sift,600000,1,select (latency ms),59.029
-pgvector,sift,600000,3,select (latency ms),59.051
-pgvector,sift,800000,80,select (latency ms),91.334
-pgvector,sift,600000,5,select (latency ms),63.159
-pgvector,sift,600000,10,select (latency ms),61.888
-pgvector,sift,600000,20,select (latency ms),59.483
-pgvector,sift,600000,40,select (latency ms),66.16
-pgvector,sift,600000,80,select (latency ms),64.938
-pgvector,sift,800000,1,select (latency ms),90.28
-pgvector,sift,800000,40,select (latency ms),89.137
-pgvector,sift,800000,3,select (latency ms),94.976
-pgvector,sift,800000,5,select (latency ms),88.629
-pgvector,sift,800000,10,select (latency ms),87.964
-pgvector,sift,800000,20,select (latency ms),88.225
 pgvector,sift,10000,1,select (latency ms),3.093
 pgvector,sift,10000,3,select (latency ms),3.203
 pgvector,sift,10000,5,select (latency ms),2.778
 pgvector,sift,10000,10,select (latency ms),2.707
 pgvector,sift,10000,20,select (latency ms),3.262
-pgvector,sift,10000,40,select (latency ms),3.458
-pgvector,sift,10000,80,select (latency ms),4.181
-pgvector,sift,100000,1,select (latency ms),12.029
-pgvector,sift,100000,3,select (latency ms),11.975
-pgvector,sift,100000,5,select (latency ms),11.512
 pgvector,sift,1000000,80,select (latency ms),117.416
-pgvector,sift,100000,10,select (latency ms),11.575
-pgvector,sift,100000,20,select (latency ms),12.574
+pgvector,sift,10000,40,select (latency ms),3.458
 pgvector,sift,1000000,40,select (latency ms),116.398
-pgvector,sift,100000,40,select (latency ms),14.019
-pgvector,sift,100000,80,select (latency ms),13.807
+pgvector,sift,10000,80,select (latency ms),4.181
 pgvector,sift,1000000,20,select (latency ms),108.614
-pgvector,sift,200000,1,select (latency ms),21.246
-pgvector,sift,200000,10,select (latency ms),22.777
-pgvector,sift,200000,20,select (latency ms),24.616
-pgvector,sift,200000,40,select (latency ms),23.38
-pgvector,sift,200000,80,select (latency ms),33.513
-pgvector,sift,1000000,3,select (latency ms),117.975
-pgvector,sift,400000,1,select (latency ms),89.509
-pgvector,sift,400000,3,select (latency ms),99.171
-pgvector,sift,200000,3,select (latency ms),22.407
+pgvector,sift,100000,1,select (latency ms),12.029
 pgvector,sift,1000000,10,select (latency ms),113.543
-pgvector,sift,200000,5,select (latency ms),21.749
+pgvector,sift,100000,3,select (latency ms),11.975
 pgvector,sift,1000000,5,select (latency ms),106.95
+pgvector,sift,100000,5,select (latency ms),11.512
+pgvector,sift,1000000,3,select (latency ms),117.975
+pgvector,sift,100000,10,select (latency ms),11.575
+pgvector,sift,1000000,1,select (latency ms),107.618
+pgvector,sift,100000,20,select (latency ms),12.574
+pgvector,sift,800000,80,select (latency ms),91.334
+pgvector,sift,100000,40,select (latency ms),14.019
+pgvector,sift,800000,40,select (latency ms),89.137
+pgvector,sift,100000,80,select (latency ms),13.807
+pgvector,sift,800000,20,select (latency ms),88.225
+pgvector,sift,200000,1,select (latency ms),21.246
+pgvector,sift,800000,10,select (latency ms),87.964
+pgvector,sift,200000,3,select (latency ms),22.407
+pgvector,sift,800000,5,select (latency ms),88.629
+pgvector,sift,200000,5,select (latency ms),21.749
+pgvector,sift,800000,3,select (latency ms),94.976
+pgvector,sift,200000,10,select (latency ms),22.777
+pgvector,sift,800000,1,select (latency ms),90.28
+pgvector,sift,200000,20,select (latency ms),24.616
+pgvector,sift,600000,80,select (latency ms),64.938
+pgvector,sift,200000,40,select (latency ms),23.38
+pgvector,sift,600000,40,select (latency ms),66.16
+pgvector,sift,200000,80,select (latency ms),33.513
+pgvector,sift,600000,20,select (latency ms),59.483
+pgvector,sift,400000,1,select (latency ms),89.509
+lantern,sift,10000,40,select (tps),1269.76065
+lantern,sift,10000,20,select (tps),1375.988992
 lantern,sift,10000,80,select (tps),1055.371843
 lantern,sift,10000,1,select (tps),1195.850399
-lantern,sift,10000,20,select (tps),1375.988992
-lantern,sift,10000,3,select (tps),1417.066201
 lantern,sift,10000,10,select (tps),1415.545044
+lantern,sift,10000,3,select (tps),1417.066201
 lantern,sift,10000,5,select (tps),944.175617
-lantern,sift,10000,40,select (tps),1269.76065
-none,gist,200000,80,select (tps),0.93443
-none,gist,600000,5,select (tps),0.361857
-none,gist,200000,20,select (tps),1.117798
-none,gist,600000,10,select (tps),0.368115
-none,gist,200000,10,select (tps),1.107746
-none,gist,600000,20,select (tps),0.372324
-none,gist,200000,5,select (tps),1.13889
-none,gist,600000,40,select (tps),0.358713
-none,gist,200000,3,select (tps),1.102237
-none,gist,600000,80,select (tps),0.368109
-none,gist,200000,1,select (tps),1.124266
-none,gist,800000,1,select (tps),0.253643
-none,gist,100000,80,select (tps),2.325192
-none,gist,800000,3,select (tps),0.269628
-none,gist,100000,40,select (tps),2.240381
-none,gist,800000,5,select (tps),0.272621
-none,gist,100000,20,select (tps),2.318856
-none,gist,800000,10,select (tps),0.271364
 none,gist,100000,10,select (tps),2.292784
-none,gist,800000,20,select (tps),0.277789
 none,gist,100000,5,select (tps),2.224853
-none,gist,800000,40,select (tps),0.274181
 none,gist,100000,3,select (tps),2.235006
-none,gist,800000,80,select (tps),0.270702
 none,gist,100000,1,select (tps),2.275975
-none,gist,1000000,1,select (tps),0.201785
-none,gist,1000000,3,select (tps),0.221555
-none,gist,1000000,5,select (tps),0.212524
-none,gist,1000000,10,select (tps),0.213227
-none,gist,1000000,20,select (tps),0.21602
-none,gist,1000000,40,select (tps),0.210523
-none,gist,1000000,80,select (tps),0.206529
-none,gist,400000,10,select (tps),0.532735
-none,gist,400000,20,select (tps),0.552333
-none,gist,400000,5,select (tps),0.533384
-none,gist,400000,40,select (tps),0.542413
-none,gist,400000,3,select (tps),0.533085
-none,gist,400000,80,select (tps),0.540334
-none,gist,400000,1,select (tps),0.552521
+none,gist,600000,10,select (tps),0.368115
+none,gist,600000,20,select (tps),0.372324
+none,gist,600000,5,select (tps),0.361857
+none,gist,600000,40,select (tps),0.358713
 none,gist,600000,1,select (tps),0.323801
+none,gist,600000,80,select (tps),0.368109
+none,gist,400000,80,select (tps),0.540334
+none,gist,800000,1,select (tps),0.253643
+none,gist,400000,40,select (tps),0.542413
+none,gist,800000,3,select (tps),0.269628
+none,gist,400000,20,select (tps),0.552333
+none,gist,800000,5,select (tps),0.272621
+none,gist,400000,10,select (tps),0.532735
+none,gist,800000,10,select (tps),0.271364
+none,gist,400000,5,select (tps),0.533384
+none,gist,800000,20,select (tps),0.277789
+none,gist,400000,3,select (tps),0.533085
+none,gist,800000,40,select (tps),0.274181
+none,gist,400000,1,select (tps),0.552521
+none,gist,800000,80,select (tps),0.270702
+none,gist,200000,80,select (tps),0.93443
+none,gist,1000000,1,select (tps),0.201785
 none,gist,200000,40,select (tps),1.029252
+none,gist,1000000,3,select (tps),0.221555
+none,gist,200000,20,select (tps),1.117798
+none,gist,1000000,5,select (tps),0.212524
+none,gist,200000,10,select (tps),1.107746
+none,gist,1000000,10,select (tps),0.213227
+none,gist,200000,5,select (tps),1.13889
+none,gist,1000000,20,select (tps),0.21602
+none,gist,200000,3,select (tps),1.102237
+none,gist,1000000,40,select (tps),0.210523
+none,gist,200000,1,select (tps),1.124266
+none,gist,1000000,80,select (tps),0.206529
+none,gist,100000,80,select (tps),2.325192
+none,gist,100000,40,select (tps),2.240381
+none,gist,100000,20,select (tps),2.318856
 none,sift,200000,80,select (tps),24.644564
-none,sift,100000,10,select (tps),41.494307
-none,sift,400000,1,select (tps),10.609813
-none,sift,400000,3,select (tps),11.499842
-none,sift,400000,5,select (tps),11.561127
-none,sift,400000,10,select (tps),11.489683
-none,sift,400000,20,select (tps),11.516857
-none,sift,400000,40,select (tps),11.396287
-none,sift,400000,80,select (tps),11.271542
-none,sift,600000,1,select (tps),6.642206
-none,sift,600000,3,select (tps),7.147602
-none,sift,10000,1,select (tps),540.00297
-none,sift,600000,5,select (tps),7.464884
-none,sift,600000,10,select (tps),7.116158
-none,sift,600000,20,select (tps),7.545227
-none,sift,10000,3,select (tps),552.809424
 none,sift,600000,40,select (tps),7.556908
-none,sift,100000,5,select (tps),35.911349
-none,sift,600000,80,select (tps),7.507857
-none,sift,10000,5,select (tps),556.390141
-none,sift,800000,1,select (tps),5.173471
-none,sift,800000,3,select (tps),5.593317
-none,sift,800000,5,select (tps),5.563888
-none,sift,10000,10,select (tps),538.374915
-none,sift,800000,10,select (tps),5.574387
-none,sift,100000,3,select (tps),44.114014
-none,sift,800000,20,select (tps),5.583549
-none,sift,10000,20,select (tps),543.234691
-none,sift,800000,40,select (tps),5.562149
-none,sift,800000,80,select (tps),5.559427
-none,sift,1000000,1,select (tps),4.166123
-none,sift,10000,40,select (tps),520.555433
-none,sift,1000000,3,select (tps),4.420096
-none,sift,1000000,5,select (tps),4.445511
-none,sift,1000000,10,select (tps),4.455713
-none,sift,10000,80,select (tps),489.326564
-none,sift,1000000,20,select (tps),4.426893
-none,sift,1000000,40,select (tps),4.429203
-none,sift,1000000,80,select (tps),4.445151
-none,sift,100000,1,select (tps),56.894014
-none,sift,100000,40,select (tps),45.757463
-none,sift,100000,80,select (tps),45.277603
-none,sift,200000,1,select (tps),23.158106
-none,sift,200000,3,select (tps),24.877076
-none,sift,100000,20,select (tps),45.724267
-none,sift,200000,5,select (tps),24.908673
-none,sift,200000,10,select (tps),22.816295
-none,sift,200000,20,select (tps),24.805104
 none,sift,200000,40,select (tps),24.736
-pgvector,gist,1000000,10,select (tps),39.217006
+none,sift,800000,80,select (tps),5.559427
+none,sift,200000,20,select (tps),24.805104
+none,sift,600000,20,select (tps),7.545227
+none,sift,200000,10,select (tps),22.816295
+none,sift,800000,20,select (tps),5.583549
+none,sift,200000,5,select (tps),24.908673
+none,sift,600000,10,select (tps),7.116158
+none,sift,200000,3,select (tps),24.877076
+none,sift,1000000,1,select (tps),4.166123
+none,sift,200000,1,select (tps),23.158106
+none,sift,600000,5,select (tps),7.464884
+none,sift,100000,80,select (tps),45.277603
+none,sift,800000,10,select (tps),5.574387
+none,sift,100000,40,select (tps),45.757463
+none,sift,600000,3,select (tps),7.147602
+none,sift,100000,20,select (tps),45.724267
+none,sift,1000000,3,select (tps),4.420096
+none,sift,100000,10,select (tps),41.494307
+none,sift,600000,1,select (tps),6.642206
+none,sift,100000,5,select (tps),35.911349
+none,sift,800000,5,select (tps),5.563888
+none,sift,100000,3,select (tps),44.114014
+none,sift,1000000,40,select (tps),4.429203
+none,sift,100000,1,select (tps),56.894014
+none,sift,1000000,80,select (tps),4.445151
+none,sift,10000,80,select (tps),489.326564
+none,sift,400000,80,select (tps),11.271542
+none,sift,10000,40,select (tps),520.555433
+none,sift,1000000,5,select (tps),4.445511
+none,sift,10000,20,select (tps),543.234691
+none,sift,400000,40,select (tps),11.396287
+none,sift,10000,10,select (tps),538.374915
+none,sift,800000,3,select (tps),5.593317
+none,sift,10000,5,select (tps),556.390141
+none,sift,400000,20,select (tps),11.516857
+none,sift,10000,3,select (tps),552.809424
+none,sift,1000000,10,select (tps),4.455713
+none,sift,10000,1,select (tps),540.00297
+none,sift,400000,10,select (tps),11.489683
+none,sift,800000,1,select (tps),5.173471
+none,sift,400000,5,select (tps),11.561127
+none,sift,1000000,20,select (tps),4.426893
+none,sift,400000,3,select (tps),11.499842
+none,sift,600000,80,select (tps),7.507857
+none,sift,400000,1,select (tps),10.609813
+none,sift,800000,40,select (tps),5.562149
+pgvector,gist,200000,80,select (tps),107.154721
 pgvector,gist,100000,1,select (tps),361.462114
 pgvector,gist,100000,3,select (tps),341.926127
 pgvector,gist,100000,5,select (tps),401.715324
@@ -344,7 +347,6 @@ pgvector,gist,200000,5,select (tps),167.572021
 pgvector,gist,200000,10,select (tps),222.349456
 pgvector,gist,200000,20,select (tps),168.651839
 pgvector,gist,200000,40,select (tps),144.289734
-pgvector,gist,200000,80,select (tps),107.154721
 pgvector,gist,400000,1,select (tps),95.740352
 pgvector,gist,400000,3,select (tps),111.81732
 pgvector,gist,400000,5,select (tps),117.493626
@@ -369,55 +371,56 @@ pgvector,gist,800000,80,select (tps),40.394669
 pgvector,gist,1000000,1,select (tps),42.449972
 pgvector,gist,1000000,3,select (tps),40.921581
 pgvector,gist,1000000,5,select (tps),43.46774
+pgvector,gist,1000000,10,select (tps),39.217006
 pgvector,gist,1000000,20,select (tps),40.716087
 pgvector,gist,1000000,40,select (tps),40.217847
 pgvector,gist,1000000,80,select (tps),33.737319
-pgvector,sift,10000,3,select (tps),2497.398543
-pgvector,sift,1000000,20,select (tps),73.65533
-pgvector,sift,10000,1,select (tps),2586.095427
 pgvector,sift,1000000,10,select (tps),70.457888
-pgvector,sift,1000000,5,select (tps),74.801542
-pgvector,sift,1000000,3,select (tps),67.811168
-pgvector,sift,1000000,1,select (tps),74.336869
-pgvector,sift,800000,80,select (tps),87.590538
-pgvector,sift,800000,40,select (tps),89.749151
-pgvector,sift,800000,20,select (tps),90.676835
-pgvector,sift,800000,10,select (tps),90.946296
-pgvector,sift,800000,5,select (tps),90.263909
-pgvector,sift,800000,3,select (tps),84.231747
-pgvector,sift,800000,1,select (tps),88.613596
-pgvector,sift,600000,80,select (tps),123.194179
-pgvector,sift,600000,40,select (tps),120.919472
-pgvector,sift,600000,20,select (tps),134.492962
-pgvector,sift,600000,10,select (tps),129.266188
-pgvector,sift,600000,5,select (tps),126.663782
-pgvector,sift,600000,3,select (tps),135.475655
-pgvector,sift,600000,1,select (tps),135.526912
-pgvector,sift,400000,80,select (tps),67.026525
-pgvector,sift,400000,40,select (tps),75.85148
-pgvector,sift,400000,20,select (tps),78.660774
-pgvector,sift,400000,10,select (tps),80.115366
-pgvector,sift,400000,5,select (tps),79.9775
-pgvector,sift,400000,3,select (tps),80.668798
-pgvector,sift,400000,1,select (tps),89.37682
-pgvector,sift,200000,80,select (tps),238.711436
-pgvector,sift,200000,40,select (tps),342.173773
-pgvector,sift,200000,20,select (tps),324.987474
-pgvector,sift,200000,10,select (tps),351.230477
-pgvector,sift,200000,5,select (tps),367.829621
-pgvector,sift,200000,3,select (tps),357.023849
-pgvector,sift,200000,1,select (tps),376.548556
-pgvector,sift,100000,80,select (tps),579.399452
-pgvector,sift,100000,40,select (tps),570.651399
-pgvector,sift,100000,20,select (tps),636.216632
-pgvector,sift,100000,10,select (tps),691.132767
-pgvector,sift,100000,5,select (tps),694.95118
-pgvector,sift,100000,3,select (tps),668.058455
-pgvector,sift,100000,1,select (tps),665.066812
-pgvector,sift,10000,80,select (tps),1913.234802
-pgvector,sift,10000,40,select (tps),2313.253012
-pgvector,sift,10000,20,select (tps),2452.182442
 pgvector,sift,10000,10,select (tps),2955.519433
 pgvector,sift,1000000,80,select (tps),68.134086
-pgvector,sift,10000,5,select (tps),2879.562307
+pgvector,sift,10000,20,select (tps),2452.182442
 pgvector,sift,1000000,40,select (tps),68.729546
+pgvector,sift,10000,40,select (tps),2313.253012
+pgvector,sift,1000000,20,select (tps),73.65533
+pgvector,sift,10000,80,select (tps),1913.234802
+pgvector,sift,10000,3,select (tps),2497.398543
+pgvector,sift,10000,5,select (tps),2879.562307
+pgvector,sift,10000,1,select (tps),2586.095427
+pgvector,sift,400000,40,select (tps),75.85148
+pgvector,sift,400000,20,select (tps),78.660774
+pgvector,sift,400000,80,select (tps),67.026525
+pgvector,sift,400000,10,select (tps),80.115366
+pgvector,sift,600000,1,select (tps),135.526912
+pgvector,sift,400000,5,select (tps),79.9775
+pgvector,sift,600000,3,select (tps),135.475655
+pgvector,sift,400000,3,select (tps),80.668798
+pgvector,sift,600000,5,select (tps),126.663782
+pgvector,sift,400000,1,select (tps),89.37682
+pgvector,sift,600000,10,select (tps),129.266188
+pgvector,sift,200000,80,select (tps),238.711436
+pgvector,sift,600000,20,select (tps),134.492962
+pgvector,sift,200000,40,select (tps),342.173773
+pgvector,sift,600000,40,select (tps),120.919472
+pgvector,sift,200000,20,select (tps),324.987474
+pgvector,sift,600000,80,select (tps),123.194179
+pgvector,sift,200000,10,select (tps),351.230477
+pgvector,sift,800000,1,select (tps),88.613596
+pgvector,sift,200000,5,select (tps),367.829621
+pgvector,sift,800000,3,select (tps),84.231747
+pgvector,sift,200000,3,select (tps),357.023849
+pgvector,sift,800000,5,select (tps),90.263909
+pgvector,sift,200000,1,select (tps),376.548556
+pgvector,sift,800000,10,select (tps),90.946296
+pgvector,sift,100000,80,select (tps),579.399452
+pgvector,sift,800000,20,select (tps),90.676835
+pgvector,sift,100000,40,select (tps),570.651399
+pgvector,sift,800000,40,select (tps),89.749151
+pgvector,sift,100000,20,select (tps),636.216632
+pgvector,sift,800000,80,select (tps),87.590538
+pgvector,sift,100000,10,select (tps),691.132767
+pgvector,sift,1000000,1,select (tps),74.336869
+pgvector,sift,100000,5,select (tps),694.95118
+pgvector,sift,1000000,3,select (tps),67.811168
+pgvector,sift,100000,3,select (tps),668.058455
+pgvector,sift,1000000,5,select (tps),74.801542
+pgvector,sift,100000,1,select (tps),665.066812
