@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
 from utils.print import print_labels, print_row
-from scripts.script_utils import execute_sql, save_result
+from scripts.script_utils import execute_sql, save_result, VALID_QUERY_DATASETS
 from scripts.number_utils import convert_string_to_number
 
 MAX_QUERIES = 50
@@ -71,22 +71,23 @@ def get_k_recall(extension, dataset, N):
     sql = """
         SELECT
             K,
-            recall
+            metric_value
         FROM
             experiment_results
         WHERE
             metric_type = 'recall'
-            AND extension = %s
+            AND database = %s
             AND dataset = %s
             AND N = %s
         ORDER BY
             K
     """
-    data = (extension, dataset, N)
-    values = execute_sql(sql, data)
+    data = (extension, dataset, convert_string_to_number(N))
+    values = execute_sql(sql, data=data, select=True)
     return values
 
 def print_results(extension, dataset):
+    N_values = VALID_QUERY_DATASETS[dataset]
     for N in N_values:
       results = get_k_recall(extension, dataset, N)
       print_labels(dataset, N)
@@ -97,11 +98,18 @@ def print_results(extension, dataset):
 
 def plot_results(extension, dataset):
     plot_items = []
+
+    N_values = VALID_QUERY_DATASETS[dataset]
     for N in N_values:
         results = get_k_recall(extension, dataset, N)
+        if len(results) == 0:
+          continue
         x_values, y_values = zip(*results)
         key = f"N = {N}"
         plot_items.append((key, x_values, y_values))
+    
+    if len(plot_items) == 0:
+      return
     
     fig = go.Figure()
     for key, x_values, y_values in plot_items:
