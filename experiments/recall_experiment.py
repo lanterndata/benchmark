@@ -11,7 +11,6 @@ from scripts.number_utils import convert_string_to_number
 MAX_QUERIES = 50
 
 def generate_result(extension, dataset, N, K_values):
-  # Establish connection
   db_connection_string = os.environ.get('DATABASE_URL')
   conn = psycopg2.connect(db_connection_string)
   cur = conn.cursor()

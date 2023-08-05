@@ -185,7 +185,7 @@ lantern,sift,10000,1,select (tps),1195.850399
 lantern,sift,10000,3,select (latency ms),5.645
 lantern,sift,10000,3,select (tps),1417.066201
 lantern,sift,10000,10,select (latency ms),5.652
-lantern,sift,10000,5,select (tps),1290.766715
+lantern,sift,10000,5,select (tps),944.175617
 lantern,sift,10000,10,select (tps),1415.545044
 lantern,sift,10000,20,select (latency ms),5.814
 lantern,sift,10000,20,select (tps),1375.988992
@@ -375,7 +375,6 @@ pgvector,gist,1000000,40,select (latency ms),198.917
 pgvector,gist,1000000,40,select (tps),40.217847
 pgvector,gist,1000000,80,select (latency ms),237.126
 pgvector,gist,1000000,80,select (tps),33.737319
-lantern,sift,10000,5,select (latency ms),6.198
 none,sift,10000,1,recall,1.0
 none,sift,10000,3,recall,1.0
 none,sift,10000,5,recall,1.0
@@ -383,3 +382,12 @@ none,sift,10000,10,recall,1.0
 none,sift,10000,20,recall,1.0
 none,sift,10000,40,recall,0.9994999999999999
 none,sift,10000,80,recall,0.99975
+lantern,sift,10000,5,select (latency ms),8.473
+none,sift,1000000,1,recall,1.0
+none,sift,1000000,3,recall,1.0
+none,sift,1000000,5,recall,1.0
+none,sift,1000000,10,recall,1.0
+none,sift,1000000,20,recall,1.0
+none,sift,1000000,40,recall,1.0
+none,sift,1000000,80,recall,1.0
+none,gist,1000000,1,recall,1.0
