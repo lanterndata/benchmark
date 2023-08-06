@@ -1,4 +1,3 @@
-import pickle
 from urllib.parse import urlparse
 import subprocess
 import os

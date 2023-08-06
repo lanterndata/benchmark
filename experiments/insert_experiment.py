@@ -1,14 +1,9 @@
 import os
-import re
 import argparse
 import psycopg2
 import plotly.graph_objects as go
-from tempfile import NamedTemporaryFile
-from scripts.delete_index import delete_index
-from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql, VALID_EXTENSIONS_AND_NONE
+from scripts.script_utils import get_table_name, save_result, VALID_DATASETS, execute_sql, VALID_EXTENSIONS_AND_NONE
 from utils.colors import get_color_from_extension
-from scripts.number_utils import convert_string_to_number
 import time
 
 N_INTERVAL = 1000
@@ -28,7 +23,7 @@ def create_dest_table(dataset):
         v VECTOR(128)
       )
     """
-    execute_sql(dataset)
+    execute_sql(sql)
     return table_name
 
 def create_dest_index(extension, dataset):
@@ -38,7 +33,7 @@ def create_dest_index(extension, dataset):
     if extension == 'pgvector':
         sql = f"""
             CREATE INDEX IF NOT EXISTS {index} ON {table} USING
-            ivfflat (v) WITH (lists = {lists})
+            ivfflat (v) WITH (lists = 100)
         """
     elif extension == 'lantern':
         sql = f"""
@@ -51,6 +46,7 @@ def create_dest_index(extension, dataset):
 def delete_dest_table(dataset):
     table_name = get_dest_table_name(dataset)
     sql = f"DROP TABLE IF EXISTS {table_name}"
+    execute_sql(sql)
 
 def generate_result(extension, dataset, bulk=False):
     db_connection_string = os.environ.get('DATABASE_URL')
@@ -58,10 +54,8 @@ def generate_result(extension, dataset, bulk=False):
     cur = conn.cursor()
 
     source_table = get_table_name(dataset, '1m')
-    dest_table = dataset + 
-
     delete_dest_table(dataset)
-    create_dest_table(dataset)
+    dest_table = create_dest_table(dataset)
     create_dest_index(extension, dataset)
 
     result_params = {
@@ -73,7 +67,7 @@ def generate_result(extension, dataset, bulk=False):
         for N in range(N_INTERVAL, N_MAX, N_INTERVAL):
             query = f"""
                 INSERT INTO
-                    {new_table}
+                    {dest_table}
                 SELECT *
                 FROM
                     {source_table}
@@ -82,7 +76,7 @@ def generate_result(extension, dataset, bulk=False):
                     AND id >= {N - N_INTERVAL}
             """
             t1 = time.time()
-            execute_sql(sql)
+            execute_sql(query)
             t2 = time.time()
             insert_latency = t2 - t1
             save_result(
@@ -96,14 +90,14 @@ def generate_result(extension, dataset, bulk=False):
         for N in range(N_MAX):
             query = f"""
                 INSERT INTO
-                    {new_table}
+                    {dest_table}
                 SELECT *
                 FROM
                     {source_table}
                 WHERE
                     id = {N}
             """ 
-            execute_sql(sql)
+            execute_sql(query)
             if N % N_INTERVAL == 0 and N > 0:
                 t2 = time.time()
                 insert_latency = t2 - t1
