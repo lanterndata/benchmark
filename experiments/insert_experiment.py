@@ -9,6 +9,7 @@ from utils.print import print_labels, print_row
 import time
 
 N_INTERVAL = 1000
+N_MIN = 1000
 N_MAX = 40000
 
 def get_dest_table_name(dataset):
@@ -62,6 +63,18 @@ def generate_result(extension, dataset, bulk=False):
     source_table = get_table_name(dataset, '1m')
     delete_dest_table(dataset)
     dest_table = create_dest_table(dataset)
+
+    if N_MIN > 0:
+        query = f"""
+            INSERT INTO
+                {dest_table}
+            SELECT *
+            FROM
+                {source_table}
+            WHERE
+                id < {N_MIN}
+        """
+        execute_sql(query)
     create_dest_index(extension, dataset)
 
     result_params = {
@@ -73,7 +86,7 @@ def generate_result(extension, dataset, bulk=False):
     }
 
     if bulk:
-        for N in range(N_INTERVAL, N_MAX, N_INTERVAL):
+        for N in range(N_MIN + N_INTERVAL, N_MAX + 1, N_INTERVAL):
             query = f"""
                 INSERT INTO
                     {dest_table}
@@ -96,7 +109,7 @@ def generate_result(extension, dataset, bulk=False):
             print(f"extension: {extension}, dataset: {dataset}, latency for bulk insert {N - N_INTERVAL} - {N}: {insert_latency}")
     else:
         t1 = time.time()
-        for N in range(N_MAX):
+        for N in range(N_MIN, N_MAX):
             query = f"""
                 INSERT INTO
                     {dest_table}
@@ -107,15 +120,15 @@ def generate_result(extension, dataset, bulk=False):
                     id = {N}
             """ 
             execute_sql(query)
-            if N % N_INTERVAL == 0 and N > 0:
+            if (N + 1) % N_INTERVAL == 0:
                 t2 = time.time()
                 insert_latency = t2 - t1
                 save_result(
                     metric_value=insert_latency,
-                    n=N,
+                    n=N + 1,
                     **result_params
                 )
-                print(f"extension: {extension}, dataset: {dataset}, latency for inserts {N - N_INTERVAL} - {N}: {insert_latency}")
+                print(f"extension: {extension}, dataset: {dataset}, latency for inserts {N + 1 - N_INTERVAL} - {N}: {insert_latency}")
                 t1 = time.time()
     
     delete_dest_table(dataset)
@@ -176,7 +189,7 @@ def plot_results(dataset, bulk=False):
             name=key
         ))
     fig.update_layout(
-        title=metric_type,
+        title=f"{dataset} - {metric_type}",
         xaxis_title=f"latency of inserting last {N_INTERVAL} rows",
         yaxis_title='latency (s)',
     )
