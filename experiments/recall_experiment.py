@@ -133,9 +133,9 @@ def plot_results(extension, dataset):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="recall experiment")
-    parser.add_argument("--dataset", type=str, choices=VALID_QUERY_DATASETS.keys(), required=True, help="Output file name (required)")
-    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS, required=True, help='Extension type')
-    parser.add_argument("--N", nargs='+', type=str, help="Dataset sizes")
+    parser.add_argument("--dataset", type=str, choices=VALID_QUERY_DATASETS.keys(), required=True, help="output file name (required)")
+    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS, required=True, help='extension type')
+    parser.add_argument("--N", nargs='+', type=str, help="dataset sizes")
     parser.add_argument("--K", nargs='+', type=int, help="K values")
     args = parser.parse_args()
     

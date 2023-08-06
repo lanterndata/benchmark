@@ -140,7 +140,7 @@ def plot_results(dataset):
     plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='transactions / second', fixed='N', fixed_value=100000)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="latency select experiment")
+    parser = argparse.ArgumentParser(description="select experiment")
     parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="output file name (required)")
     parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS_AND_NONE, required=True, help='extension type')
     parser.add_argument("--N", nargs='+', type=str, help="dataset sizes (e.g., 10k)")

@@ -99,10 +99,10 @@ def plot_results(dataset):
     fig.show()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Latency create experiment")
-    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="Output file name (required)")
-    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS, required=True, help='Extension type')
-    parser.add_argument("--N", nargs='+', type=str, help="Dataset sizes")
+    parser = argparse.ArgumentParser(description="create experiment")
+    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="output file name (required)")
+    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS, required=True, help='extension type')
+    parser.add_argument("--N", nargs='+', type=str, help="dataset sizes")
     args = parser.parse_args()
     
     extension = args.extension
