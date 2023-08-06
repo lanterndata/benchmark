@@ -4,7 +4,7 @@ import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_index
 from scripts.delete_index import delete_index
-from scripts.script_utils import execute_sql, VALID_EXTENSIONS, get_index_name, save_result
+from scripts.script_utils import execute_sql, VALID_DATASETS, VALID_EXTENSIONS, get_index_name, save_result
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number, convert_bytes_to_number
 from utils.print import print_labels, print_row
@@ -88,14 +88,15 @@ def plot_results(dataset):
     fig.show()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Disk usage experiment")
-    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
-    parser.add_argument('--extension', nargs='+', type=str, choices=['none', 'lantern', 'pgvector'], required=True, help='Extension type')
-    parser.add_argument("--N", nargs='+', type=str, required=True, help="Dataset sizes")
+    parser = argparse.ArgumentParser(description="disk usage experiment")
+    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="Output file name (required)")
+    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS, required=True, help='Extension type')
+    parser.add_argument("--N", nargs='+', type=str, help="Dataset sizes")
     args = parser.parse_args()
 
     dataset = args.dataset
-    extensions = args.extension
-    N_values = args.N
+    extension = args.extension
+    N_values = args.N or VALID_DATASETS[dataset]
     
-    generate_data(dataset, extensions, N_values)
+    for N in N_values:
+        generate_result(extension, dataset, N)
