@@ -81,9 +81,9 @@ def get_generate_result(metric_type):
         return disk_usage_experiment.generate_result
     if metric_type == 'create (latency ms)':
         return create_experiment.generate_result
-    if metric_type == 'insert (latency ms)':
+    if metric_type == 'insert (latency s)':
         return insert_experiment.generate_result
-    if metric_type == 'insert bulk (latency ms)':
+    if metric_type == 'insert bulk (latency s)':
         return insert_bulk_experiment.generate_result
 
 def generate_extension_results(extension, metric_type):

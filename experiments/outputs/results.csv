@@ -1,157 +1,391 @@
 database,dataset,n,k,metric_type,metric_value
-none,gist,39000,,insert (latency ms),6.3008739948272705
-none,gist,1000,,insert (latency ms),6.214303016662598
-none,gist,2000,,insert (latency ms),6.269612789154053
-none,gist,3000,,insert (latency ms),6.2921812534332275
-none,gist,4000,,insert (latency ms),6.487889766693115
-none,gist,5000,,insert (latency ms),6.166394472122192
-none,gist,6000,,insert (latency ms),6.22326397895813
-none,gist,7000,,insert (latency ms),6.3124473094940186
-none,gist,8000,,insert (latency ms),6.185592174530029
-none,gist,9000,,insert (latency ms),6.260367155075073
-none,gist,10000,,insert (latency ms),6.266801118850708
-none,gist,11000,,insert (latency ms),6.367795705795288
-none,gist,12000,,insert (latency ms),6.145715951919556
-none,gist,13000,,insert (latency ms),6.195271968841553
-none,gist,14000,,insert (latency ms),6.245370864868164
-none,gist,15000,,insert (latency ms),6.252848386764526
-none,gist,16000,,insert (latency ms),6.343924283981323
-none,gist,17000,,insert (latency ms),6.275736570358276
-none,gist,18000,,insert (latency ms),6.188300848007202
-none,gist,19000,,insert (latency ms),6.468891859054565
-none,gist,20000,,insert (latency ms),6.498507261276245
-none,gist,21000,,insert (latency ms),6.590167284011841
-none,gist,22000,,insert (latency ms),6.527483224868774
-none,gist,23000,,insert (latency ms),6.462695121765137
-none,gist,24000,,insert (latency ms),6.311777830123901
-none,gist,25000,,insert (latency ms),6.332464218139648
-none,gist,26000,,insert (latency ms),6.247774600982666
-none,gist,27000,,insert (latency ms),6.487606525421143
-none,gist,28000,,insert (latency ms),6.473583698272705
-none,gist,29000,,insert (latency ms),6.391772747039795
-none,gist,30000,,insert (latency ms),6.548486709594727
-none,gist,31000,,insert (latency ms),6.287713050842285
-none,gist,32000,,insert (latency ms),6.34237003326416
-none,gist,33000,,insert (latency ms),6.375743627548218
-none,gist,34000,,insert (latency ms),6.386332035064697
-none,gist,35000,,insert (latency ms),6.443420886993408
-none,gist,36000,,insert (latency ms),6.420262813568115
-none,gist,37000,,insert (latency ms),6.347773790359497
-none,gist,38000,,insert (latency ms),6.324404239654541
-none,sift,1000,,insert (latency ms),5.994915723800659
-none,sift,2000,,insert (latency ms),5.9889233112335205
-none,sift,3000,,insert (latency ms),5.8968424797058105
-none,sift,4000,,insert (latency ms),6.241945743560791
-none,sift,5000,,insert (latency ms),5.939880132675171
-none,sift,6000,,insert (latency ms),6.029419422149658
-none,sift,7000,,insert (latency ms),5.930192232131958
-none,sift,8000,,insert (latency ms),6.003810882568359
-none,sift,9000,,insert (latency ms),6.190083742141724
-none,sift,10000,,insert (latency ms),6.157288312911987
-none,sift,11000,,insert (latency ms),5.965528726577759
-none,sift,12000,,insert (latency ms),5.930405855178833
-none,sift,13000,,insert (latency ms),6.042269945144653
-none,sift,14000,,insert (latency ms),5.91138482093811
-none,sift,15000,,insert (latency ms),5.777734279632568
-none,sift,16000,,insert (latency ms),5.822797775268555
-none,sift,17000,,insert (latency ms),5.870931148529053
-none,sift,18000,,insert (latency ms),5.7897210121154785
-none,sift,19000,,insert (latency ms),5.852150917053223
-none,sift,20000,,insert (latency ms),5.853980779647827
-none,sift,21000,,insert (latency ms),5.892572402954102
-none,sift,22000,,insert (latency ms),5.91269063949585
-none,sift,23000,,insert (latency ms),5.994536399841309
-none,sift,24000,,insert (latency ms),6.117467403411865
-none,sift,25000,,insert (latency ms),5.896758794784546
-none,sift,26000,,insert (latency ms),5.973222494125366
-none,sift,27000,,insert (latency ms),5.864748954772949
-none,sift,28000,,insert (latency ms),5.774115324020386
-none,sift,29000,,insert (latency ms),5.878494739532471
-none,sift,30000,,insert (latency ms),5.926750659942627
-none,sift,31000,,insert (latency ms),6.022777318954468
-none,sift,32000,,insert (latency ms),5.894284725189209
-none,sift,33000,,insert (latency ms),5.826134204864502
-none,sift,34000,,insert (latency ms),5.954623460769653
-none,sift,35000,,insert (latency ms),5.960406303405762
-none,sift,36000,,insert (latency ms),6.024835109710693
-none,sift,37000,,insert (latency ms),5.929425001144409
-none,sift,38000,,insert (latency ms),6.224157094955444
-none,sift,39000,,insert (latency ms),6.0303332805633545
-pgvector,gist,39000,,insert (latency ms),8.438941478729248
-pgvector,gist,1000,,insert (latency ms),8.487682342529297
-pgvector,gist,2000,,insert (latency ms),8.254993200302124
-pgvector,gist,3000,,insert (latency ms),8.414515495300293
-pgvector,gist,4000,,insert (latency ms),8.472602367401123
-pgvector,gist,5000,,insert (latency ms),8.40498685836792
-pgvector,gist,6000,,insert (latency ms),8.467110872268677
-pgvector,gist,7000,,insert (latency ms),8.329698324203491
-pgvector,gist,8000,,insert (latency ms),8.385485887527466
-pgvector,gist,9000,,insert (latency ms),8.314244985580444
-pgvector,gist,10000,,insert (latency ms),8.473469972610474
-pgvector,gist,11000,,insert (latency ms),8.637391567230225
-pgvector,gist,12000,,insert (latency ms),8.544894218444824
-pgvector,gist,13000,,insert (latency ms),8.52560806274414
-pgvector,gist,14000,,insert (latency ms),8.414323806762695
-pgvector,gist,15000,,insert (latency ms),8.533291816711426
-pgvector,gist,16000,,insert (latency ms),8.319658756256104
-pgvector,gist,17000,,insert (latency ms),8.372278690338135
-pgvector,gist,18000,,insert (latency ms),8.352077007293701
-pgvector,gist,19000,,insert (latency ms),8.408530473709106
-pgvector,gist,20000,,insert (latency ms),8.427715301513672
-pgvector,gist,21000,,insert (latency ms),8.501293659210205
-pgvector,gist,22000,,insert (latency ms),8.477920293807983
-pgvector,gist,23000,,insert (latency ms),8.434131383895874
-pgvector,gist,24000,,insert (latency ms),8.480040073394775
-pgvector,gist,25000,,insert (latency ms),8.563585996627808
-pgvector,gist,26000,,insert (latency ms),8.211982250213623
-pgvector,gist,27000,,insert (latency ms),8.301539421081543
-pgvector,gist,28000,,insert (latency ms),8.415030241012573
-pgvector,gist,29000,,insert (latency ms),8.407135725021362
-pgvector,gist,30000,,insert (latency ms),8.492002964019775
-pgvector,gist,31000,,insert (latency ms),8.448345184326172
-pgvector,gist,32000,,insert (latency ms),8.53283977508545
-pgvector,gist,33000,,insert (latency ms),8.68990707397461
-pgvector,gist,34000,,insert (latency ms),8.626116752624512
-pgvector,gist,35000,,insert (latency ms),8.360933303833008
-pgvector,gist,36000,,insert (latency ms),8.432061195373535
-pgvector,gist,37000,,insert (latency ms),8.474709033966064
-pgvector,gist,38000,,insert (latency ms),8.427502393722534
-pgvector,sift,1000,,insert (latency ms),7.095586061477661
-pgvector,sift,2000,,insert (latency ms),6.993924856185913
-pgvector,sift,3000,,insert (latency ms),7.01514458656311
-pgvector,sift,4000,,insert (latency ms),7.214370250701904
-pgvector,sift,5000,,insert (latency ms),6.968144178390503
-pgvector,sift,6000,,insert (latency ms),7.002033710479736
-pgvector,sift,7000,,insert (latency ms),7.1243956089019775
-pgvector,sift,8000,,insert (latency ms),7.02409815788269
-pgvector,sift,9000,,insert (latency ms),7.2461817264556885
-pgvector,sift,10000,,insert (latency ms),7.218639850616455
-pgvector,sift,11000,,insert (latency ms),7.1706037521362305
-pgvector,sift,12000,,insert (latency ms),7.0763959884643555
-pgvector,sift,13000,,insert (latency ms),7.360527753829956
-pgvector,sift,14000,,insert (latency ms),7.20024299621582
-pgvector,sift,15000,,insert (latency ms),7.067759275436401
-pgvector,sift,16000,,insert (latency ms),7.013278245925903
-pgvector,sift,17000,,insert (latency ms),7.201829671859741
-pgvector,sift,18000,,insert (latency ms),6.9853196144104
-pgvector,sift,19000,,insert (latency ms),6.986191511154175
-pgvector,sift,20000,,insert (latency ms),6.9661383628845215
-pgvector,sift,21000,,insert (latency ms),6.9782397747039795
-pgvector,sift,22000,,insert (latency ms),7.168933391571045
-pgvector,sift,23000,,insert (latency ms),7.119316577911377
-pgvector,sift,24000,,insert (latency ms),7.147544860839844
-pgvector,sift,25000,,insert (latency ms),7.283205986022949
-pgvector,sift,26000,,insert (latency ms),7.386075973510742
-pgvector,sift,27000,,insert (latency ms),7.2317259311676025
-pgvector,sift,28000,,insert (latency ms),7.168140888214111
-pgvector,sift,29000,,insert (latency ms),7.250863552093506
-pgvector,sift,30000,,insert (latency ms),7.230395317077637
-pgvector,sift,31000,,insert (latency ms),7.065059661865234
-pgvector,sift,32000,,insert (latency ms),7.161691904067993
-pgvector,sift,33000,,insert (latency ms),7.17588996887207
-pgvector,sift,34000,,insert (latency ms),7.102517604827881
-pgvector,sift,35000,,insert (latency ms),6.9714515209198
-pgvector,sift,36000,,insert (latency ms),7.3807618618011475
-pgvector,sift,37000,,insert (latency ms),7.127222537994385
-pgvector,sift,38000,,insert (latency ms),7.107661247253418
-pgvector,sift,39000,,insert (latency ms),6.889742374420166
+lantern,gist,39000,,insert bulk (latency s),0.10768842697143555
+lantern,gist,1000,,insert bulk (latency s),0.15532565116882324
+lantern,gist,2000,,insert bulk (latency s),0.10545039176940918
+lantern,gist,3000,,insert bulk (latency s),0.10718131065368652
+lantern,gist,4000,,insert bulk (latency s),0.10802459716796875
+lantern,gist,5000,,insert bulk (latency s),0.14075565338134766
+lantern,gist,6000,,insert bulk (latency s),0.09065580368041992
+lantern,gist,7000,,insert bulk (latency s),0.1041567325592041
+lantern,gist,8000,,insert bulk (latency s),0.10917878150939941
+lantern,gist,9000,,insert bulk (latency s),0.17401552200317383
+lantern,gist,10000,,insert bulk (latency s),0.11571884155273438
+lantern,gist,11000,,insert bulk (latency s),0.10824465751647949
+lantern,gist,12000,,insert bulk (latency s),0.10470819473266602
+lantern,gist,13000,,insert bulk (latency s),0.15736913681030273
+lantern,gist,14000,,insert bulk (latency s),0.10638761520385742
+lantern,gist,15000,,insert bulk (latency s),0.10065555572509766
+lantern,gist,16000,,insert bulk (latency s),0.10247921943664551
+lantern,gist,17000,,insert bulk (latency s),0.10738611221313477
+lantern,gist,18000,,insert bulk (latency s),0.15576648712158203
+lantern,gist,19000,,insert bulk (latency s),0.10910439491271973
+lantern,gist,20000,,insert bulk (latency s),0.10618758201599121
+lantern,gist,21000,,insert bulk (latency s),0.10854387283325195
+lantern,gist,22000,,insert bulk (latency s),0.15680885314941406
+lantern,gist,23000,,insert bulk (latency s),0.11171150207519531
+lantern,gist,24000,,insert bulk (latency s),0.10952496528625488
+lantern,gist,25000,,insert bulk (latency s),0.10800957679748535
+lantern,gist,26000,,insert bulk (latency s),0.1652212142944336
+lantern,gist,27000,,insert bulk (latency s),0.11915469169616699
+lantern,gist,28000,,insert bulk (latency s),0.11207246780395508
+lantern,gist,29000,,insert bulk (latency s),0.12464189529418945
+lantern,gist,30000,,insert bulk (latency s),0.2189946174621582
+lantern,gist,31000,,insert bulk (latency s),0.11597347259521484
+lantern,gist,32000,,insert bulk (latency s),0.12576794624328613
+lantern,gist,33000,,insert bulk (latency s),0.11516189575195312
+lantern,gist,34000,,insert bulk (latency s),0.16980743408203125
+lantern,gist,35000,,insert bulk (latency s),0.11130094528198242
+lantern,gist,36000,,insert bulk (latency s),0.10768556594848633
+lantern,gist,37000,,insert bulk (latency s),0.11333131790161133
+lantern,gist,38000,,insert bulk (latency s),0.1674203872680664
+lantern,sift,1000,,insert bulk (latency s),0.01895618438720703
+lantern,sift,2000,,insert bulk (latency s),0.018297910690307617
+lantern,sift,3000,,insert bulk (latency s),0.018294572830200195
+lantern,sift,4000,,insert bulk (latency s),0.018393516540527344
+lantern,sift,5000,,insert bulk (latency s),0.018019437789916992
+lantern,sift,6000,,insert bulk (latency s),0.018038272857666016
+lantern,sift,7000,,insert bulk (latency s),0.01830911636352539
+lantern,sift,8000,,insert bulk (latency s),0.018194913864135742
+lantern,sift,9000,,insert bulk (latency s),0.01784205436706543
+lantern,sift,10000,,insert bulk (latency s),0.018102645874023438
+lantern,sift,11000,,insert bulk (latency s),0.01770925521850586
+lantern,sift,12000,,insert bulk (latency s),0.017839670181274414
+lantern,sift,13000,,insert bulk (latency s),0.017777442932128906
+lantern,sift,14000,,insert bulk (latency s),0.020441293716430664
+lantern,sift,15000,,insert bulk (latency s),0.06750774383544922
+lantern,sift,16000,,insert bulk (latency s),0.018980979919433594
+lantern,sift,17000,,insert bulk (latency s),0.01843547821044922
+lantern,sift,18000,,insert bulk (latency s),0.017189741134643555
+lantern,sift,19000,,insert bulk (latency s),0.017699241638183594
+lantern,sift,20000,,insert bulk (latency s),0.02080535888671875
+lantern,sift,21000,,insert bulk (latency s),0.01851511001586914
+lantern,sift,22000,,insert bulk (latency s),0.018560409545898438
+lantern,sift,23000,,insert bulk (latency s),0.019053936004638672
+lantern,sift,24000,,insert bulk (latency s),0.018280506134033203
+lantern,sift,25000,,insert bulk (latency s),0.018172025680541992
+lantern,sift,26000,,insert bulk (latency s),0.017369508743286133
+lantern,sift,27000,,insert bulk (latency s),0.01779770851135254
+lantern,sift,28000,,insert bulk (latency s),0.017475128173828125
+lantern,sift,29000,,insert bulk (latency s),0.01751399040222168
+lantern,sift,30000,,insert bulk (latency s),0.018332719802856445
+lantern,sift,31000,,insert bulk (latency s),0.01768350601196289
+lantern,sift,32000,,insert bulk (latency s),0.018475055694580078
+lantern,sift,33000,,insert bulk (latency s),0.01714944839477539
+lantern,sift,34000,,insert bulk (latency s),0.0206758975982666
+lantern,sift,35000,,insert bulk (latency s),0.01792764663696289
+lantern,sift,36000,,insert bulk (latency s),0.018477678298950195
+lantern,sift,37000,,insert bulk (latency s),0.01798081398010254
+lantern,sift,38000,,insert bulk (latency s),0.017847299575805664
+lantern,sift,39000,,insert bulk (latency s),0.018032312393188477
+none,gist,28000,,insert bulk (latency s),0.10352635383605957
+none,gist,39000,,insert bulk (latency s),0.11418962478637695
+none,gist,38000,,insert bulk (latency s),0.11702728271484375
+none,gist,37000,,insert bulk (latency s),0.11229467391967773
+none,gist,36000,,insert bulk (latency s),0.11518716812133789
+none,gist,35000,,insert bulk (latency s),0.11422061920166016
+none,gist,34000,,insert bulk (latency s),0.1127932071685791
+none,gist,33000,,insert bulk (latency s),0.11389279365539551
+none,gist,32000,,insert bulk (latency s),0.11853957176208496
+none,gist,31000,,insert bulk (latency s),0.1146383285522461
+none,gist,30000,,insert bulk (latency s),0.11397695541381836
+none,gist,29000,,insert bulk (latency s),0.10849332809448242
+none,gist,27000,,insert bulk (latency s),0.10879659652709961
+none,gist,26000,,insert bulk (latency s),0.09254670143127441
+none,gist,25000,,insert bulk (latency s),0.11208200454711914
+none,gist,24000,,insert bulk (latency s),0.11422491073608398
+none,gist,23000,,insert bulk (latency s),0.11636948585510254
+none,gist,22000,,insert bulk (latency s),0.10599708557128906
+none,gist,21000,,insert bulk (latency s),0.11097073554992676
+none,gist,20000,,insert bulk (latency s),0.10900568962097168
+none,gist,19000,,insert bulk (latency s),0.1173410415649414
+none,gist,18000,,insert bulk (latency s),0.11314058303833008
+none,gist,17000,,insert bulk (latency s),0.10840415954589844
+none,gist,16000,,insert bulk (latency s),0.1123507022857666
+none,gist,15000,,insert bulk (latency s),0.10680580139160156
+none,gist,14000,,insert bulk (latency s),0.10771346092224121
+none,gist,13000,,insert bulk (latency s),0.10790133476257324
+none,gist,12000,,insert bulk (latency s),0.10521054267883301
+none,gist,11000,,insert bulk (latency s),0.1182856559753418
+none,gist,10000,,insert bulk (latency s),0.10982751846313477
+none,gist,9000,,insert bulk (latency s),0.1115121841430664
+none,gist,8000,,insert bulk (latency s),0.11286020278930664
+none,gist,7000,,insert bulk (latency s),0.11312627792358398
+none,gist,6000,,insert bulk (latency s),0.09002137184143066
+none,gist,5000,,insert bulk (latency s),0.09465575218200684
+none,gist,4000,,insert bulk (latency s),0.10680341720581055
+none,gist,3000,,insert bulk (latency s),0.10616874694824219
+none,gist,2000,,insert bulk (latency s),0.10892772674560547
+none,gist,1000,,insert bulk (latency s),0.10325217247009277
+none,sift,28000,,insert bulk (latency s),0.017830848693847656
+none,sift,2000,,insert bulk (latency s),0.01894974708557129
+none,sift,3000,,insert bulk (latency s),0.01935744285583496
+none,sift,4000,,insert bulk (latency s),0.019588708877563477
+none,sift,5000,,insert bulk (latency s),0.018213272094726562
+none,sift,6000,,insert bulk (latency s),0.018873214721679688
+none,sift,7000,,insert bulk (latency s),0.018840789794921875
+none,sift,8000,,insert bulk (latency s),0.01925349235534668
+none,sift,9000,,insert bulk (latency s),0.01970839500427246
+none,sift,10000,,insert bulk (latency s),0.018230915069580078
+none,sift,11000,,insert bulk (latency s),0.01856684684753418
+none,sift,12000,,insert bulk (latency s),0.01849675178527832
+none,sift,13000,,insert bulk (latency s),0.0191497802734375
+none,sift,14000,,insert bulk (latency s),0.01855778694152832
+none,sift,15000,,insert bulk (latency s),0.019285917282104492
+none,sift,16000,,insert bulk (latency s),0.019558191299438477
+none,sift,17000,,insert bulk (latency s),0.018305540084838867
+none,sift,18000,,insert bulk (latency s),0.01865386962890625
+none,sift,19000,,insert bulk (latency s),0.01776885986328125
+none,sift,20000,,insert bulk (latency s),0.0189666748046875
+none,sift,21000,,insert bulk (latency s),0.01883721351623535
+none,sift,22000,,insert bulk (latency s),0.018306255340576172
+none,sift,23000,,insert bulk (latency s),0.018355607986450195
+none,sift,24000,,insert bulk (latency s),0.017791748046875
+none,sift,25000,,insert bulk (latency s),0.018779754638671875
+none,sift,26000,,insert bulk (latency s),0.01720714569091797
+none,sift,27000,,insert bulk (latency s),0.017924070358276367
+none,sift,1000,,insert bulk (latency s),0.020935773849487305
+none,sift,33000,,insert bulk (latency s),0.020319461822509766
+none,sift,32000,,insert bulk (latency s),0.0182344913482666
+none,sift,31000,,insert bulk (latency s),0.01761937141418457
+none,sift,30000,,insert bulk (latency s),0.017334461212158203
+none,sift,29000,,insert bulk (latency s),0.01812124252319336
+none,sift,39000,,insert bulk (latency s),0.018030405044555664
+none,sift,38000,,insert bulk (latency s),0.015982866287231445
+none,sift,37000,,insert bulk (latency s),0.018541336059570312
+none,sift,36000,,insert bulk (latency s),0.018507957458496094
+none,sift,35000,,insert bulk (latency s),0.018430709838867188
+none,sift,34000,,insert bulk (latency s),0.019071578979492188
+pgvector,gist,39000,,insert bulk (latency s),0.860048770904541
+pgvector,gist,1000,,insert bulk (latency s),0.795173168182373
+pgvector,gist,2000,,insert bulk (latency s),0.8054099082946777
+pgvector,gist,3000,,insert bulk (latency s),0.8142585754394531
+pgvector,gist,4000,,insert bulk (latency s),0.8131592273712158
+pgvector,gist,5000,,insert bulk (latency s),0.7957804203033447
+pgvector,gist,6000,,insert bulk (latency s),0.8076071739196777
+pgvector,gist,7000,,insert bulk (latency s),0.8273308277130127
+pgvector,gist,8000,,insert bulk (latency s),0.8369405269622803
+pgvector,gist,9000,,insert bulk (latency s),0.8583123683929443
+pgvector,gist,10000,,insert bulk (latency s),0.8182368278503418
+pgvector,gist,11000,,insert bulk (latency s),0.821232795715332
+pgvector,gist,12000,,insert bulk (latency s),0.8274645805358887
+pgvector,gist,13000,,insert bulk (latency s),0.8646049499511719
+pgvector,gist,14000,,insert bulk (latency s),0.8100206851959229
+pgvector,gist,15000,,insert bulk (latency s),0.8658475875854492
+pgvector,gist,16000,,insert bulk (latency s),0.8282032012939453
+pgvector,gist,17000,,insert bulk (latency s),0.8752014636993408
+pgvector,gist,18000,,insert bulk (latency s),0.8094902038574219
+pgvector,gist,19000,,insert bulk (latency s),0.866459846496582
+pgvector,gist,20000,,insert bulk (latency s),0.8203303813934326
+pgvector,gist,21000,,insert bulk (latency s),0.826807975769043
+pgvector,gist,22000,,insert bulk (latency s),0.8944945335388184
+pgvector,gist,23000,,insert bulk (latency s),0.8401310443878174
+pgvector,gist,24000,,insert bulk (latency s),0.8482434749603271
+pgvector,gist,25000,,insert bulk (latency s),0.8362388610839844
+pgvector,gist,26000,,insert bulk (latency s),0.8322339057922363
+pgvector,gist,27000,,insert bulk (latency s),0.8509030342102051
+pgvector,gist,28000,,insert bulk (latency s),0.8548829555511475
+pgvector,gist,29000,,insert bulk (latency s),0.8282980918884277
+pgvector,gist,30000,,insert bulk (latency s),0.9038217067718506
+pgvector,gist,31000,,insert bulk (latency s),0.8632142543792725
+pgvector,gist,32000,,insert bulk (latency s),0.9069099426269531
+pgvector,gist,33000,,insert bulk (latency s),0.9410984516143799
+pgvector,gist,34000,,insert bulk (latency s),0.9386589527130127
+pgvector,gist,35000,,insert bulk (latency s),0.9394872188568115
+pgvector,gist,36000,,insert bulk (latency s),0.8680024147033691
+pgvector,gist,37000,,insert bulk (latency s),0.9345471858978271
+pgvector,gist,38000,,insert bulk (latency s),0.8467237949371338
+pgvector,sift,1000,,insert bulk (latency s),0.046959638595581055
+pgvector,sift,39000,,insert bulk (latency s),0.04901528358459473
+pgvector,sift,38000,,insert bulk (latency s),0.04936695098876953
+pgvector,sift,37000,,insert bulk (latency s),0.04438209533691406
+pgvector,sift,36000,,insert bulk (latency s),0.04764890670776367
+pgvector,sift,35000,,insert bulk (latency s),0.0500795841217041
+pgvector,sift,34000,,insert bulk (latency s),0.04686236381530762
+pgvector,sift,33000,,insert bulk (latency s),0.04669523239135742
+pgvector,sift,32000,,insert bulk (latency s),0.04670524597167969
+pgvector,sift,31000,,insert bulk (latency s),0.048413753509521484
+pgvector,sift,30000,,insert bulk (latency s),0.04537081718444824
+pgvector,sift,29000,,insert bulk (latency s),0.04708981513977051
+pgvector,sift,28000,,insert bulk (latency s),0.048543691635131836
+pgvector,sift,27000,,insert bulk (latency s),0.04552268981933594
+pgvector,sift,26000,,insert bulk (latency s),0.04877018928527832
+pgvector,sift,25000,,insert bulk (latency s),0.04907846450805664
+pgvector,sift,24000,,insert bulk (latency s),0.04844188690185547
+pgvector,sift,23000,,insert bulk (latency s),0.04733562469482422
+pgvector,sift,22000,,insert bulk (latency s),0.047456979751586914
+pgvector,sift,21000,,insert bulk (latency s),0.04603219032287598
+pgvector,sift,20000,,insert bulk (latency s),0.04699134826660156
+pgvector,sift,19000,,insert bulk (latency s),0.05022478103637695
+pgvector,sift,18000,,insert bulk (latency s),0.04785656929016113
+pgvector,sift,17000,,insert bulk (latency s),0.046185970306396484
+pgvector,sift,16000,,insert bulk (latency s),0.04603838920593262
+pgvector,sift,15000,,insert bulk (latency s),0.046601057052612305
+pgvector,sift,14000,,insert bulk (latency s),0.04576516151428223
+pgvector,sift,13000,,insert bulk (latency s),0.046296119689941406
+pgvector,sift,12000,,insert bulk (latency s),0.04856157302856445
+pgvector,sift,11000,,insert bulk (latency s),0.04969453811645508
+pgvector,sift,10000,,insert bulk (latency s),0.04684567451477051
+pgvector,sift,9000,,insert bulk (latency s),0.047460079193115234
+pgvector,sift,8000,,insert bulk (latency s),0.04722929000854492
+pgvector,sift,7000,,insert bulk (latency s),0.0484004020690918
+pgvector,sift,6000,,insert bulk (latency s),0.04751706123352051
+pgvector,sift,5000,,insert bulk (latency s),0.04492902755737305
+pgvector,sift,4000,,insert bulk (latency s),0.046845197677612305
+pgvector,sift,3000,,insert bulk (latency s),0.049957990646362305
+pgvector,sift,2000,,insert bulk (latency s),0.04846763610839844
+none,gist,27000,,insert (latency s),6.487606525421143
+none,gist,13000,,insert (latency s),6.195271968841553
+none,gist,12000,,insert (latency s),6.145715951919556
+none,gist,11000,,insert (latency s),6.367795705795288
+none,gist,10000,,insert (latency s),6.266801118850708
+none,gist,9000,,insert (latency s),6.260367155075073
+none,gist,8000,,insert (latency s),6.185592174530029
+none,gist,7000,,insert (latency s),6.3124473094940186
+none,gist,6000,,insert (latency s),6.22326397895813
+none,gist,5000,,insert (latency s),6.166394472122192
+none,gist,4000,,insert (latency s),6.487889766693115
+none,gist,3000,,insert (latency s),6.2921812534332275
+none,gist,2000,,insert (latency s),6.269612789154053
+none,gist,1000,,insert (latency s),6.214303016662598
+none,gist,14000,,insert (latency s),6.245370864868164
+none,gist,15000,,insert (latency s),6.252848386764526
+none,gist,16000,,insert (latency s),6.343924283981323
+none,gist,17000,,insert (latency s),6.275736570358276
+none,gist,18000,,insert (latency s),6.188300848007202
+none,gist,19000,,insert (latency s),6.468891859054565
+none,gist,20000,,insert (latency s),6.498507261276245
+none,gist,21000,,insert (latency s),6.590167284011841
+none,gist,22000,,insert (latency s),6.527483224868774
+none,gist,23000,,insert (latency s),6.462695121765137
+none,gist,24000,,insert (latency s),6.311777830123901
+none,gist,25000,,insert (latency s),6.332464218139648
+none,gist,26000,,insert (latency s),6.247774600982666
+none,gist,28000,,insert (latency s),6.473583698272705
+none,gist,29000,,insert (latency s),6.391772747039795
+none,gist,30000,,insert (latency s),6.548486709594727
+none,gist,31000,,insert (latency s),6.287713050842285
+none,gist,32000,,insert (latency s),6.34237003326416
+none,gist,33000,,insert (latency s),6.375743627548218
+none,gist,34000,,insert (latency s),6.386332035064697
+none,gist,35000,,insert (latency s),6.443420886993408
+none,gist,36000,,insert (latency s),6.420262813568115
+none,gist,37000,,insert (latency s),6.347773790359497
+none,gist,38000,,insert (latency s),6.324404239654541
+none,gist,39000,,insert (latency s),6.3008739948272705
+none,sift,39000,,insert (latency s),6.0303332805633545
+none,sift,38000,,insert (latency s),6.224157094955444
+none,sift,37000,,insert (latency s),5.929425001144409
+none,sift,36000,,insert (latency s),6.024835109710693
+none,sift,35000,,insert (latency s),5.960406303405762
+none,sift,34000,,insert (latency s),5.954623460769653
+none,sift,33000,,insert (latency s),5.826134204864502
+none,sift,32000,,insert (latency s),5.894284725189209
+none,sift,31000,,insert (latency s),6.022777318954468
+none,sift,30000,,insert (latency s),5.926750659942627
+none,sift,29000,,insert (latency s),5.878494739532471
+none,sift,28000,,insert (latency s),5.774115324020386
+none,sift,27000,,insert (latency s),5.864748954772949
+none,sift,1000,,insert (latency s),5.994915723800659
+none,sift,26000,,insert (latency s),5.973222494125366
+none,sift,25000,,insert (latency s),5.896758794784546
+none,sift,24000,,insert (latency s),6.117467403411865
+none,sift,23000,,insert (latency s),5.994536399841309
+none,sift,22000,,insert (latency s),5.91269063949585
+none,sift,21000,,insert (latency s),5.892572402954102
+none,sift,20000,,insert (latency s),5.853980779647827
+none,sift,19000,,insert (latency s),5.852150917053223
+none,sift,18000,,insert (latency s),5.7897210121154785
+none,sift,17000,,insert (latency s),5.870931148529053
+none,sift,16000,,insert (latency s),5.822797775268555
+none,sift,15000,,insert (latency s),5.777734279632568
+none,sift,14000,,insert (latency s),5.91138482093811
+none,sift,13000,,insert (latency s),6.042269945144653
+none,sift,12000,,insert (latency s),5.930405855178833
+none,sift,11000,,insert (latency s),5.965528726577759
+none,sift,10000,,insert (latency s),6.157288312911987
+none,sift,9000,,insert (latency s),6.190083742141724
+none,sift,8000,,insert (latency s),6.003810882568359
+none,sift,7000,,insert (latency s),5.930192232131958
+none,sift,6000,,insert (latency s),6.029419422149658
+none,sift,5000,,insert (latency s),5.939880132675171
+none,sift,4000,,insert (latency s),6.241945743560791
+none,sift,3000,,insert (latency s),5.8968424797058105
+none,sift,2000,,insert (latency s),5.9889233112335205
+pgvector,gist,23000,,insert (latency s),8.434131383895874
+pgvector,gist,13000,,insert (latency s),8.52560806274414
+pgvector,gist,12000,,insert (latency s),8.544894218444824
+pgvector,gist,11000,,insert (latency s),8.637391567230225
+pgvector,gist,10000,,insert (latency s),8.473469972610474
+pgvector,gist,9000,,insert (latency s),8.314244985580444
+pgvector,gist,8000,,insert (latency s),8.385485887527466
+pgvector,gist,7000,,insert (latency s),8.329698324203491
+pgvector,gist,6000,,insert (latency s),8.467110872268677
+pgvector,gist,5000,,insert (latency s),8.40498685836792
+pgvector,gist,4000,,insert (latency s),8.472602367401123
+pgvector,gist,3000,,insert (latency s),8.414515495300293
+pgvector,gist,2000,,insert (latency s),8.254993200302124
+pgvector,gist,1000,,insert (latency s),8.487682342529297
+pgvector,gist,14000,,insert (latency s),8.414323806762695
+pgvector,gist,15000,,insert (latency s),8.533291816711426
+pgvector,gist,16000,,insert (latency s),8.319658756256104
+pgvector,gist,17000,,insert (latency s),8.372278690338135
+pgvector,gist,18000,,insert (latency s),8.352077007293701
+pgvector,gist,19000,,insert (latency s),8.408530473709106
+pgvector,gist,20000,,insert (latency s),8.427715301513672
+pgvector,gist,21000,,insert (latency s),8.501293659210205
+pgvector,gist,22000,,insert (latency s),8.477920293807983
+pgvector,gist,24000,,insert (latency s),8.480040073394775
+pgvector,gist,25000,,insert (latency s),8.563585996627808
+pgvector,gist,26000,,insert (latency s),8.211982250213623
+pgvector,gist,27000,,insert (latency s),8.301539421081543
+pgvector,gist,28000,,insert (latency s),8.415030241012573
+pgvector,gist,29000,,insert (latency s),8.407135725021362
+pgvector,gist,30000,,insert (latency s),8.492002964019775
+pgvector,gist,31000,,insert (latency s),8.448345184326172
+pgvector,gist,32000,,insert (latency s),8.53283977508545
+pgvector,gist,33000,,insert (latency s),8.68990707397461
+pgvector,gist,34000,,insert (latency s),8.626116752624512
+pgvector,gist,35000,,insert (latency s),8.360933303833008
+pgvector,gist,36000,,insert (latency s),8.432061195373535
+pgvector,gist,37000,,insert (latency s),8.474709033966064
+pgvector,gist,38000,,insert (latency s),8.427502393722534
+pgvector,gist,39000,,insert (latency s),8.438941478729248
+pgvector,sift,39000,,insert (latency s),6.889742374420166
+pgvector,sift,11000,,insert (latency s),7.1706037521362305
+pgvector,sift,13000,,insert (latency s),7.360527753829956
+pgvector,sift,1000,,insert (latency s),7.095586061477661
+pgvector,sift,2000,,insert (latency s),6.993924856185913
+pgvector,sift,3000,,insert (latency s),7.01514458656311
+pgvector,sift,4000,,insert (latency s),7.214370250701904
+pgvector,sift,5000,,insert (latency s),6.968144178390503
+pgvector,sift,6000,,insert (latency s),7.002033710479736
+pgvector,sift,7000,,insert (latency s),7.1243956089019775
+pgvector,sift,12000,,insert (latency s),7.0763959884643555
+pgvector,sift,8000,,insert (latency s),7.02409815788269
+pgvector,sift,9000,,insert (latency s),7.2461817264556885
+pgvector,sift,10000,,insert (latency s),7.218639850616455
+pgvector,sift,38000,,insert (latency s),7.107661247253418
+pgvector,sift,37000,,insert (latency s),7.127222537994385
+pgvector,sift,36000,,insert (latency s),7.3807618618011475
+pgvector,sift,35000,,insert (latency s),6.9714515209198
+pgvector,sift,34000,,insert (latency s),7.102517604827881
+pgvector,sift,33000,,insert (latency s),7.17588996887207
+pgvector,sift,32000,,insert (latency s),7.161691904067993
+pgvector,sift,31000,,insert (latency s),7.065059661865234
+pgvector,sift,30000,,insert (latency s),7.230395317077637
+pgvector,sift,29000,,insert (latency s),7.250863552093506
+pgvector,sift,28000,,insert (latency s),7.168140888214111
+pgvector,sift,27000,,insert (latency s),7.2317259311676025
+pgvector,sift,26000,,insert (latency s),7.386075973510742
+pgvector,sift,25000,,insert (latency s),7.283205986022949
+pgvector,sift,24000,,insert (latency s),7.147544860839844
+pgvector,sift,23000,,insert (latency s),7.119316577911377
+pgvector,sift,22000,,insert (latency s),7.168933391571045
+pgvector,sift,21000,,insert (latency s),6.9782397747039795
+pgvector,sift,20000,,insert (latency s),6.9661383628845215
+pgvector,sift,19000,,insert (latency s),6.986191511154175
+pgvector,sift,18000,,insert (latency s),6.9853196144104
+pgvector,sift,17000,,insert (latency s),7.201829671859741
+pgvector,sift,16000,,insert (latency s),7.013278245925903
+pgvector,sift,15000,,insert (latency s),7.067759275436401
+pgvector,sift,14000,,insert (latency s),7.20024299621582

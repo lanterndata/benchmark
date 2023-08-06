@@ -52,7 +52,7 @@ def delete_dest_table(dataset):
     execute_sql(sql)
 
 def get_metric_type(bulk):
-    return 'insert bulk (latency ms)' if bulk else 'insert (latency ms)'
+    return 'insert bulk (latency s)' if bulk else 'insert (latency s)'
 
 def generate_result(extension, dataset, bulk=False):
     db_connection_string = os.environ.get('DATABASE_URL')
@@ -147,7 +147,7 @@ def print_results(dataset, bulk=False):
         results = get_n_latency(metric_type, extension, dataset)
         if len(results) == 0:
             continue
-        print_labels(dataset + ' - ' + extension, 'N', 'latency (ms)')
+        print_labels(dataset + ' - ' + extension, 'N', 'latency (s)')
         for N, latency in results:
             print_row(convert_number_to_string(N), "{:.2f}".format(latency))
         print('\n\n')
@@ -178,7 +178,7 @@ def plot_results(dataset, bulk=False):
     fig.update_layout(
         title=metric_type,
         xaxis_title=f"latency of inserting last {N_INTERVAL} rows",
-        yaxis_title='latency (ms)',
+        yaxis_title='latency (s)',
     )
     fig.show()
 

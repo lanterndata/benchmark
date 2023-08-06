@@ -9,7 +9,7 @@ from .number_utils import convert_number_to_string
 
 METRICS_WITH_K = ['select (latency ms)', 'select (tps)', 'recall']
 
-METRICS_WITHOUT_N = ['insert (latency ms)', 'insert bulk (latency ms)']
+METRICS_WITHOUT_N = ['insert (latency s)', 'insert bulk (latency s)']
 
 VALID_METRICS = METRICS_WITH_K + METRICS_WITHOUT_N + ['disk usage (bytes)', 'create (latency ms)']
 
