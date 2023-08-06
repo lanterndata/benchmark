@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
 from utils.print import print_labels, print_row
-from scripts.script_utils import execute_sql, save_result, VALID_QUERY_DATASETS
+from scripts.script_utils import execute_sql, save_result, VALID_QUERY_DATASETS, VALID_EXTENSIONS, SUGGESTED_K_VALUES
 from scripts.number_utils import convert_string_to_number
 
 MAX_QUERIES = 50
@@ -89,12 +89,12 @@ def get_k_recall(extension, dataset, N):
 def print_results(extension, dataset):
     N_values = VALID_QUERY_DATASETS[dataset]
     for N in N_values:
-      results = get_k_recall(extension, dataset, N)
-      print_labels(dataset, N)
-      print_labels('K', 'Recall')
-      for K, recall in results:
-          print_row(K, recall)
-      print('\n\n')
+        results = get_k_recall(extension, dataset, N)
+        print_labels(dataset, N)
+        print_labels('K', 'Recall')
+        for K, recall in results:
+            print_row(K, recall)
+        print('\n\n')
 
 def plot_results(extension, dataset):
     plot_items = []
@@ -132,16 +132,17 @@ def plot_results(extension, dataset):
     fig.show()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Recall experiment")
-    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
-    parser.add_argument('--extension', type=str, choices=['lantern', 'pgvector'], required=True, help='Extension type')
-    parser.add_argument("--N", nargs='+', type=str, required=True, help="Dataset sizes")
-    parser.add_argument("--K", nargs='+', required=True, type=int, help="K values")
+    parser = argparse.ArgumentParser(description="recall experiment")
+    parser.add_argument("--dataset", type=str, choices=VALID_QUERY_DATASETS.keys(), required=True, help="Output file name (required)")
+    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS, required=True, help='Extension type')
+    parser.add_argument("--N", nargs='+', type=str, help="Dataset sizes")
+    parser.add_argument("--K", nargs='+', type=int, help="K values")
     args = parser.parse_args()
     
     extension = args.extension
     dataset = args.dataset
-    N_values = args.N
-    K_values = args.K
+    N_values = args.N or VALID_QUERY_DATASETS[dataset]
+    K_values = args.K or SUGGESTED_K_VALUES
 
-    generate_data(extension, dataset, N_values, K_values)
+    for N in N_values:
+        generate_result(extension, dataset, N, K_values)
