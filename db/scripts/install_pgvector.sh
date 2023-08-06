@@ -8,6 +8,7 @@ if [ -d "/pgvector" ]; then
   cd /pgvector
   git fetch origin
   git pull
+  git submodule update
 else
   echo "Installing pgvector..."
   git clone https://github.com/pgvector/pgvector.git /pgvector

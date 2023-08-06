@@ -8,6 +8,7 @@ if [ -d "/lantern" ]; then
   cd /lantern
   git fetch origin
   git pull
+  git submodule update
 else
   echo "Installing lantern..."
   git clone --recursive git@github.com:lanterndata/lanterndb.git /lantern
