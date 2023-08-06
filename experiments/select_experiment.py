@@ -143,7 +143,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="latency select experiment")
     parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="output file name (required)")
     parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS_AND_NONE, required=True, help='extension type')
-    parser.add_argument("--N", type=str, help="dataset sizes (e.g., 10k)")
+    parser.add_argument("--N", nargs='+', type=str, help="dataset sizes (e.g., 10k)")
     parser.add_argument("--K", nargs='+', type=int, help="K values (e.g., 5)")
     args = parser.parse_args()
     

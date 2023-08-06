@@ -7,7 +7,7 @@ from scripts.delete_index import get_drop_index_query, delete_index
 from scripts.create_index import get_create_index_query
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
-from scripts.script_utils import save_result, VALID_EXTENSIONS
+from scripts.script_utils import save_result, VALID_EXTENSIONS, VALID_DATASETS
 from utils.print import print_labels, print_row
 
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
@@ -43,6 +43,7 @@ def generate_result(extension, dataset, N, count=10):
         dataset=dataset,
         n=convert_string_to_number(N)
     )
+    print('average latency:', average_latency, 'ms')
 
 def get_n_latency(extension, dataset):
   sql = """
@@ -99,13 +100,14 @@ def plot_results(dataset):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Latency create experiment")
-    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="Output file name (required)")
-    parser.add_argument('--extension', nargs='+', type=str, choices=['none', 'lantern', 'pgvector'], required=True, help='Extension type')
-    parser.add_argument("--N", type=str, required=True, help="Dataset sizes")
+    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="Output file name (required)")
+    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS, required=True, help='Extension type')
+    parser.add_argument("--N", nargs='+', type=str, help="Dataset sizes")
     args = parser.parse_args()
     
-    extensions = args.extension
+    extension = args.extension
     dataset = args.dataset
-    N_values = args.N
+    N_values = args.N or VALID_DATASETS[dataset]
 
-    generate_data(dataset, extensions, N_values)
+    for N in N_values:
+        generate_result(extension, dataset, N)
