@@ -141,17 +141,16 @@ def plot_results(dataset):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="latency select experiment")
-    parser.add_argument("--dataset", type=str, choices=['sift', 'gist'], required=True, help="output file name (required)")
-    parser.add_argument('--extension', nargs='+', type=str, choices=['none', 'lantern', 'pgvector'], required=True, help='extension type')
-    parser.add_argument("--N", type=str, required=True, help="dataset sizes")
-    parser.add_argument("--K", nargs='+', required=True, type=int, help="K values")
+    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="output file name (required)")
+    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS_AND_NONE, required=True, help='extension type')
+    parser.add_argument("--N", type=str, help="dataset sizes (e.g., 10k)")
+    parser.add_argument("--K", nargs='+', type=int, help="K values (e.g., 5)")
     args = parser.parse_args()
     
-    extensions = args.extension
+    extension = args.extension
     dataset = args.dataset
-    N_values = args.N
-    K_values = args.K
+    N_values = args.N or VALID_DATASETS[dataset]
+    K_values = args.K or SUGGESTED_K_VALUES
 
-    for extension in extensions:
-      for N in N_values:
-        generate_data(dataset, extensions, N_values, K_values)
+    for N in N_values:
+        generate_result(extension, dataset, N, K_values)

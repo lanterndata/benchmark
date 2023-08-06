@@ -19,7 +19,7 @@ def generate_result(extension, dataset, N, count=10):
 
     current_results = []
     for c in range(count):
-        print(f"dataset: {dataset}, N: {N}, count: {c} / {count}")
+        print(f"extension: {extension}, dataset: {dataset}, N: {N}, count: {c} / {count}")
 
         create_index_query = get_create_index_query(extension, dataset, N)
         result = subprocess.run(["psql", "-U", user, "-c", SUPPRESS_COMMAND, "-c", "\\timing", "-c", create_index_query], capture_output=True, text=True)

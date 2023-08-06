@@ -108,7 +108,10 @@ COLUMNS = ['database', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out'
 def dump_results_to_csv():
     sql = f"SELECT {', '.join(COLUMNS[:-2])} FROM experiment_results ORDER BY metric_type, database, dataset"
     rows = execute_sql(sql, select=True)
-    output_file = "outputs/results.csv"
+
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    output_file = os.path.join(script_directory, "../outputs/results.csv")
+
     with open(output_file, 'w', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(COLUMNS[:-2])
