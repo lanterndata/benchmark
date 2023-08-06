@@ -6,8 +6,8 @@ import plotly.graph_objects as go
 from scripts.delete_index import get_drop_index_query, delete_index
 from scripts.create_index import get_create_index_query
 from utils.colors import get_color_from_extension
-from scripts.number_utils import convert_string_to_number
-from scripts.script_utils import save_result, VALID_EXTENSIONS, VALID_DATASETS
+from scripts.number_utils import convert_string_to_number, convert_number_to_string
+from scripts.script_utils import save_result, VALID_EXTENSIONS, VALID_DATASETS, execute_sql
 from utils.print import print_labels, print_row
 
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
@@ -46,31 +46,32 @@ def generate_result(extension, dataset, N, count=10):
     print('average latency:', average_latency, 'ms')
 
 def get_n_latency(extension, dataset):
-  sql = """
-      SELECT
-          N,
-          metric_value
-      FROM
-          experiment_results
-      WHERE
-          metric_type = 'create (latency ms)'
-          AND database = %s
-          AND dataset = %s
-      ORDER BY
-          N
-  """
-  data = (extension, dataset)
-  values = execute_sql(sql, data=data, select=True)
-  return values
+    sql = """
+        SELECT
+            N,
+            metric_value
+        FROM
+            experiment_results
+        WHERE
+            metric_type = 'create (latency ms)'
+            AND database = %s
+            AND dataset = %s
+        ORDER BY
+            N
+    """
+    data = (extension, dataset)
+    values = execute_sql(sql, data=data, select=True)
+    return values
 
 def print_results(dataset):
     for extension in VALID_EXTENSIONS:
       results = get_n_latency(extension, dataset)
       if len(results) == 0:
+          print(f"No results for {extension}")
           continue
       print_labels(f"{dataset} - {extension}", 'N', 'Time (ms)')
-      for N, times in data:
-          print_row(N, "{:.2f}".format(latency))
+      for N, latency in results:
+          print_row(convert_number_to_string(N), "{:.2f}".format(latency))
       print('\n\n')
 
 def plot_results(dataset):

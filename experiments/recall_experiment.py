@@ -6,7 +6,7 @@ from scripts.delete_index import delete_index
 from scripts.create_index import create_index
 from utils.print import print_labels, print_row
 from scripts.script_utils import execute_sql, save_result, VALID_QUERY_DATASETS, VALID_EXTENSIONS, SUGGESTED_K_VALUES
-from scripts.number_utils import convert_string_to_number
+from scripts.number_utils import convert_string_to_number, convert_number_to_string
 
 MAX_QUERIES = 50
 
@@ -90,8 +90,7 @@ def print_results(extension, dataset):
     N_values = VALID_QUERY_DATASETS[dataset]
     for N in N_values:
         results = get_k_recall(extension, dataset, N)
-        print_labels(dataset, N)
-        print_labels('K', 'Recall')
+        print_labels(dataset + ' - ' + convert_number_to_string(N), 'K', 'Recall')
         for K, recall in results:
             print_row(K, recall)
         print('\n\n')

@@ -8,5 +8,5 @@ CREATE TABLE experiment_results (
   err TEXT,
   metric_type TEXT NOT NULL,
   metric_value DOUBLE PRECISION NOT NULL,
-  CONSTRAINT unique_result UNIQUE (metric_type, database, dataset, n, k)
+  CONSTRAINT unique_result UNIQUE NULLS NOT DISTINCT (metric_type, database, dataset, n, k)
 );

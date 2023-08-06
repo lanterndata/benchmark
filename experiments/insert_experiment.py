@@ -3,7 +3,9 @@ import argparse
 import psycopg2
 import plotly.graph_objects as go
 from scripts.script_utils import get_table_name, save_result, VALID_DATASETS, execute_sql, VALID_EXTENSIONS_AND_NONE
+from scripts.number_utils import convert_number_to_string
 from utils.colors import get_color_from_extension
+from utils.print import print_labels, print_row
 import time
 
 N_INTERVAL = 1000
@@ -17,10 +19,11 @@ def get_dest_index_name(dataset):
 
 def create_dest_table(dataset):
     table_name = get_dest_table_name(dataset)
+    vector_dim = 128 if dataset == 'sift' else 960
     sql = f"""
       CREATE TABLE IF NOT EXISTS {table_name} (
         id SERIAL PRIMARY KEY,
-        v VECTOR(128)
+        v VECTOR({vector_dim})
       )
     """
     execute_sql(sql)
@@ -48,6 +51,9 @@ def delete_dest_table(dataset):
     sql = f"DROP TABLE IF EXISTS {table_name}"
     execute_sql(sql)
 
+def get_metric_type(bulk):
+    return 'insert bulk (latency ms)' if bulk else 'insert (latency ms)'
+
 def generate_result(extension, dataset, bulk=False):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
@@ -59,6 +65,9 @@ def generate_result(extension, dataset, bulk=False):
     create_dest_index(extension, dataset)
 
     result_params = {
+        'metric_type': get_metric_type(bulk),
+        'database': extension,
+        'dataset': dataset,
         'conn': conn,
         'cur': cur,
     }
@@ -80,11 +89,11 @@ def generate_result(extension, dataset, bulk=False):
             t2 = time.time()
             insert_latency = t2 - t1
             save_result(
-                metric_type='insert bulk (latency ms)',
                 metric_value=insert_latency,
                 n=N,
                 **result_params
             )
+            print(f"extension: {extension}, dataset: {dataset}, latency for bulk insert {N - N_INTERVAL} - {N}: {insert_latency}")
     else:
         t1 = time.time()
         for N in range(N_MAX):
@@ -102,11 +111,11 @@ def generate_result(extension, dataset, bulk=False):
                 t2 = time.time()
                 insert_latency = t2 - t1
                 save_result(
-                    metric_type='insert (latency ms)',
                     metric_value=insert_latency,
                     n=N,
                     **result_params
                 )
+                print(f"extension: {extension}, dataset: {dataset}, latency for inserts {N - N_INTERVAL} - {N}: {insert_latency}")
                 t1 = time.time()
     
     delete_dest_table(dataset)
@@ -114,30 +123,45 @@ def generate_result(extension, dataset, bulk=False):
     cur.close()
     conn.close()
 
+def get_n_latency(metric_type, database, dataset):
+    sql = f"""
+        SELECT
+            N,
+            metric_value
+        FROM
+            experiment_results
+        WHERE
+            metric_type = %s
+            AND database = %s
+            AND dataset = %s
+        ORDER BY
+            N
+    """
+    data = (metric_type, database, dataset)
+    values = execute_sql(sql, data, select=True)
+    return values
+
+def print_results(dataset, bulk=False):
+    metric_type = get_metric_type(bulk)
+    for extension in VALID_EXTENSIONS_AND_NONE:
+        results = get_n_latency(metric_type, extension, dataset)
+        if len(results) == 0:
+            continue
+        print_labels(dataset + ' - ' + extension, 'N', 'latency (ms)')
+        for N, latency in results:
+            print_row(convert_number_to_string(N), "{:.2f}".format(latency))
+        print('\n\n')
+
 def plot_results(dataset, bulk=False):
-    metric_type = 'insert bulk (latency ms)' if bulk else 'insert (latency ms)'
+    metric_type = get_metric_type(bulk)
 
     # Process data
     plot_items = []
     for extension in VALID_EXTENSIONS_AND_NONE:
-        sql = f"""
-            SELECT
-                N,
-                metric_value
-            FROM
-                experiment_results
-            WHERE
-                metric_type = %s
-                AND database = %s
-                AND dataset = %s
-            ORDER BY
-                N
-        """
-        data = (metric_type, extension, dataset)
-        values = execute_sql(sql, data, select=True)
-        if len(values) == 0:
+        results = get_n_latency(metric_type, extension, dataset)
+        if len(results) == 0:
             continue
-        x_values, y_values = zip(*values)
+        x_values, y_values = zip(*results)
         color = get_color_from_extension(extension)
         plot_items.append((extension, x_values, y_values, color))
 
@@ -153,7 +177,7 @@ def plot_results(dataset, bulk=False):
         ))
     fig.update_layout(
         title=metric_type,
-        xaxis_title='latency of inserting last 1000 rows',
+        xaxis_title=f"latency of inserting last {N_INTERVAL} rows",
         yaxis_title='latency (ms)',
     )
     fig.show()

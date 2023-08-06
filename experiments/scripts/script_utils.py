@@ -9,7 +9,9 @@ from .number_utils import convert_number_to_string
 
 METRICS_WITH_K = ['select (latency ms)', 'select (tps)', 'recall']
 
-VALID_METRICS = METRICS_WITH_K + ['disk usage (bytes)', 'create (latency ms)']
+METRICS_WITHOUT_N = ['insert (latency ms)', 'insert bulk (latency ms)']
+
+VALID_METRICS = METRICS_WITH_K + METRICS_WITHOUT_N + ['disk usage (bytes)', 'create (latency ms)']
 
 VALID_EXTENSIONS = ['pgvector', 'lantern']
 
@@ -84,6 +86,8 @@ def execute_sql(sql, data=None, conn=None, cur=None, select=False, select_one=Fa
 
     except Exception as e:
       print("Error executing SQL:", e)
+      print(sql)
+      print()
       return False
 
     finally:

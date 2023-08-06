@@ -1,31 +1,40 @@
-from scripts.script_utils import execute_sql, convert_number_to_string, VALID_METRICS, METRICS_WITH_K, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, VALID_DATASETS, VALID_QUERY_DATASETS, SUGGESTED_K_VALUES
+from scripts.script_utils import execute_sql, VALID_METRICS, METRICS_WITH_K, METRICS_WITHOUT_N, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, VALID_DATASETS, VALID_QUERY_DATASETS, SUGGESTED_K_VALUES
+from scripts.number_utils import convert_number_to_string
 import recall_experiment
 import select_experiment
 import disk_usage_experiment
 import create_experiment
+import insert_experiment
+import insert_bulk_experiment
 
 # Parameter sets
 
 def get_found_parameter_sets(metric_type):
     if metric_type in METRICS_WITH_K:
         sql = 'SELECT database, dataset, n, k FROM experiment_results WHERE metric_type = %s'
+    elif metric_type in METRICS_WITHOUT_N:
+        sql = 'SELECT database, dataset FROM experiment_results WHERE metric_type = %s'
     else:
         sql = 'SELECT database, dataset, n FROM experiment_results WHERE metric_type = %s'
   
     found_parameter_sets = execute_sql(sql, data=(metric_type,), select=True)
-    found_parameter_sets = {(database, dataset, convert_number_to_string(n), *rest) for (database, dataset, n, *rest) in found_parameter_sets}
+    if metric_type in METRICS_WITHOUT_N:
+        found_parameter_sets = {(database, dataset, convert_number_to_string(n), *rest) for (database, dataset, n, *rest) in found_parameter_sets}
     return found_parameter_sets
 
 def get_extension_parameter_sets(extension, metric_type):
     valid_parameter_sets = []
     for dataset in VALID_DATASETS.keys():
-        valid_N = VALID_QUERY_DATASETS[dataset] if metric_type == 'recall' else VALID_DATASETS[dataset]
-        for N in valid_N:
-            if metric_type in METRICS_WITH_K:
-                for K in SUGGESTED_K_VALUES:
-                    valid_parameter_sets.append((extension, dataset, N, K))
-            else:
-                valid_parameter_sets.append((extension, dataset, N))
+        if metric_type in METRICS_WITHOUT_N:
+            valid_parameter_sets.append((extension, dataset))
+        else:
+            valid_N = VALID_QUERY_DATASETS[dataset] if metric_type == 'recall' else VALID_DATASETS[dataset]
+            for N in valid_N:
+                if metric_type in METRICS_WITH_K:
+                    for K in SUGGESTED_K_VALUES:
+                        valid_parameter_sets.append((extension, dataset, N, K))
+                else:
+                    valid_parameter_sets.append((extension, dataset, N))
     return valid_parameter_sets
 
 def get_missing_parameter_sets(metric_type):
@@ -56,7 +65,7 @@ def group_parameter_sets_with_k(parameter_sets):
 def validate(metric_type, extension=None):
     assert metric_type in VALID_METRICS
     if extension is not None:
-        if 'select' in metric_type or 'recall' in metric_type:
+        if 'select' in metric_type or 'recall' in metric_type or 'insert' in metric_type:
             assert extension in VALID_EXTENSIONS_AND_NONE
         else:
             assert extension in VALID_EXTENSIONS
@@ -72,6 +81,10 @@ def get_generate_result(metric_type):
         return disk_usage_experiment.generate_result
     if metric_type == 'create (latency ms)':
         return create_experiment.generate_result
+    if metric_type == 'insert (latency ms)':
+        return insert_experiment.generate_result
+    if metric_type == 'insert bulk (latency ms)':
+        return insert_bulk_experiment.generate_result
 
 def generate_extension_results(extension, metric_type):
     validate(metric_type, extension)

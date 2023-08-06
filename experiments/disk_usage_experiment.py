@@ -6,7 +6,7 @@ from scripts.create_index import create_index
 from scripts.delete_index import delete_index
 from scripts.script_utils import execute_sql, VALID_DATASETS, VALID_EXTENSIONS, get_index_name, save_result
 from utils.colors import get_color_from_extension
-from scripts.number_utils import convert_string_to_number, convert_bytes_to_number
+from scripts.number_utils import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
 from utils.print import print_labels, print_row
 
 def generate_result(extension, dataset, N):
@@ -56,10 +56,9 @@ def print_results(dataset):
       results = get_n_disk_usage(extension, dataset)
       if len(results) == 0:
           continue
-      print_labels(dataset + ' - ' + extension)
-      print_labels('N', 'Disk Usage (MB)')
+      print_labels(dataset + ' - ' + extension, 'N', 'Disk Usage (MB)')
       for N, disk_usage in data:
-          print_row(N, disk_usage)
+          print_row(convert_number_to_string(N), disk_usage)
       print('\n\n')
 
 def plot_results(dataset):
