@@ -25,10 +25,10 @@ blue_shades = [
   'rgb(0,0,153)',
 ]
 
-def get_color_from_extension(extension):
+def get_color_from_extension(extension, index=0):
   if extension == 'lantern':
-      return green_shades[0]
+      return green_shades[index]
   elif extension == 'pgvector':
-      return blue_shades[0]
+      return blue_shades[index]
   else:
-      return red_shades[0]
+      return red_shades[index]

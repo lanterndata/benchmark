@@ -1,4 +1,4 @@
-from script_utils import parse_args, get_table_name, get_index_name, execute_sql, DEFAULT_INDEX_PARAMS, VALID_INDEX_PARAMS, VALID_DATASETS
+from .script_utils import parse_args, get_table_name, get_index_name, execute_sql, DEFAULT_INDEX_PARAMS, VALID_INDEX_PARAMS, VALID_DATASETS
 
 def get_create_pg_vector_index_query(dataset, N, index_params):
     table = get_table_name(dataset, N)

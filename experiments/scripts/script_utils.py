@@ -4,7 +4,8 @@ import os
 import psycopg2
 import csv
 import argparse
-from number_utils import convert_number_to_string
+import json
+from .number_utils import convert_number_to_string
 
 # Allowed parameters
 
@@ -63,8 +64,8 @@ def parse_args(description, args):
 
     extension = parsed_args.extension if 'extension' in args else None
     dataset = parsed_args.dataset
-    N_values = parsed_args.N if 'N' in parsed_args else None
-    K = parsed_args.K if 'K' in parsed_args else None
+    N_values = (parsed_args.N or VALID_DATASETS[dataset]) if 'N' in parsed_args else None
+    K = (parsed_args.K or SUGGESTED_K_VALUES) if 'K' in parsed_args else None
 
     if 'N' in args:
         for N in N_values:
@@ -169,11 +170,11 @@ def dump_results_to_csv():
         for row in rows:
             csv_writer.writerow(row)
 
-def save_result(metric_type, metric_value, database, dataset, n, k=None, out=None, err=None, conn=None, cur=None):
+def save_result(metric_type, metric_value, database, database_params, dataset, n, k=None, out=None, err=None, conn=None, cur=None):
     columns = ', '.join(COLUMNS)
     placeholders = ', '.join(['%s'] * len(COLUMNS))
     updates = ', '.join(map(lambda col: f"{col} = EXCLUDED.{col}", COLUMNS))
     sql = f"INSERT INTO experiment_results ({columns}) VALUES ({placeholders}) ON CONFLICT ON CONSTRAINT unique_result DO UPDATE SET {updates}"
-    data = (database, dataset, n, k, metric_type, metric_value, out, err)
+    data = (database, json.dumps(database_params), dataset, n, k, metric_type, metric_value, out, err)
     execute_sql(sql, data, conn=conn, cur=cur)
     dump_results_to_csv()

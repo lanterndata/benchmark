@@ -1,5 +1,4 @@
-import argparse
-from script_utils import get_index_name, execute_sql, parse_args
+from .script_utils import get_index_name, execute_sql, parse_args
 
 def get_drop_index_query(dataset, N):
     index_name = get_index_name(dataset, N)
