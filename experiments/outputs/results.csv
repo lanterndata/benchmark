@@ -1,1 +1,2 @@
 database,database_params,dataset,n,k,metric_type,metric_value
+pgvector,"{""lists"": 100}",sift,10000,0,create (latency ms),583.1014

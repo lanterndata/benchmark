@@ -170,7 +170,7 @@ def dump_results_to_csv():
         for row in rows:
             csv_writer.writerow(row)
 
-def save_result(metric_type, metric_value, database, database_params, dataset, n, k=None, out=None, err=None, conn=None, cur=None):
+def save_result(metric_type, metric_value, database, database_params, dataset, n, k=0, out=None, err=None, conn=None, cur=None):
     columns = ', '.join(COLUMNS)
     placeholders = ', '.join(['%s'] * len(COLUMNS))
     updates = ', '.join(map(lambda col: f"{col} = EXCLUDED.{col}", COLUMNS))

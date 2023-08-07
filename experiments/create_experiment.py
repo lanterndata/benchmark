@@ -44,7 +44,7 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
         dataset=dataset,
         n=convert_string_to_number(N)
     )
-    print('average latency:', average_latency, 'ms')
+    print('average latency:', average_latency, 'ms\n')
 
 def get_n_latency(extension, dataset):
     sql = """
