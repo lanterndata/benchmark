@@ -1,6 +1,7 @@
 CREATE TABLE experiment_results (
   id SERIAL PRIMARY KEY,
   database TEXT NOT NULL,
+  database_params TEXT NOT NULL,
   dataset TEXT NOT NULL,
   n INTEGER NOT NULL,
   k INTEGER,
