@@ -3,9 +3,17 @@ import subprocess
 import os
 import psycopg2
 import csv
-from .number_utils import convert_number_to_string
+import argparse
+from number_utils import convert_number_to_string
 
 # Allowed parameters
+
+DEFAULT_INDEX_PARAMS = {
+    'pgvector': { 'lists': 100 },
+    'lantern': { 'M': 2, 'ef_construction': 10, 'ef': 4 }
+}
+
+VALID_INDEX_PARAMS = { index: list(default_params.keys()) for index, default_params in DEFAULT_INDEX_PARAMS.items() }
 
 METRICS_WITH_K = ['select (latency ms)', 'select (tps)', 'recall']
 
@@ -28,6 +36,46 @@ VALID_QUERY_DATASETS = {
 }
 
 SUGGESTED_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
+
+# Argument parser
+
+def parse_args(description, args):
+    parser = argparse.ArgumentParser(description=description)
+
+    if 'extension' in args:
+        valid_extensions = VALID_EXTENSIONS_AND_NONE if 'none' in args else VALID_EXTENSIONS
+        parser.add_argument('--extension', type=str, choices=valid_extensions, required=True, help='Extension type')
+
+    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="Dataset name")
+
+    if 'N' in args:
+        parser.add_argument("--N", nargs='+', type=str, required=True, help="dataset size")
+    if 'K' in args:
+        parser.add_argument("--K", nargs='+', type=int, help="K values (e.g., 5)")
+    
+    if 'extension' in args:
+        parser.add_argument("--lists", type=int, help="parameter for pgvector")
+        parser.add_argument("--M", type=int, help="parameter for lantern")
+        parser.add_argument("--ef_construction", type=int, help="parameter for lantern")
+        parser.add_argument("--ef", type=int, help="parameter for lantern")
+
+    parsed_args = parser.parse_args()
+
+    extension = parsed_args.extension if 'extension' in args else None
+    dataset = parsed_args.dataset
+    N_values = parsed_args.N if 'N' in parsed_args else None
+    K = parsed_args.K if 'K' in parsed_args else None
+
+    if 'N' in args:
+        for N in N_values:
+            if not N in VALID_DATASETS[dataset]:
+                parser.error(f"Invalid dataset size: {N_values}. Valid dataset sizes for {dataset} are: {', '.join(VALID_DATASETS[dataset])}")
+
+    index_params = None
+    if extension is not None:
+        index_params = { key: getattr(parsed_args, key) for key in VALID_INDEX_PARAMS[extension] if getattr(parsed_args, key) is not None }
+
+    return extension, index_params, dataset, N_values, K
 
 # Get names
 
@@ -106,7 +154,7 @@ def run_command(command):
 
 # Results
 
-COLUMNS = ['database', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
+COLUMNS = ['database', 'database_params', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
 
 def dump_results_to_csv():
     sql = f"SELECT {', '.join(COLUMNS[:-2])} FROM experiment_results ORDER BY metric_type, database, dataset"
