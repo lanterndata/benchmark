@@ -12,3 +12,16 @@ Scripts you can run
 - experiments/create_experiment.py
 - experiments/select_experiment.py
 - experiments/disk_usage_experiment.py
+
+
+### Examples
+
+Run recall experiments on Lantern
+```bash
+python  ./experiments/recall_experiment.py --dataset sift --extension pgvector --N 10k 100k
+```
+
+Use a custom database URL to run the experiments
+```bash
+DATABASE_URL='postgresql://ngalstyan:abra@localhost:5432/testdb' python  ./experiments/recall_experiment.py --dataset sift --extension pgvector --N 10k 100k
+ ```
