@@ -78,6 +78,51 @@ def parse_args(description, args):
 
     return extension, index_params, dataset, N_values, K
 
+# Parameters
+
+def get_distinct_database_params(metric_type, extension, dataset):
+    sql = """
+        SELECT DISTINCT
+            database_params
+        FROM
+            experiment_results
+        WHERE
+            metric_type = %s
+            AND database = %s
+            AND dataset = %s
+    """
+    data = (METRIC_TYPE, extension, dataset)
+    database_params = execute_sql(sql, data=data, select=True)
+    database_params = [p[0] for p in database_params]
+    return database_params
+
+def get_experiment_results_for_params(metric_type, database, database_params, dataset):
+    sql = """
+        SELECT
+            N,
+            metric_value
+        FROM
+            experiment_results
+        WHERE
+            metric_type = %s
+            AND database = %s
+            AND database_params = %s
+            AND dataset = %s
+        ORDER BY
+            N
+    """
+    data = (metric_type, extension, p, dataset)
+    results = execute_sql(sql, data=data, select=True)
+    return results
+
+def get_experiment_results(metric_type, extension, dataset):
+    database_params = get_distinct_database_params(metric_type, extension, dataset)
+    values = []
+    for p in database_params:
+        value = get_experiment_results_by_n(metric_type, extension, p, dataset)
+        values.append((p, value))
+    return values
+
 # Get names
 
 def get_table_name(dataset, N):

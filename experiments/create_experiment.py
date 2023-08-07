@@ -7,7 +7,7 @@ from scripts.delete_index import get_drop_index_query, delete_index
 from scripts.create_index import get_create_index_query
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number, convert_number_to_string
-from scripts.script_utils import save_result, VALID_EXTENSIONS, VALID_DATASETS, execute_sql, parse_args
+from scripts.script_utils import save_result, VALID_EXTENSIONS, VALID_DATASETS, execute_sql, parse_args, get_experiment_results
 from utils.print import print_labels, print_row
 
 METRIC_TYPE = 'create (latency ms)'
@@ -46,44 +46,9 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
     )
     print('average latency:', average_latency, 'ms\n')
 
-def get_n_latency(extension, dataset):
-    sql = """
-        SELECT DISTINCT
-            database_params
-        FROM
-            experiment_results
-        WHERE
-            metric_type = %s
-            AND database = %s
-            AND dataset = %s
-    """
-    data = (METRIC_TYPE, extension, dataset)
-    database_params = execute_sql(sql, data=data, select=True)
-    database_params = [p[0] for p in database_params]
-
-    values = []
-    for p in database_params:
-        sql = """
-            SELECT
-                N,
-                metric_value
-            FROM
-                experiment_results
-            WHERE
-                metric_type = %s
-                AND database = %s
-                AND database_params = %s
-                AND dataset = %s
-            ORDER BY
-                N
-        """
-        data = (METRIC_TYPE, extension, p, dataset)
-        values.append((p, execute_sql(sql, data=data, select=True)))
-    return values
-
 def print_results(dataset):
     for extension in VALID_EXTENSIONS:
-      results = get_n_latency(extension, dataset)
+      results = get_experiment_results(METRIC_TYPE, extension, dataset)
       if len(results) == 0:
           print(f"No results for {extension}")
           print("\n\n")
@@ -97,7 +62,7 @@ def plot_results(dataset):
     fig = go.Figure()
 
     for extension in VALID_EXTENSIONS:
-        results = get_n_latency(extension, dataset)
+        results = get_experiment_results(METRIC_TYPE, extension, dataset)
         for index, (database_params, param_results) in enumerate(results):
             N_values, times = zip(*param_results)
             fig.add_trace(go.Scatter(
