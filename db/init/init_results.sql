@@ -1,4 +1,4 @@
-DROP TABLE experiment_results;
+DROP TABLE IF EXISTS experiment_results;
 CREATE TABLE experiment_results (
   id SERIAL PRIMARY KEY,
   database TEXT NOT NULL,

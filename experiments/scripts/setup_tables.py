@@ -33,17 +33,15 @@ print("Creating tables...")
 conn = psycopg2.connect(os.environ["DATABASE_URL"]) 
 cur = conn.cursor()
 
-# with open("create_tables.sql", "r") as sqlfile:
-#     cur.execute(sqlfile.read())
+with open("create_tables.sql", "r") as sqlfile:
+    cur.execute(sqlfile.read())
 
-# with open("create_tables_recall.sql", "r") as sqlfile:
-#     cur.execute(sqlfile.read())
+with open("create_tables_recall.sql", "r") as sqlfile:
+    cur.execute(sqlfile.read())
 
-#with open("../../db/init/init_results.sql", "r") as sqlfile:
-#    cur.execute(sqlfile.read())
-#with open("../../db/init/init_util.sql", "r") as sqlfile:
-#    cur.execute(sqlfile.read())
-with open("create_tables_derived.sql", "r") as sqlfile:
+with open("../../db/init/init_results.sql", "r") as sqlfile:
+    cur.execute(sqlfile.read())
+with open("../../db/init/init_util.sql", "r") as sqlfile:
     cur.execute(sqlfile.read())
 
 conn.commit()
