@@ -78,7 +78,7 @@ def get_n_latency(extension, dataset):
                 N
         """
         data = (METRIC_TYPE, extension, p, dataset)
-        values += (p, execute_sql(sql, data=data, select=True))
+        values.append((p, execute_sql(sql, data=data, select=True)))
     return values
 
 def print_results(dataset):
@@ -86,9 +86,9 @@ def print_results(dataset):
       results = get_n_latency(extension, dataset)
       if len(results) == 0:
           print(f"No results for {extension}")
-          continue
+          print("\n\n")
       for (database_params, param_results) in results:
-          print_labels(f"{dataset} - {extension} - {param_results}", 'N', 'Time (ms)')
+          print_labels(f"{dataset} - {extension} - {database_params}", 'N', 'Time (ms)')
           for N, latency in param_results:
               print_row(convert_number_to_string(N), "{:.2f}".format(latency))
           print('\n\n')
@@ -98,9 +98,7 @@ def plot_results(dataset):
 
     for extension in VALID_EXTENSIONS:
         results = get_n_latency(extension, dataset)
-        if len(results) == 0:
-            continue
-        for ((database_params, param_results), index) in enumerate(results):
+        for index, (database_params, param_results) in enumerate(results):
             N_values, times = zip(*param_results)
             fig.add_trace(go.Scatter(
                 x=N_values,

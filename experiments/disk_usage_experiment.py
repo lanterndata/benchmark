@@ -9,14 +9,15 @@ from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
 from utils.print import print_labels, print_row
 
-def generate_result(extension, dataset, N):
+def generate_result(extension, dataset, N, index_params={}):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
     delete_index(dataset, N, conn=conn, cur=cur)
-    create_index(extension, dataset, N, conn=conn, cur=cur)
+    create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
     index = get_index_name(dataset, N)
+
     execute_sql(f"SELECT pg_size_pretty(pg_total_relation_size('{index}'))", conn=conn, cur=cur)
     disk_usage = cur.fetchone()[0]
     save_result(
