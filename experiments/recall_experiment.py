@@ -9,7 +9,7 @@ from scripts.script_utils import execute_sql, save_result, VALID_QUERY_DATASETS,
 from scripts.number_utils import convert_string_to_number, convert_number_to_string
 
 METRIC_TYPE = 'recall'
-MAX_QUERIES = 50
+MAX_QUERIES = 100
 
 def generate_result(extension, dataset, N, K_values, index_params={}):
   db_connection_string = os.environ.get('DATABASE_URL')
@@ -24,32 +24,32 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
       truth_table_name = f"{dataset}_truth{N}"
       query_table_name = f"{dataset}_query{N}"
 
-      cur.execute(f"SELECT id FROM {query_table_name} LIMIT {MAX_QUERIES}")
-      query_ids = cur.fetchall()
+      query_ids = execute_sql(f"SELECT id FROM {query_table_name} LIMIT {MAX_QUERIES}", select=True)
 
       recall_at_k_sum = 0
       for query_id, in query_ids:
-          cur.execute(f"""
+          truth_ids = execute_sql(f"""
               SELECT
-                  CARDINALITY(ARRAY(SELECT UNNEST(base_ids) INTERSECT SELECT UNNEST(truth_ids)))
-              FROM 
-              (
-                  SELECT 
-                      q.id AS query_id,
-                      (SELECT ARRAY_AGG(b.id ORDER BY q.v <-> b.v) FROM {base_table_name} b LIMIT {K}) AS base_ids,
-                      t.indices[1:{K}] AS truth_ids
-                  FROM 
-                      {query_table_name} q
-                  JOIN 
-                      {truth_table_name} t
-                  ON 
-                      q.id = t.id
-              ) subquery
+                  indices[1:{K}]
+              FROM
+                  {truth_table_name}
               WHERE
-                  query_id = {query_id}
-          """)
-          recall_query = cur.fetchone()[0]
-          recall_at_k_sum += int(recall_query)
+                  id = {query_id}
+          """, select_one=True)
+          base_ids = list(map(lambda x: x[0], execute_sql(f"""
+              SELECT
+                  b.id - 1
+              FROM
+                  {base_table_name} b
+              JOIN
+                  {query_table_name} q
+              ON
+                  q.id = {query_id}
+              ORDER BY
+                  q.v <-> b.v
+              LIMIT {K}
+          """, select=True)))
+          recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
 
       # Calculate the average recall for this K
       recall_at_k = recall_at_k_sum / len(query_ids) / K
