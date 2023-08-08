@@ -1,6 +1,6 @@
 from .script_utils import parse_args, get_table_name, get_index_name, execute_sql, DEFAULT_INDEX_PARAMS, VALID_INDEX_PARAMS, VALID_DATASETS
 
-def get_create_pg_vector_index_query(dataset, N, index_params):
+def get_create_pgvector_index_query(dataset, N, index_params):
     table = get_table_name(dataset, N)
     index = get_index_name(dataset, N)
     params = { **DEFAULT_INDEX_PARAMS['pgvector'], **index_params }
@@ -13,7 +13,7 @@ def get_create_pg_vector_index_query(dataset, N, index_params):
     return sql
 
 def create_pgvector_index(dataset, N, index_params={}, conn=None, cur=None):
-    sql = get_create_pg_vector_index_query(dataset, N, index_params)
+    sql = get_create_pgvector_index_query(dataset, N, index_params)
     execute_sql(sql, conn=conn, cur=cur)
 
 def get_create_lantern_index_query(dataset, N, index_params):
