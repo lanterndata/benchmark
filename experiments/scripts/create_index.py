@@ -6,10 +6,11 @@ def get_create_pgvector_index_query(dataset, N, index_params):
     params = { **DEFAULT_INDEX_PARAMS['pgvector'], **index_params }
     sql = f"""
         CREATE INDEX IF NOT EXISTS {index} ON {table} USING
-        ivfflat (v) WITH (
+        ivfflat (v vector_l2_ops) WITH (
             lists = {params['lists']}
         )
     """
+    print(sql)
     return sql
 
 def create_pgvector_index(dataset, N, index_params={}, conn=None, cur=None):
