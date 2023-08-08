@@ -55,7 +55,7 @@ def plot_results(dataset):
     for extension in VALID_EXTENSIONS:
         results = get_experiment_results(METRIC_TYPE, extension, dataset)
         for index, (database_params, param_results) in enumerate(results):
-            N_values, disk_usages = zip(*results)
+            N_values, disk_usages = zip(*param_results)
             fig.add_trace(go.Scatter(
                 x=N_values,
                 y=disk_usages,

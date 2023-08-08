@@ -5,7 +5,7 @@ import psycopg2
 import csv
 import argparse
 import json
-from .number_utils import convert_number_to_string
+from .number_utils import convert_number_to_string, convert_string_to_number
 
 # Allowed parameters
 
@@ -80,8 +80,9 @@ def parse_args(description, args):
 
 # Parameters
 
-def get_distinct_database_params(metric_type, extension, dataset):
-    sql = """
+def get_distinct_database_params(metric_type, extension, dataset, N):
+    n_sql = '' if N is None else 'AND N = %s'
+    sql = f"""
         SELECT DISTINCT
             database_params
         FROM
@@ -90,16 +91,21 @@ def get_distinct_database_params(metric_type, extension, dataset):
             metric_type = %s
             AND database = %s
             AND dataset = %s
+            {n_sql}
     """
-    data = (METRIC_TYPE, extension, dataset)
+    data = (metric_type, extension, dataset)
+    if N is not None:
+        data += (convert_string_to_number(N),)
     database_params = execute_sql(sql, data=data, select=True)
     database_params = [p[0] for p in database_params]
     return database_params
 
-def get_experiment_results_for_params(metric_type, database, database_params, dataset):
-    sql = """
+def get_experiment_results_for_params(metric_type, database, database_params, dataset, N):
+    x_param = 'N' if N is None else 'K'
+    n_sql = '' if N is None else 'AND N = %s'
+    sql = f"""
         SELECT
-            N,
+            {x_param},
             metric_value
         FROM
             experiment_results
@@ -108,18 +114,21 @@ def get_experiment_results_for_params(metric_type, database, database_params, da
             AND database = %s
             AND database_params = %s
             AND dataset = %s
+            {n_sql}
         ORDER BY
-            N
+            {x_param}
     """
-    data = (metric_type, extension, p, dataset)
+    data = (metric_type, database, database_params, dataset)
+    if N is not None:
+        data += (convert_string_to_number(N),)
     results = execute_sql(sql, data=data, select=True)
     return results
 
-def get_experiment_results(metric_type, extension, dataset):
-    database_params = get_distinct_database_params(metric_type, extension, dataset)
+def get_experiment_results(metric_type, extension, dataset, N=None):
+    database_params = get_distinct_database_params(metric_type, extension, dataset, N)
     values = []
     for p in database_params:
-        value = get_experiment_results_by_n(metric_type, extension, p, dataset)
+        value = get_experiment_results_for_params(metric_type, extension, p, dataset, N)
         values.append((p, value))
     return values
 
