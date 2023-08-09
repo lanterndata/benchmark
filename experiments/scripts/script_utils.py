@@ -10,7 +10,7 @@ from .number_utils import convert_number_to_string, convert_string_to_number
 # Allowed parameters
 
 DEFAULT_INDEX_PARAMS = {
-    'pgvector': { 'lists': 100 },
+    'pgvector': { 'lists': 100, 'probes': 1 },
     'lantern': { 'M': 2, 'ef_construction': 10, 'ef': 4 }
 }
 
@@ -55,10 +55,9 @@ def parse_args(description, args):
         parser.add_argument("--K", nargs='+', type=int, help="K values (e.g., 5)")
     
     if 'extension' in args:
-        parser.add_argument("--lists", type=int, help="parameter for pgvector")
-        parser.add_argument("--M", type=int, help="parameter for lantern")
-        parser.add_argument("--ef_construction", type=int, help="parameter for lantern")
-        parser.add_argument("--ef", type=int, help="parameter for lantern")
+        for index, valid_index_params in VALID_INDEX_PARAMS.items():
+            for param in valid_index_params:
+                parser.add_argument(f"--{paran}", type=int, help=f"parameter for {index}")
 
     parsed_args = parser.parse_args()
 

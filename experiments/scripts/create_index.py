@@ -7,7 +7,8 @@ def get_create_pgvector_index_query(table, index, index_params):
         CREATE INDEX IF NOT EXISTS {index} ON {table} USING
         ivfflat (v vector_l2_ops) WITH (
             lists = {params['lists']}
-        )
+        );
+        SET LOCAL ivfflat.probes = {params['probes']};
     """
     return sql
 

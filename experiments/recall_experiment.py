@@ -19,6 +19,7 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
   delete_index(dataset, N, conn=conn, cur=cur)
   create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
 
+  print(f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
   for K in K_values:
       base_table_name = f"{dataset}_base{N}"
       truth_table_name = f"{dataset}_truth{N}"
@@ -56,7 +57,7 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
 
       # Calculate the average recall for this K
       recall_at_k = recall_at_k_sum / len(query_ids) / K
-      print(f"dataset={dataset}, extension={extension}, N={N} | recall @ {K}: {recall_at_k}")
+      print(f"recall@{K}:".ljust(10), "{:.2f}".format(recall_at_k))
       save_result(
         metric_type='recall',
         metric_value=recall_at_k,
@@ -68,6 +69,7 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
         conn=conn,
         cur=cur,
       )
+  print()
 
   cur.close()
   conn.close()
