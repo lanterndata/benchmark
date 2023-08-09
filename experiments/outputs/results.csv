@@ -1,44 +1,38 @@
 database,database_params,dataset,n,k,metric_type,metric_value
+pgvector,"{""lists"": 100}",gist,600000,0,create (latency ms),83357.1827
 pgvector,"{""lists"": 100}",gist,100000,0,create (latency ms),13137.3692
 pgvector,"{""lists"": 100}",gist,200000,0,create (latency ms),27848.7812
 pgvector,"{""lists"": 100}",gist,400000,0,create (latency ms),55816.2152
-pgvector,"{""lists"": 100}",gist,600000,0,create (latency ms),83357.1827
+pgvector,"{""lists"": 100}",sift,1000000,0,create (latency ms),22280.4073
+pgvector,"{""lists"": 1000}",sift,10000,0,create (latency ms),23.4262
+pgvector,"{""lists"": 1000}",sift,100000,0,create (latency ms),98.5081
 pgvector,"{""lists"": 100}",sift,10000,0,create (latency ms),565.7743
 pgvector,"{""lists"": 100}",sift,200000,0,create (latency ms),4786.3522
 pgvector,"{""lists"": 100}",sift,400000,0,create (latency ms),9272.6037
 pgvector,"{""lists"": 100}",sift,600000,0,create (latency ms),13661.3404
 pgvector,"{""lists"": 100}",sift,800000,0,create (latency ms),20459.5407
-pgvector,"{""lists"": 100}",sift,1000000,0,create (latency ms),22280.4073
-pgvector,"{""lists"": 1000}",sift,10000,0,create (latency ms),23.4262
-pgvector,"{""lists"": 1000}",sift,100000,0,create (latency ms),98.5081
 pgvector,"{""lists"": 100}",sift,100000,0,create (latency ms),2530.4207
-pgvector,"{""lists"": 100}",gist,400000,0,disk usage (bytes),1539000000.0
-pgvector,"{""lists"": 100}",gist,800000,0,disk usage (bytes),3073000000.0
 pgvector,"{""lists"": 100}",gist,1000000,0,disk usage (bytes),3841000000.0
-pgvector,"{""lists"": 100}",gist,100000,0,disk usage (bytes),384000000.0
-pgvector,"{""lists"": 100}",gist,200000,0,disk usage (bytes),769000000.0
+pgvector,"{""lists"": 100}",gist,800000,0,disk usage (bytes),3073000000.0
 pgvector,"{""lists"": 100}",gist,600000,0,disk usage (bytes),2306000000.0
-pgvector,"{""lists"": 500}",sift,1000000,0,disk usage (bytes),296000000.0
+pgvector,"{""lists"": 100}",gist,400000,0,disk usage (bytes),1539000000.0
+pgvector,"{""lists"": 100}",gist,200000,0,disk usage (bytes),769000000.0
+pgvector,"{""lists"": 100}",gist,100000,0,disk usage (bytes),384000000.0
+pgvector,"{""lists"": 100}",sift,800000,0,disk usage (bytes),236000000.0
 pgvector,"{""lists"": 100}",sift,10000,0,disk usage (bytes),3448000.0
 pgvector,"{""lists"": 100}",sift,100000,0,disk usage (bytes),30000000.0
 pgvector,"{""lists"": 100}",sift,200000,0,disk usage (bytes),60000000.0
 pgvector,"{""lists"": 100}",sift,400000,0,disk usage (bytes),119000000.0
 pgvector,"{""lists"": 100}",sift,600000,0,disk usage (bytes),177000000.0
-pgvector,"{""lists"": 100}",sift,800000,0,disk usage (bytes),236000000.0
-pgvector,"{""lists"": 100}",sift,1000000,0,disk usage (bytes),294000000.0
-pgvector,"{""lists"": 500}",sift,10000,0,disk usage (bytes),5328000.0
-pgvector,"{""lists"": 500}",sift,100000,0,disk usage (bytes),31000000.0
-pgvector,"{""lists"": 500}",sift,200000,0,disk usage (bytes),61000000.0
-pgvector,"{""lists"": 500}",sift,400000,0,disk usage (bytes),121000000.0
-pgvector,"{""lists"": 500}",sift,600000,0,disk usage (bytes),179000000.0
+pgvector,"{""lists"": 500}",sift,1000000,0,disk usage (bytes),296000000.0
 pgvector,"{""lists"": 500}",sift,800000,0,disk usage (bytes),237000000.0
+pgvector,"{""lists"": 500}",sift,600000,0,disk usage (bytes),179000000.0
+pgvector,"{""lists"": 500}",sift,400000,0,disk usage (bytes),121000000.0
+pgvector,"{""lists"": 500}",sift,200000,0,disk usage (bytes),61000000.0
+pgvector,"{""lists"": 500}",sift,100000,0,disk usage (bytes),31000000.0
+pgvector,"{""lists"": 500}",sift,10000,0,disk usage (bytes),5328000.0
+pgvector,"{""lists"": 100}",sift,1000000,0,disk usage (bytes),294000000.0
 pgvector,"{""lists"": 10}",sift,40000,0,insert (latency s),8.520162343978882
-pgvector,"{""lists"": 10}",sift,6000,0,insert (latency s),8.324006795883179
-pgvector,"{""lists"": 10}",sift,7000,0,insert (latency s),8.28031611442566
-pgvector,"{""lists"": 10}",sift,8000,0,insert (latency s),8.20921802520752
-pgvector,"{""lists"": 10}",sift,9000,0,insert (latency s),8.433951377868652
-pgvector,"{""lists"": 10}",sift,10000,0,insert (latency s),8.189755916595459
-pgvector,"{""lists"": 10}",sift,11000,0,insert (latency s),8.339696645736694
 pgvector,"{""lists"": 10}",sift,12000,0,insert (latency s),8.125101804733276
 pgvector,"{""lists"": 10}",sift,13000,0,insert (latency s),8.294596433639526
 pgvector,"{""lists"": 10}",sift,14000,0,insert (latency s),8.260149478912354
@@ -67,13 +61,25 @@ pgvector,"{""lists"": 10}",sift,36000,0,insert (latency s),8.116114854812622
 pgvector,"{""lists"": 10}",sift,37000,0,insert (latency s),8.192646026611328
 pgvector,"{""lists"": 10}",sift,38000,0,insert (latency s),8.482864379882812
 pgvector,"{""lists"": 10}",sift,39000,0,insert (latency s),8.699440956115723
-lantern,{},sift,10000,3,recall,0.6133333333333334
-lantern,{},sift,10000,5,recall,0.624
-lantern,{},sift,10000,10,recall,0.592
-lantern,{},sift,10000,20,recall,0.575
-lantern,{},sift,10000,40,recall,0.5377500000000001
+pgvector,"{""lists"": 10}",sift,6000,0,insert (latency s),8.324006795883179
+pgvector,"{""lists"": 10}",sift,7000,0,insert (latency s),8.28031611442566
+pgvector,"{""lists"": 10}",sift,8000,0,insert (latency s),8.20921802520752
+pgvector,"{""lists"": 10}",sift,9000,0,insert (latency s),8.433951377868652
+pgvector,"{""lists"": 10}",sift,10000,0,insert (latency s),8.189755916595459
+pgvector,"{""lists"": 10}",sift,11000,0,insert (latency s),8.339696645736694
 lantern,{},sift,10000,80,recall,0.4335
-lantern,{},sift,1000000,1,recall,1.0
+lantern,{},sift,10000,40,recall,0.5377500000000001
+lantern,{},sift,10000,20,recall,0.575
+lantern,{},sift,10000,10,recall,0.592
+lantern,{},sift,10000,5,recall,0.624
+lantern,{},sift,10000,3,recall,0.6133333333333334
+lantern,{},sift,10000,1,recall,0.62
+lantern,{},sift,1000000,80,recall,0.999875
+lantern,{},sift,1000000,40,recall,1.0
+lantern,{},sift,1000000,20,recall,0.9994999999999999
+lantern,{},sift,1000000,10,recall,1.0
+lantern,{},sift,1000000,5,recall,1.0
+lantern,{},sift,1000000,3,recall,0.9966666666666667
 lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,1,recall,0.97
 lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,3,recall,0.9766666666666667
 lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,5,recall,0.968
@@ -88,46 +94,7 @@ lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,10,recall,0.
 lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,20,recall,0.898
 lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,40,recall,0.8554999999999999
 lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,80,recall,0.619125
-lantern,{},sift,1000000,3,recall,0.9966666666666667
-lantern,{},sift,1000000,5,recall,1.0
-lantern,{},sift,1000000,10,recall,1.0
-lantern,{},sift,1000000,20,recall,0.9994999999999999
-lantern,{},sift,1000000,40,recall,1.0
-lantern,{},sift,1000000,80,recall,0.999875
-lantern,{},sift,10000,1,recall,0.62
-pgvector,"{""lists"": 100}",sift,1000000,80,recall,0.5573750000000001
-pgvector,"{""lists"": 200}",sift,1000000,1,recall,0.61
-pgvector,"{""lists"": 200}",sift,1000000,3,recall,0.62
-pgvector,"{""lists"": 200}",sift,1000000,5,recall,0.5900000000000001
-pgvector,"{""lists"": 1000}",sift,1000000,3,recall,0.3666666666666667
-pgvector,"{""lists"": 1000}",sift,1000000,5,recall,0.382
-pgvector,"{""lists"": 1000}",sift,1000000,10,recall,0.375
-pgvector,"{""lists"": 1000}",sift,1000000,20,recall,0.363
-pgvector,"{""lists"": 1000}",sift,1000000,40,recall,0.34249999999999997
-pgvector,"{""lists"": 1000}",sift,1000000,80,recall,0.3255
-pgvector,"{""lists"": 200}",sift,1000000,10,recall,0.55
-pgvector,"{""lists"": 200}",sift,1000000,20,recall,0.5255
-pgvector,"{""lists"": 200}",sift,1000000,40,recall,0.50225
-pgvector,"{""lists"": 200}",sift,1000000,80,recall,0.475
-pgvector,"{""lists"": 400}",sift,1000000,1,recall,0.54
-pgvector,"{""lists"": 400}",sift,1000000,3,recall,0.49333333333333335
-pgvector,"{""lists"": 400}",sift,1000000,5,recall,0.476
-pgvector,"{""lists"": 400}",sift,1000000,10,recall,0.442
-pgvector,"{""lists"": 400}",sift,1000000,20,recall,0.41950000000000004
-pgvector,"{""lists"": 400}",sift,1000000,40,recall,0.39825
-pgvector,"{""lists"": 400}",sift,1000000,80,recall,0.378375
-pgvector,"{""lists"": 800}",sift,1000000,1,recall,0.47
-pgvector,"{""lists"": 800}",sift,1000000,3,recall,0.44333333333333336
-pgvector,"{""lists"": 800}",sift,1000000,5,recall,0.426
-pgvector,"{""lists"": 800}",sift,1000000,10,recall,0.395
-pgvector,"{""lists"": 800}",sift,1000000,20,recall,0.375
-pgvector,"{""lists"": 800}",sift,1000000,40,recall,0.34975
-pgvector,"{""lists"": 1600}",sift,1000000,1,recall,0.4
-pgvector,"{""lists"": 1600}",sift,1000000,3,recall,0.35333333333333333
-pgvector,"{""lists"": 1600}",sift,1000000,5,recall,0.33999999999999997
-pgvector,"{""lists"": 1600}",sift,1000000,10,recall,0.307
-pgvector,"{""lists"": 1600}",sift,1000000,20,recall,0.281
-pgvector,"{""lists"": 1600}",sift,1000000,40,recall,0.26575000000000004
+lantern,{},sift,1000000,1,recall,1.0
 pgvector,"{""lists"": 1600}",sift,1000000,80,recall,0.24500000000000002
 pgvector,"{""lists"": 2400}",sift,1000000,1,recall,1.0
 pgvector,"{""lists"": 2400}",sift,1000000,3,recall,0.9966666666666667
@@ -163,6 +130,7 @@ pgvector,"{""lists"": 40}",sift,10000,10,recall,0.591
 pgvector,"{""lists"": 40}",sift,10000,20,recall,0.5589999999999999
 pgvector,"{""lists"": 40}",sift,10000,40,recall,0.5305
 pgvector,"{""lists"": 40}",sift,10000,80,recall,0.49225
+pgvector,"{""lists"": 10}",sift,1000000,5,recall,0.882
 pgvector,"{""lists"": 1}",sift,10000,1,recall,1.0
 pgvector,"{""lists"": 1}",sift,10000,3,recall,1.0
 pgvector,"{""lists"": 1}",sift,10000,5,recall,1.0
@@ -196,9 +164,8 @@ pgvector,"{""lists"": 10}",sift,1000000,3,recall,0.8866666666666667
 pgvector,"{""lists"": 10}",sift,1000000,20,recall,0.8625
 pgvector,"{""lists"": 10}",sift,10000,1,recall,0.77
 pgvector,"{""lists"": 10}",sift,1000000,1,recall,0.89
-pgvector,"{""lists"": 10}",sift,1000000,5,recall,0.882
-pgvector,"{""lists"": 5}",sift,10000,3,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,1,recall,1.0
+pgvector,"{""lists"": 5}",sift,10000,3,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,5,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,10,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,20,recall,1.0
@@ -226,3 +193,78 @@ pgvector,"{""lists"": 1}",sift,1000000,5,recall,1.0
 pgvector,"{""lists"": 1}",sift,1000000,10,recall,0.999
 pgvector,"{""lists"": 1}",sift,1000000,20,recall,1.0
 pgvector,"{""lists"": 100}",sift,1000000,1,recall,0.7
+pgvector,"{""lists"": 100}",sift,1000000,80,recall,0.5573750000000001
+pgvector,"{""lists"": 200}",sift,1000000,1,recall,0.61
+pgvector,"{""lists"": 200}",sift,1000000,3,recall,0.62
+pgvector,"{""lists"": 200}",sift,1000000,5,recall,0.5900000000000001
+pgvector,"{""lists"": 1000}",sift,1000000,3,recall,0.3666666666666667
+pgvector,"{""lists"": 1000}",sift,1000000,5,recall,0.382
+pgvector,"{""lists"": 1000}",sift,1000000,10,recall,0.375
+pgvector,"{""lists"": 1000}",sift,1000000,20,recall,0.363
+pgvector,"{""lists"": 1000}",sift,1000000,40,recall,0.34249999999999997
+pgvector,"{""lists"": 1000}",sift,1000000,80,recall,0.3255
+pgvector,"{""lists"": 200}",sift,1000000,10,recall,0.55
+pgvector,"{""lists"": 200}",sift,1000000,20,recall,0.5255
+pgvector,"{""lists"": 200}",sift,1000000,40,recall,0.50225
+pgvector,"{""lists"": 200}",sift,1000000,80,recall,0.475
+pgvector,"{""lists"": 400}",sift,1000000,1,recall,0.54
+pgvector,"{""lists"": 400}",sift,1000000,3,recall,0.49333333333333335
+pgvector,"{""lists"": 400}",sift,1000000,5,recall,0.476
+pgvector,"{""lists"": 400}",sift,1000000,10,recall,0.442
+pgvector,"{""lists"": 400}",sift,1000000,20,recall,0.41950000000000004
+pgvector,"{""lists"": 400}",sift,1000000,40,recall,0.39825
+pgvector,"{""lists"": 400}",sift,1000000,80,recall,0.378375
+pgvector,"{""lists"": 800}",sift,1000000,1,recall,0.47
+pgvector,"{""lists"": 800}",sift,1000000,3,recall,0.44333333333333336
+pgvector,"{""lists"": 800}",sift,1000000,5,recall,0.426
+pgvector,"{""lists"": 800}",sift,1000000,10,recall,0.395
+pgvector,"{""lists"": 800}",sift,1000000,20,recall,0.375
+pgvector,"{""lists"": 800}",sift,1000000,40,recall,0.34975
+pgvector,"{""lists"": 1600}",sift,1000000,1,recall,0.4
+pgvector,"{""lists"": 1600}",sift,1000000,3,recall,0.35333333333333333
+pgvector,"{""lists"": 1600}",sift,1000000,5,recall,0.33999999999999997
+pgvector,"{""lists"": 1600}",sift,1000000,10,recall,0.307
+pgvector,"{""lists"": 1600}",sift,1000000,20,recall,0.281
+pgvector,"{""lists"": 1600}",sift,1000000,40,recall,0.26575000000000004
+pgvector,"{""lists"": 10}",sift,10000,1,select (latency ms),10.692
+pgvector,"{""lists"": 10}",sift,10000,3,select (latency ms),10.93
+pgvector,"{""lists"": 10}",sift,10000,5,select (latency ms),11.296
+pgvector,"{""lists"": 10}",sift,10000,10,select (latency ms),11.314
+pgvector,"{""lists"": 10}",sift,10000,20,select (latency ms),12.034
+pgvector,"{""lists"": 10}",sift,10000,40,select (latency ms),11.716
+pgvector,"{""lists"": 10}",sift,10000,80,select (latency ms),13.119
+pgvector,"{""lists"": 10}",sift,100000,1,select (latency ms),99.622
+pgvector,"{""lists"": 10}",sift,100000,3,select (latency ms),98.74
+pgvector,"{""lists"": 10}",sift,100000,5,select (latency ms),95.55
+pgvector,"{""lists"": 10}",sift,100000,10,select (latency ms),91.023
+pgvector,"{""lists"": 10}",sift,100000,20,select (latency ms),96.668
+pgvector,"{""lists"": 10}",sift,100000,40,select (latency ms),94.429
+pgvector,"{""lists"": 10}",sift,100000,80,select (latency ms),98.528
+pgvector,"{""lists"": 10}",sift,200000,1,select (latency ms),199.023
+pgvector,"{""lists"": 10}",sift,200000,3,select (latency ms),191.117
+pgvector,"{""lists"": 10}",sift,200000,5,select (latency ms),198.177
+pgvector,"{""lists"": 10}",sift,200000,10,select (latency ms),193.989
+pgvector,"{""lists"": 10}",sift,200000,20,select (latency ms),191.604
+pgvector,"{""lists"": 10}",sift,200000,40,select (latency ms),199.131
+pgvector,"{""lists"": 10}",sift,200000,80,select (latency ms),188.433
+pgvector,"{""lists"": 10}",sift,100000,10,select (tps),87.890003
+pgvector,"{""lists"": 10}",sift,10000,1,select (tps),748.246298
+pgvector,"{""lists"": 10}",sift,200000,20,select (tps),41.752854
+pgvector,"{""lists"": 10}",sift,10000,3,select (tps),731.952789
+pgvector,"{""lists"": 10}",sift,100000,20,select (tps),82.757251
+pgvector,"{""lists"": 10}",sift,10000,5,select (tps),708.219477
+pgvector,"{""lists"": 10}",sift,200000,5,select (tps),40.368022
+pgvector,"{""lists"": 10}",sift,10000,10,select (tps),707.08023
+pgvector,"{""lists"": 10}",sift,100000,40,select (tps),84.720095
+pgvector,"{""lists"": 10}",sift,10000,20,select (tps),664.808895
+pgvector,"{""lists"": 10}",sift,200000,80,select (tps),42.455303
+pgvector,"{""lists"": 10}",sift,10000,40,select (tps),682.854103
+pgvector,"{""lists"": 10}",sift,100000,80,select (tps),81.195578
+pgvector,"{""lists"": 10}",sift,10000,80,select (tps),609.780885
+pgvector,"{""lists"": 10}",sift,200000,10,select (tps),41.239551
+pgvector,"{""lists"": 10}",sift,100000,1,select (tps),80.303655
+pgvector,"{""lists"": 10}",sift,200000,1,select (tps),40.196373
+pgvector,"{""lists"": 10}",sift,100000,3,select (tps),81.02048
+pgvector,"{""lists"": 10}",sift,200000,40,select (tps),40.174558
+pgvector,"{""lists"": 10}",sift,100000,5,select (tps),83.72609
+pgvector,"{""lists"": 10}",sift,200000,3,select (tps),41.859175

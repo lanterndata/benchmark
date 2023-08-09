@@ -10,13 +10,13 @@ from scripts.script_utils import get_table_name, run_command, save_result, extra
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
 
-def generate_result(extension, dataset, N, K_values):
+def generate_result(extension, dataset, N, K_values, index_params={}):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
     delete_index(dataset, N, conn=conn, cur=cur)
-    create_index(extension, dataset, N, conn=conn, cur=cur)
+    create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
 
     for K in K_values:
         table = get_table_name(dataset, N)
@@ -42,6 +42,7 @@ def generate_result(extension, dataset, N, K_values):
 
         save_result_params = {
             'database': extension,
+            'database_params': index_params,
             'dataset': dataset,
             'n': convert_string_to_number(N),
             'k': K,
@@ -88,8 +89,7 @@ full_strings = {
 }
 
 def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
-    # Process data
-    plot_items = []
+    fig = go.Figure()
     for extension in VALID_EXTENSIONS_AND_NONE:
         x_values = []
         y_values = []
@@ -113,18 +113,13 @@ def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
                 y_values.append(value)
         if len(x_values) > 0:
             color = get_color_from_extension(extension)
-            plot_items.append((extension, x_values, y_values, color))
-
-    # Plot data
-    fig = go.Figure()
-    for (key, x_values, y_values, color) in plot_items:
-        fig.add_trace(go.Scatter(
-            x=x_values,
-            y=y_values,
-            marker=dict(color=color),
-            mode='lines+markers',
-            name=key
-        ))
+            fig.add_trace(go.Scatter(
+                x=x_values,
+                y=y_values,
+                marker=dict(color=color),
+                mode='lines+markers',
+                name=extension
+            ))
     fig.update_layout(
         title=f"{y} vs. {x}",
         xaxis_title=full_strings[x],
