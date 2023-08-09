@@ -16,18 +16,18 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
   conn = psycopg2.connect(db_connection_string)
   cur = conn.cursor()
 
-  # delete_index(dataset, N, conn=conn, cur=cur)
-  # create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
+  delete_index(dataset, N, conn=conn, cur=cur)
+  create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
 
   for K in K_values:
       base_table_name = f"{dataset}_base{N}"
       truth_table_name = f"{dataset}_truth{N}"
       query_table_name = f"{dataset}_query{N}"
 
-      query_data = execute_sql(f"SELECT id, v FROM {query_table_name} LIMIT {MAX_QUERIES}", select=True)
+      query_ids = execute_sql(f"SELECT id FROM {query_table_name} LIMIT {MAX_QUERIES}", select=True)
 
       recall_at_k_sum = 0
-      for query_id, query_v in query_data:
+      for query_id, in query_ids:
           truth_ids = execute_sql(f"""
               SELECT
                   indices[1:{K}]
@@ -42,13 +42,20 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
               FROM
                   {base_table_name}
               ORDER BY
-                  v <-> {'%s'}
+                  v <-> (
+                      SELECT
+                          v
+                      FROM
+                          {query_table_name}
+                      WHERE
+                          id = {query_id} 
+                  )
               LIMIT {K}
-          """, data=(query_v,), select=True)))
+          """, select=True)))
           recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
 
       # Calculate the average recall for this K
-      recall_at_k = recall_at_k_sum / len(query_data) / K
+      recall_at_k = recall_at_k_sum / len(query_ids) / K
       print(f"dataset={dataset}, extension={extension}, N={N} | recall @ {K}: {recall_at_k}")
       save_result(
         metric_type='recall',

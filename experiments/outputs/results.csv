@@ -1,30 +1,28 @@
 database,database_params,dataset,n,k,metric_type,metric_value
-pgvector,"{""lists"": 100}",gist,200000,0,create (latency ms),27848.7812
 pgvector,"{""lists"": 100}",gist,100000,0,create (latency ms),13137.3692
-pgvector,"{""lists"": 100}",gist,600000,0,create (latency ms),83357.1827
+pgvector,"{""lists"": 100}",gist,200000,0,create (latency ms),27848.7812
 pgvector,"{""lists"": 100}",gist,400000,0,create (latency ms),55816.2152
-pgvector,"{""lists"": 1000}",sift,10000,0,create (latency ms),23.4262
-pgvector,"{""lists"": 1000}",sift,100000,0,create (latency ms),98.5081
-pgvector,"{""lists"": 100}",sift,100000,0,create (latency ms),2530.4207
+pgvector,"{""lists"": 100}",gist,600000,0,create (latency ms),83357.1827
+pgvector,"{""lists"": 100}",sift,10000,0,create (latency ms),565.7743
 pgvector,"{""lists"": 100}",sift,200000,0,create (latency ms),4786.3522
 pgvector,"{""lists"": 100}",sift,400000,0,create (latency ms),9272.6037
 pgvector,"{""lists"": 100}",sift,600000,0,create (latency ms),13661.3404
 pgvector,"{""lists"": 100}",sift,800000,0,create (latency ms),20459.5407
 pgvector,"{""lists"": 100}",sift,1000000,0,create (latency ms),22280.4073
-pgvector,"{""lists"": 100}",sift,10000,0,create (latency ms),565.7743
+pgvector,"{""lists"": 1000}",sift,10000,0,create (latency ms),23.4262
+pgvector,"{""lists"": 1000}",sift,100000,0,create (latency ms),98.5081
+pgvector,"{""lists"": 100}",sift,100000,0,create (latency ms),2530.4207
+pgvector,"{""lists"": 100}",gist,400000,0,disk usage (bytes),1539000000.0
 pgvector,"{""lists"": 100}",gist,800000,0,disk usage (bytes),3073000000.0
 pgvector,"{""lists"": 100}",gist,1000000,0,disk usage (bytes),3841000000.0
 pgvector,"{""lists"": 100}",gist,100000,0,disk usage (bytes),384000000.0
 pgvector,"{""lists"": 100}",gist,200000,0,disk usage (bytes),769000000.0
-pgvector,"{""lists"": 100}",gist,400000,0,disk usage (bytes),1539000000.0
 pgvector,"{""lists"": 100}",gist,600000,0,disk usage (bytes),2306000000.0
-pgvector,"{""lists"": 500}",sift,600000,0,disk usage (bytes),179000000.0
-pgvector,"{""lists"": 500}",sift,800000,0,disk usage (bytes),237000000.0
 pgvector,"{""lists"": 500}",sift,1000000,0,disk usage (bytes),296000000.0
-pgvector,"{""lists"": 100}",sift,100000,0,disk usage (bytes),30000000.0
 pgvector,"{""lists"": 100}",sift,10000,0,disk usage (bytes),3448000.0
-pgvector,"{""lists"": 100}",sift,400000,0,disk usage (bytes),119000000.0
+pgvector,"{""lists"": 100}",sift,100000,0,disk usage (bytes),30000000.0
 pgvector,"{""lists"": 100}",sift,200000,0,disk usage (bytes),60000000.0
+pgvector,"{""lists"": 100}",sift,400000,0,disk usage (bytes),119000000.0
 pgvector,"{""lists"": 100}",sift,600000,0,disk usage (bytes),177000000.0
 pgvector,"{""lists"": 100}",sift,800000,0,disk usage (bytes),236000000.0
 pgvector,"{""lists"": 100}",sift,1000000,0,disk usage (bytes),294000000.0
@@ -32,25 +30,182 @@ pgvector,"{""lists"": 500}",sift,10000,0,disk usage (bytes),5328000.0
 pgvector,"{""lists"": 500}",sift,100000,0,disk usage (bytes),31000000.0
 pgvector,"{""lists"": 500}",sift,200000,0,disk usage (bytes),61000000.0
 pgvector,"{""lists"": 500}",sift,400000,0,disk usage (bytes),121000000.0
-pgvector,"{""lists"": 100}",sift,1000000,40,recall,1.0
-pgvector,"{""lists"": 10}",sift,10000,1,recall,1.0
-pgvector,"{""lists"": 100}",sift,1000000,1,recall,1.0
-pgvector,"{""lists"": 100}",sift,1000000,80,recall,1.0
-pgvector,"{""lists"": 200}",sift,1000000,40,recall,1.0
-pgvector,"{""lists"": 200}",sift,1000000,80,recall,1.0
-pgvector,"{""lists"": 10}",sift,10000,3,recall,1.0
-pgvector,"{""lists"": 10}",sift,10000,5,recall,1.0
-pgvector,"{""lists"": 10}",sift,10000,10,recall,1.0
-pgvector,"{""lists"": 10}",sift,10000,20,recall,1.0
-pgvector,"{""lists"": 10}",sift,10000,40,recall,1.0
-pgvector,"{""lists"": 10}",sift,10000,80,recall,1.0
-pgvector,"{""lists"": 5}",sift,10000,1,recall,1.0
+pgvector,"{""lists"": 500}",sift,600000,0,disk usage (bytes),179000000.0
+pgvector,"{""lists"": 500}",sift,800000,0,disk usage (bytes),237000000.0
+pgvector,"{""lists"": 10}",sift,40000,0,insert (latency s),8.520162343978882
+pgvector,"{""lists"": 10}",sift,6000,0,insert (latency s),8.324006795883179
+pgvector,"{""lists"": 10}",sift,7000,0,insert (latency s),8.28031611442566
+pgvector,"{""lists"": 10}",sift,8000,0,insert (latency s),8.20921802520752
+pgvector,"{""lists"": 10}",sift,9000,0,insert (latency s),8.433951377868652
+pgvector,"{""lists"": 10}",sift,10000,0,insert (latency s),8.189755916595459
+pgvector,"{""lists"": 10}",sift,11000,0,insert (latency s),8.339696645736694
+pgvector,"{""lists"": 10}",sift,12000,0,insert (latency s),8.125101804733276
+pgvector,"{""lists"": 10}",sift,13000,0,insert (latency s),8.294596433639526
+pgvector,"{""lists"": 10}",sift,14000,0,insert (latency s),8.260149478912354
+pgvector,"{""lists"": 10}",sift,15000,0,insert (latency s),8.37672472000122
+pgvector,"{""lists"": 10}",sift,16000,0,insert (latency s),8.09925889968872
+pgvector,"{""lists"": 10}",sift,17000,0,insert (latency s),8.247019052505493
+pgvector,"{""lists"": 10}",sift,18000,0,insert (latency s),8.185747146606445
+pgvector,"{""lists"": 10}",sift,19000,0,insert (latency s),8.01131820678711
+pgvector,"{""lists"": 10}",sift,20000,0,insert (latency s),8.047186851501465
+pgvector,"{""lists"": 10}",sift,21000,0,insert (latency s),8.02364444732666
+pgvector,"{""lists"": 10}",sift,22000,0,insert (latency s),8.424972534179688
+pgvector,"{""lists"": 10}",sift,23000,0,insert (latency s),8.27648115158081
+pgvector,"{""lists"": 10}",sift,24000,0,insert (latency s),8.408309698104858
+pgvector,"{""lists"": 10}",sift,25000,0,insert (latency s),8.35965895652771
+pgvector,"{""lists"": 10}",sift,26000,0,insert (latency s),8.506627559661865
+pgvector,"{""lists"": 10}",sift,27000,0,insert (latency s),8.214281558990479
+pgvector,"{""lists"": 10}",sift,28000,0,insert (latency s),8.265732765197754
+pgvector,"{""lists"": 10}",sift,29000,0,insert (latency s),8.428190469741821
+pgvector,"{""lists"": 10}",sift,30000,0,insert (latency s),8.153600215911865
+pgvector,"{""lists"": 10}",sift,31000,0,insert (latency s),8.287651538848877
+pgvector,"{""lists"": 10}",sift,32000,0,insert (latency s),8.32817792892456
+pgvector,"{""lists"": 10}",sift,33000,0,insert (latency s),8.444132804870605
+pgvector,"{""lists"": 10}",sift,34000,0,insert (latency s),8.129438400268555
+pgvector,"{""lists"": 10}",sift,35000,0,insert (latency s),8.166523218154907
+pgvector,"{""lists"": 10}",sift,36000,0,insert (latency s),8.116114854812622
+pgvector,"{""lists"": 10}",sift,37000,0,insert (latency s),8.192646026611328
+pgvector,"{""lists"": 10}",sift,38000,0,insert (latency s),8.482864379882812
+pgvector,"{""lists"": 10}",sift,39000,0,insert (latency s),8.699440956115723
+lantern,{},sift,10000,3,recall,0.6133333333333334
+lantern,{},sift,10000,5,recall,0.624
+lantern,{},sift,10000,10,recall,0.592
+lantern,{},sift,10000,20,recall,0.575
+lantern,{},sift,10000,40,recall,0.5377500000000001
+lantern,{},sift,10000,80,recall,0.4335
+lantern,{},sift,1000000,1,recall,1.0
+lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,1,recall,0.97
+lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,3,recall,0.9766666666666667
+lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,5,recall,0.968
+lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,10,recall,0.967
+lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,20,recall,0.9470000000000001
+lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,40,recall,0.9175000000000001
+lantern,"{""M"": 4, ""ef_construction"": 10, ""ef"": 4}",sift,10000,80,recall,0.624625
+lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,1,recall,0.91
+lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,3,recall,0.9233333333333333
+lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,5,recall,0.9119999999999999
+lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,10,recall,0.921
+lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,20,recall,0.898
+lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,40,recall,0.8554999999999999
+lantern,"{""M"": 3, ""ef_construction"": 10, ""ef"": 4}",sift,10000,80,recall,0.619125
+lantern,{},sift,1000000,3,recall,0.9966666666666667
+lantern,{},sift,1000000,5,recall,1.0
+lantern,{},sift,1000000,10,recall,1.0
+lantern,{},sift,1000000,20,recall,0.9994999999999999
+lantern,{},sift,1000000,40,recall,1.0
+lantern,{},sift,1000000,80,recall,0.999875
+lantern,{},sift,10000,1,recall,0.62
+pgvector,"{""lists"": 100}",sift,1000000,80,recall,0.5573750000000001
+pgvector,"{""lists"": 200}",sift,1000000,1,recall,0.61
+pgvector,"{""lists"": 200}",sift,1000000,3,recall,0.62
+pgvector,"{""lists"": 200}",sift,1000000,5,recall,0.5900000000000001
+pgvector,"{""lists"": 1000}",sift,1000000,3,recall,0.3666666666666667
+pgvector,"{""lists"": 1000}",sift,1000000,5,recall,0.382
+pgvector,"{""lists"": 1000}",sift,1000000,10,recall,0.375
+pgvector,"{""lists"": 1000}",sift,1000000,20,recall,0.363
+pgvector,"{""lists"": 1000}",sift,1000000,40,recall,0.34249999999999997
+pgvector,"{""lists"": 1000}",sift,1000000,80,recall,0.3255
+pgvector,"{""lists"": 200}",sift,1000000,10,recall,0.55
+pgvector,"{""lists"": 200}",sift,1000000,20,recall,0.5255
+pgvector,"{""lists"": 200}",sift,1000000,40,recall,0.50225
+pgvector,"{""lists"": 200}",sift,1000000,80,recall,0.475
+pgvector,"{""lists"": 400}",sift,1000000,1,recall,0.54
+pgvector,"{""lists"": 400}",sift,1000000,3,recall,0.49333333333333335
+pgvector,"{""lists"": 400}",sift,1000000,5,recall,0.476
+pgvector,"{""lists"": 400}",sift,1000000,10,recall,0.442
+pgvector,"{""lists"": 400}",sift,1000000,20,recall,0.41950000000000004
+pgvector,"{""lists"": 400}",sift,1000000,40,recall,0.39825
+pgvector,"{""lists"": 400}",sift,1000000,80,recall,0.378375
+pgvector,"{""lists"": 800}",sift,1000000,1,recall,0.47
+pgvector,"{""lists"": 800}",sift,1000000,3,recall,0.44333333333333336
+pgvector,"{""lists"": 800}",sift,1000000,5,recall,0.426
+pgvector,"{""lists"": 800}",sift,1000000,10,recall,0.395
+pgvector,"{""lists"": 800}",sift,1000000,20,recall,0.375
+pgvector,"{""lists"": 800}",sift,1000000,40,recall,0.34975
+pgvector,"{""lists"": 1600}",sift,1000000,1,recall,0.4
+pgvector,"{""lists"": 1600}",sift,1000000,3,recall,0.35333333333333333
+pgvector,"{""lists"": 1600}",sift,1000000,5,recall,0.33999999999999997
+pgvector,"{""lists"": 1600}",sift,1000000,10,recall,0.307
+pgvector,"{""lists"": 1600}",sift,1000000,20,recall,0.281
+pgvector,"{""lists"": 1600}",sift,1000000,40,recall,0.26575000000000004
+pgvector,"{""lists"": 1600}",sift,1000000,80,recall,0.24500000000000002
+pgvector,"{""lists"": 2400}",sift,1000000,1,recall,1.0
+pgvector,"{""lists"": 2400}",sift,1000000,3,recall,0.9966666666666667
+pgvector,"{""lists"": 2400}",sift,1000000,5,recall,0.998
+pgvector,"{""lists"": 2400}",sift,1000000,10,recall,0.999
+pgvector,"{""lists"": 2400}",sift,1000000,20,recall,0.9994999999999999
+pgvector,"{""lists"": 2400}",sift,1000000,40,recall,1.0
+pgvector,"{""lists"": 2400}",sift,1000000,80,recall,1.0
+pgvector,"{""lists"": 2000}",sift,1000000,1,recall,0.48
+pgvector,"{""lists"": 2000}",sift,1000000,3,recall,0.41
+pgvector,"{""lists"": 2000}",sift,1000000,5,recall,0.388
+pgvector,"{""lists"": 2000}",sift,1000000,10,recall,0.358
+pgvector,"{""lists"": 10}",sift,10000,5,recall,0.774
+pgvector,"{""lists"": 10}",sift,10000,10,recall,0.748
+pgvector,"{""lists"": 10}",sift,10000,20,recall,0.7304999999999999
+pgvector,"{""lists"": 10}",sift,10000,40,recall,0.7110000000000001
+pgvector,"{""lists"": 10}",sift,10000,80,recall,0.6935
+pgvector,"{""lists"": 2000}",sift,1000000,20,recall,0.331
+pgvector,"{""lists"": 2000}",sift,1000000,40,recall,0.305
+pgvector,"{""lists"": 2000}",sift,1000000,80,recall,0.281625
+pgvector,"{""lists"": 10}",sift,10000,3,recall,0.7566666666666667
+pgvector,"{""lists"": 20}",sift,10000,1,recall,0.71
+pgvector,"{""lists"": 20}",sift,10000,3,recall,0.6866666666666666
+pgvector,"{""lists"": 20}",sift,10000,5,recall,0.682
+pgvector,"{""lists"": 20}",sift,10000,10,recall,0.648
+pgvector,"{""lists"": 20}",sift,10000,20,recall,0.632
+pgvector,"{""lists"": 20}",sift,10000,40,recall,0.61125
+pgvector,"{""lists"": 20}",sift,10000,80,recall,0.5894999999999999
+pgvector,"{""lists"": 40}",sift,10000,1,recall,0.65
+pgvector,"{""lists"": 40}",sift,10000,3,recall,0.6466666666666666
+pgvector,"{""lists"": 40}",sift,10000,5,recall,0.61
+pgvector,"{""lists"": 40}",sift,10000,10,recall,0.591
+pgvector,"{""lists"": 40}",sift,10000,20,recall,0.5589999999999999
+pgvector,"{""lists"": 40}",sift,10000,40,recall,0.5305
+pgvector,"{""lists"": 40}",sift,10000,80,recall,0.49225
+pgvector,"{""lists"": 1}",sift,10000,1,recall,1.0
+pgvector,"{""lists"": 1}",sift,10000,3,recall,1.0
+pgvector,"{""lists"": 1}",sift,10000,5,recall,1.0
+pgvector,"{""lists"": 1}",sift,10000,10,recall,1.0
+pgvector,"{""lists"": 1}",sift,10000,20,recall,1.0
+pgvector,"{""lists"": 1}",sift,10000,40,recall,0.9994999999999999
+pgvector,"{""lists"": 1}",sift,10000,80,recall,0.99975
+pgvector,"{""lists"": 200}",sift,10000,1,recall,1.0
+pgvector,"{""lists"": 200}",sift,10000,3,recall,1.0
+pgvector,"{""lists"": 200}",sift,10000,5,recall,1.0
+pgvector,"{""lists"": 200}",sift,10000,10,recall,1.0
+pgvector,"{""lists"": 200}",sift,10000,20,recall,1.0
+pgvector,"{""lists"": 200}",sift,10000,40,recall,0.9994999999999999
+pgvector,"{""lists"": 200}",sift,10000,80,recall,0.99975
+pgvector,"{""lists"": 10}",sift,1000000,40,recall,0.8484999999999999
+pgvector,"{""lists"": 100}",sift,1000000,3,recall,0.6466666666666666
+pgvector,"{""lists"": 100}",sift,1000000,10,recall,0.61
+pgvector,"{""lists"": 100}",sift,1000000,40,recall,0.58175
+pgvector,"{""lists"": 100}",sift,10000,1,recall,1.0
+pgvector,"{""lists"": 100}",sift,10000,3,recall,1.0
+pgvector,"{""lists"": 100}",sift,10000,5,recall,1.0
+pgvector,"{""lists"": 100}",sift,10000,10,recall,1.0
+pgvector,"{""lists"": 100}",sift,10000,20,recall,1.0
+pgvector,"{""lists"": 100}",sift,10000,40,recall,1.0
+pgvector,"{""lists"": 100}",sift,10000,80,recall,1.0
+pgvector,"{""lists"": 10}",sift,1000000,10,recall,0.889
+pgvector,"{""lists"": 10}",sift,1000000,80,recall,0.843875
+pgvector,"{""lists"": 100}",sift,1000000,5,recall,0.646
+pgvector,"{""lists"": 100}",sift,1000000,20,recall,0.5985
+pgvector,"{""lists"": 10}",sift,1000000,3,recall,0.8866666666666667
+pgvector,"{""lists"": 10}",sift,1000000,20,recall,0.8625
+pgvector,"{""lists"": 10}",sift,10000,1,recall,0.77
+pgvector,"{""lists"": 10}",sift,1000000,1,recall,0.89
+pgvector,"{""lists"": 10}",sift,1000000,5,recall,0.882
 pgvector,"{""lists"": 5}",sift,10000,3,recall,1.0
+pgvector,"{""lists"": 5}",sift,10000,1,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,5,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,10,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,20,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,40,recall,1.0
 pgvector,"{""lists"": 5}",sift,10000,80,recall,1.0
+pgvector,"{""lists"": 800}",sift,1000000,80,recall,0.33275
+pgvector,"{""lists"": 1000}",sift,1000000,1,recall,0.36
 pgvector,"{""lists"": 2}",sift,10000,80,recall,1.0
 pgvector,"{""lists"": 2}",sift,10000,10,recall,1.0
 pgvector,"{""lists"": 2}",sift,10000,20,recall,1.0
@@ -70,40 +225,4 @@ pgvector,"{""lists"": 1}",sift,1000000,3,recall,0.9966666666666667
 pgvector,"{""lists"": 1}",sift,1000000,5,recall,1.0
 pgvector,"{""lists"": 1}",sift,1000000,10,recall,0.999
 pgvector,"{""lists"": 1}",sift,1000000,20,recall,1.0
-pgvector,"{""lists"": 200}",sift,1000000,1,recall,1.0
-pgvector,"{""lists"": 200}",sift,1000000,3,recall,0.9966666666666667
-pgvector,"{""lists"": 200}",sift,1000000,5,recall,1.0
-pgvector,"{""lists"": 200}",sift,1000000,10,recall,0.999
-pgvector,"{""lists"": 200}",sift,1000000,20,recall,1.0
-pgvector,"{""lists"": 1}",sift,10000,1,recall,1.0
-pgvector,"{""lists"": 1}",sift,10000,3,recall,1.0
-pgvector,"{""lists"": 1}",sift,10000,5,recall,1.0
-pgvector,"{""lists"": 1}",sift,10000,10,recall,1.0
-pgvector,"{""lists"": 1}",sift,10000,20,recall,1.0
-pgvector,"{""lists"": 1}",sift,10000,40,recall,0.9994999999999999
-pgvector,"{""lists"": 1}",sift,10000,80,recall,0.99975
-pgvector,"{""lists"": 200}",sift,10000,1,recall,1.0
-pgvector,"{""lists"": 200}",sift,10000,3,recall,1.0
-pgvector,"{""lists"": 200}",sift,10000,5,recall,1.0
-pgvector,"{""lists"": 200}",sift,10000,10,recall,1.0
-pgvector,"{""lists"": 200}",sift,10000,20,recall,1.0
-pgvector,"{""lists"": 200}",sift,10000,40,recall,0.9994999999999999
-pgvector,"{""lists"": 200}",sift,10000,80,recall,0.99975
-pgvector,"{""lists"": 10}",sift,1000000,10,recall,0.869
-pgvector,"{""lists"": 10}",sift,1000000,40,recall,0.84475
-pgvector,"{""lists"": 100}",sift,1000000,3,recall,1.0
-pgvector,"{""lists"": 100}",sift,10000,1,recall,1.0
-pgvector,"{""lists"": 100}",sift,10000,3,recall,1.0
-pgvector,"{""lists"": 100}",sift,10000,5,recall,1.0
-pgvector,"{""lists"": 100}",sift,10000,10,recall,1.0
-pgvector,"{""lists"": 100}",sift,10000,20,recall,1.0
-pgvector,"{""lists"": 100}",sift,10000,40,recall,1.0
-pgvector,"{""lists"": 100}",sift,10000,80,recall,1.0
-pgvector,"{""lists"": 10}",sift,1000000,3,recall,0.8733333333333334
-pgvector,"{""lists"": 10}",sift,1000000,20,recall,0.858
-pgvector,"{""lists"": 10}",sift,1000000,80,recall,0.999875
-pgvector,"{""lists"": 10}",sift,1000000,1,recall,0.89
-pgvector,"{""lists"": 10}",sift,1000000,5,recall,0.8699999999999999
-pgvector,"{""lists"": 100}",sift,1000000,5,recall,1.0
-pgvector,"{""lists"": 100}",sift,1000000,10,recall,1.0
-pgvector,"{""lists"": 100}",sift,1000000,20,recall,1.0
+pgvector,"{""lists"": 100}",sift,1000000,1,recall,0.7

@@ -1,27 +1,20 @@
 from .script_utils import parse_args, get_table_name, get_index_name, execute_sql, DEFAULT_INDEX_PARAMS, VALID_INDEX_PARAMS, VALID_DATASETS
 
-def get_create_pgvector_index_query(dataset, N, index_params):
-    table = get_table_name(dataset, N)
-    index = get_index_name(dataset, N)
+def get_create_pgvector_index_query(table, index, index_params):
     params = { **DEFAULT_INDEX_PARAMS['pgvector'], **index_params }
     sql = f"""
+        SET maintenance_work_mem = '1GB';
         CREATE INDEX IF NOT EXISTS {index} ON {table} USING
         ivfflat (v vector_l2_ops) WITH (
             lists = {params['lists']}
         )
     """
-    print(sql)
     return sql
 
-def create_pgvector_index(dataset, N, index_params={}, conn=None, cur=None):
-    sql = get_create_pgvector_index_query(dataset, N, index_params)
-    execute_sql(sql, conn=conn, cur=cur)
-
-def get_create_lantern_index_query(dataset, N, index_params):
-    table = get_table_name(dataset, N)
-    index = get_index_name(dataset, N)
+def get_create_lantern_index_query(table, index, index_params):
     params = { **DEFAULT_INDEX_PARAMS['lantern'], **index_params }
     sql = f"""
+        SET maintenance_work_mem = '1GB';
         CREATE INDEX IF NOT EXISTS {index} ON {table} USING
         hnsw (v) WITH (
             M={params['M']},
@@ -31,26 +24,28 @@ def get_create_lantern_index_query(dataset, N, index_params):
     """
     return sql
 
-def create_lantern_index(dataset, N, index_params={}, conn=None, cur=None):
-    sql = get_create_lantern_index_query(dataset, N, index_params)
-    execute_sql(sql, conn=conn, cur=cur)
-
-def get_create_index_query(extension, *args, **kwargs):
+def create_custom_index_query(extension, table, index, index_params, conn=None, cur=None):
     if extension == 'lantern':
-        return get_create_lantern_index_query(*args, **kwargs)
+        return get_create_lantern_index_query(table, index, index_params)
     elif extension == 'pgvector':
-        return get_create_pg_vector_index_query(*args, **kwargs)
+        return get_create_pgvector_index_query(table, index, index_params)
 
-def create_index(extension, *args, **kwargs):
-    if extension == 'lantern':
-        return create_lantern_index(*args, **kwargs)
-    elif extension == 'pgvector':
-        return create_pgvector_index(*args, **kwargs)
+def get_create_index_query(extension, dataset, N, index_params):
+    table = get_table_name(dataset, N)
+    index = get_index_name(dataset, N)
+    return create_custom_index_query(extension, table, index, index_params)
+
+def create_custom_index(*args, **kwargs):
+    sql = create_custom_index_query(*args, **kwargs)
+    if sql is not None:
+        execute_sql(sql, conn=None, cur=None)
+
+def create_index(extension, dataset, N, index_params={}, conn=None, cur=None):
+    sql = get_create_index_query(extension, dataset, N, index_params)
+    if sql is not None:
+        execute_sql(sql, conn=None, cur=None)
 
 if __name__ == '__main__':
     extension, index_params, dataset, N_values, _ = parse_args("create index", args=['extension', 'N'])
     for N in N_values:
-        if extension == 'lantern':
-            create_lantern_index(dataset, N, index_params)
-        elif extension == 'pgvector':
-            create_pgvector_index(dataset, N, index_params)
+        create_index(extension, dataset, N, index_params)

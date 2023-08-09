@@ -2,14 +2,15 @@ import os
 import argparse
 import psycopg2
 import plotly.graph_objects as go
-from scripts.script_utils import get_table_name, save_result, VALID_DATASETS, execute_sql, VALID_EXTENSIONS_AND_NONE
+from scripts.create_index import create_custom_index
+from scripts.script_utils import get_table_name, save_result, VALID_DATASETS, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results
 from scripts.number_utils import convert_number_to_string
 from utils.colors import get_color_from_extension
 from utils.print import print_labels, print_row
 import time
 
 N_INTERVAL = 1000
-N_MIN = 1000
+N_MIN = 5000
 N_MAX = 40000
 
 def get_dest_table_name(dataset):
@@ -30,22 +31,10 @@ def create_dest_table(dataset):
     execute_sql(sql)
     return table_name
 
-def create_dest_index(extension, dataset):
-    sql = ''
+def create_dest_index(extension, dataset, index_params):
     table = get_dest_table_name(dataset)
     index = get_dest_index_name(dataset)
-    if extension == 'pgvector':
-        sql = f"""
-            CREATE INDEX IF NOT EXISTS {index} ON {table} USING
-            ivfflat (v) WITH (lists = 100)
-        """
-    elif extension == 'lantern':
-        sql = f"""
-            CREATE INDEX IF NOT EXISTS {index} ON {table} USING
-            hnsw (v)
-        """
-    if sql != '':
-        execute_sql(sql)
+    create_custom_index(extension, table, index, index_params)
 
 def delete_dest_table(dataset):
     table_name = get_dest_table_name(dataset)
@@ -55,7 +44,7 @@ def delete_dest_table(dataset):
 def get_metric_type(bulk):
     return 'insert bulk (latency s)' if bulk else 'insert (latency s)'
 
-def generate_result(extension, dataset, bulk=False):
+def generate_result(extension, dataset, index_params={}, bulk=False):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
@@ -75,11 +64,13 @@ def generate_result(extension, dataset, bulk=False):
                 id < {N_MIN}
         """
         execute_sql(query)
-    create_dest_index(extension, dataset)
+
+    create_dest_index(extension, dataset, index_params)
 
     result_params = {
         'metric_type': get_metric_type(bulk),
         'database': extension,
+        'database_params': index_params,
         'dataset': dataset,
         'conn': conn,
         'cur': cur,
@@ -106,7 +97,7 @@ def generate_result(extension, dataset, bulk=False):
                 n=N,
                 **result_params
             )
-            print(f"extension: {extension}, dataset: {dataset}, latency for bulk insert {N - N_INTERVAL} - {N}: {insert_latency}")
+            print(f"extension: {extension}, dataset: {dataset}, latency for bulk insert {N - N_INTERVAL} - {N - 1}: {insert_latency}")
     else:
         t1 = time.time()
         for N in range(N_MIN, N_MAX):
@@ -136,58 +127,35 @@ def generate_result(extension, dataset, bulk=False):
     cur.close()
     conn.close()
 
-def get_n_latency(metric_type, database, dataset):
-    sql = f"""
-        SELECT
-            N,
-            metric_value
-        FROM
-            experiment_results
-        WHERE
-            metric_type = %s
-            AND database = %s
-            AND dataset = %s
-        ORDER BY
-            N
-    """
-    data = (metric_type, database, dataset)
-    values = execute_sql(sql, data, select=True)
-    return values
-
 def print_results(dataset, bulk=False):
     metric_type = get_metric_type(bulk)
     for extension in VALID_EXTENSIONS_AND_NONE:
-        results = get_n_latency(metric_type, extension, dataset)
+        results = get_experiment_results(metric_type, extension, dataset)
         if len(results) == 0:
-            continue
-        print_labels(dataset + ' - ' + extension, 'N', 'latency (s)')
-        for N, latency in results:
-            print_row(convert_number_to_string(N), "{:.2f}".format(latency))
-        print('\n\n')
+            print(f"No results for {extension}")
+            print("\n\n")
+        for (database_params, param_results) in results:
+            print_labels(dataset + ' - ' + extension, 'N', 'latency (s)')
+            for N, latency in param_results:
+                print_row(convert_number_to_string(N), "{:.2f}".format(latency))
+            print('\n\n')
 
 def plot_results(dataset, bulk=False):
     metric_type = get_metric_type(bulk)
 
-    # Process data
-    plot_items = []
-    for extension in VALID_EXTENSIONS_AND_NONE:
-        results = get_n_latency(metric_type, extension, dataset)
-        if len(results) == 0:
-            continue
-        x_values, y_values = zip(*results)
-        color = get_color_from_extension(extension)
-        plot_items.append((extension, x_values, y_values, color))
-
-    # Plot data
     fig = go.Figure()
-    for (key, x_values, y_values, color) in plot_items:
-        fig.add_trace(go.Scatter(
-            x=x_values,
-            y=y_values,
-            marker=dict(color=color),
-            mode='lines+markers',
-            name=key
-        ))
+    for extension in VALID_EXTENSIONS_AND_NONE:
+        results = get_experiment_results(metric_type, extension, dataset)
+        for index, (database_params, param_results) in enumerate(results):
+            x_values, y_values = zip(*param_results)
+            color = get_color_from_extension(extension)
+            fig.add_trace(go.Scatter(
+                x=x_values,
+                y=y_values,
+                marker=dict(color=color),
+                mode='lines+markers',
+                name=extension,
+            ))
     fig.update_layout(
         title=f"{dataset} - {metric_type}",
         xaxis_title=f"latency of inserting last {N_INTERVAL} rows",
@@ -196,12 +164,5 @@ def plot_results(dataset, bulk=False):
     fig.show()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="insert experiment")
-    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="output file name (required)")
-    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS_AND_NONE, required=True, help='extension type')
-    args = parser.parse_args()
-    
-    extension = args.extension
-    dataset = args.dataset
-
-    generate_result(extension, dataset)
+    extension, index_params, dataset, _, _ = parse_args("insert experiment", ['extension'])
+    generate_result(extension, dataset, index_params)
