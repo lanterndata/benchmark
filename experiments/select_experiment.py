@@ -1,22 +1,28 @@
 import os
 import re
-import argparse
 import psycopg2
 import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql, VALID_EXTENSIONS_AND_NONE
+from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql, VALID_EXTENSIONS_AND_NONE, parse_args
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
 
-def generate_result(extension, dataset, N, K_values):
+
+def generate_result(extension, dataset, N, K_values, index_params={}):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
     delete_index(dataset, N, conn=conn, cur=cur)
-    create_index(extension, dataset, N, conn=conn, cur=cur)
+    create_index(extension, dataset, N,
+                 index_params=index_params, conn=conn, cur=cur)
+
+    print(
+        f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
+    print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(12))
+    print('-' * 32)
 
     for K in K_values:
         table = get_table_name(dataset, N)
@@ -36,12 +42,14 @@ def generate_result(extension, dataset, N, K_values):
             tmp_file.write(query)
             tmp_file_path = tmp_file.name
 
-        host, port, user, password, database = extract_connection_params(db_connection_string)
+        host, port, user, password, database = extract_connection_params(
+            db_connection_string)
         command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
         stdout, stderr = run_command(command)
 
         save_result_params = {
             'database': extension,
+            'database_params': index_params,
             'dataset': dataset,
             'n': convert_string_to_number(N),
             'k': K,
@@ -53,7 +61,8 @@ def generate_result(extension, dataset, N, K_values):
 
         # Extract latency average using regular expression
         latency_average = None
-        latency_average_match = re.search(r'latency average = (\d+\.\d+) ms', stdout)
+        latency_average_match = re.search(
+            r'latency average = (\d+\.\d+) ms', stdout)
         if latency_average_match:
             latency_average = float(latency_average_match.group(1))
             save_result(
@@ -73,23 +82,26 @@ def generate_result(extension, dataset, N, K_values):
                 **save_result_params
             )
 
-        print(stdout)
-        print(f"Finished pgbench with dataset={dataset}, N={N}, extension={extension}, K={K}\n")
-    
+        print(f"{K}".ljust(10), "{:.2f}".format(tps).ljust(
+            10), "{:.2f}".format(latency_average))
+
+    print()
+
     if extension != 'none':
         delete_index(dataset, N, conn=conn, cur=cur)
 
     cur.close()
     conn.close()
 
+
 full_strings = {
     'N': 'Number of rows (N)',
     'K': 'Number of similar vectors (K)'
 }
 
+
 def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
-    # Process data
-    plot_items = []
+    fig = go.Figure()
     for extension in VALID_EXTENSIONS_AND_NONE:
         x_values = []
         y_values = []
@@ -113,18 +125,13 @@ def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
                 y_values.append(value)
         if len(x_values) > 0:
             color = get_color_from_extension(extension)
-            plot_items.append((extension, x_values, y_values, color))
-
-    # Plot data
-    fig = go.Figure()
-    for (key, x_values, y_values, color) in plot_items:
-        fig.add_trace(go.Scatter(
-            x=x_values,
-            y=y_values,
-            marker=dict(color=color),
-            mode='lines+markers',
-            name=key
-        ))
+            fig.add_trace(go.Scatter(
+                x=x_values,
+                y=y_values,
+                marker=dict(color=color),
+                mode='lines+markers',
+                name=extension
+            ))
     fig.update_layout(
         title=f"{y} vs. {x}",
         xaxis_title=full_strings[x],
@@ -132,25 +139,21 @@ def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     )
     fig.show()
 
+
 def plot_results(dataset):
     N_values = list(map(convert_string_to_number, VALID_DATASETS[dataset]))
-    plot_result(metric_type='select (latency ms)', dataset=dataset, x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
-    plot_result(metric_type='select (latency ms)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
-    plot_result(metric_type='select (tps)', dataset=dataset, x_params=N_values, x='N', y='transactions / second', fixed='K', fixed_value=5)
-    plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='transactions / second', fixed='N', fixed_value=100000)
+    plot_result(metric_type='select (latency ms)', dataset=dataset,
+                x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
+    plot_result(metric_type='select (latency ms)', dataset=dataset,
+                x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
+    plot_result(metric_type='select (tps)', dataset=dataset, x_params=N_values,
+                x='N', y='transactions / second', fixed='K', fixed_value=5)
+    plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES,
+                x='K', y='transactions / second', fixed='N', fixed_value=100000)
+
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="select experiment")
-    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="output file name (required)")
-    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS_AND_NONE, required=True, help='extension type')
-    parser.add_argument("--N", nargs='+', type=str, help="dataset sizes (e.g., 10k)")
-    parser.add_argument("--K", nargs='+', type=int, help="K values (e.g., 5)")
-    args = parser.parse_args()
-    
-    extension = args.extension
-    dataset = args.dataset
-    N_values = args.N or VALID_DATASETS[dataset]
-    K_values = args.K or SUGGESTED_K_VALUES
-
+    extension, index_params, dataset, N_values, K_values = parse_args(
+        "select experiment", ['extension', 'N', 'K'])
     for N in N_values:
-        generate_result(extension, dataset, N, K_values)
+        generate_result(extension, dataset, N, K_values, index_params)
