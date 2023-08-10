@@ -12,68 +12,73 @@ METRIC_TYPE = 'recall'
 MAX_QUERIES = 100
 
 def generate_result(extension, dataset, N, K_values, index_params={}):
-  db_connection_string = os.environ.get('DATABASE_URL')
-  conn = psycopg2.connect(db_connection_string)
-  cur = conn.cursor()
+    db_connection_string = os.environ.get('DATABASE_URL')
+    conn = psycopg2.connect(db_connection_string)
+    cur = conn.cursor()
 
-  delete_index(dataset, N, conn=conn, cur=cur)
-  create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
+    delete_index(dataset, N, conn=conn, cur=cur)
+    create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
 
-  print(f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
-  for K in K_values:
-      base_table_name = f"{dataset}_base{N}"
-      truth_table_name = f"{dataset}_truth{N}"
-      query_table_name = f"{dataset}_query{N}"
+    print(f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
 
-      query_ids = execute_sql(f"SELECT id FROM {query_table_name} LIMIT {MAX_QUERIES}", select=True)
+    recalls = []
+    for K in K_values:
+        base_table_name = f"{dataset}_base{N}"
+        truth_table_name = f"{dataset}_truth{N}"
+        query_table_name = f"{dataset}_query{N}"
 
-      recall_at_k_sum = 0
-      for query_id, in query_ids:
-          truth_ids = execute_sql(f"""
-              SELECT
-                  indices[1:{K}]
-              FROM
-                  {truth_table_name}
-              WHERE
-                  id = {query_id}
-          """, select_one=True)
-          base_ids = list(map(lambda x: x[0], execute_sql(f"""
-              SELECT
-                  id - 1
-              FROM
-                  {base_table_name}
-              ORDER BY
-                  v <-> (
-                      SELECT
-                          v
-                      FROM
-                          {query_table_name}
-                      WHERE
-                          id = {query_id} 
-                  )
-              LIMIT {K}
-          """, select=True)))
-          recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
+        query_ids = execute_sql(f"SELECT id FROM {query_table_name} LIMIT {MAX_QUERIES}", select=True)
 
-      # Calculate the average recall for this K
-      recall_at_k = recall_at_k_sum / len(query_ids) / K
-      save_result(
-        metric_type='recall',
-        metric_value=recall_at_k,
-        database=extension,
-        database_params=index_params,
-        dataset=dataset,
-        n=convert_string_to_number(N),
-        k=K,
-        conn=conn,
-        cur=cur,
-      )
+        recall_at_k_sum = 0
+        for query_id, in query_ids:
+            truth_ids = execute_sql(f"""
+                SELECT
+                    indices[1:{K}]
+                FROM
+                    {truth_table_name}
+                WHERE
+                    id = {query_id}
+            """, select_one=True)
+            base_ids = list(map(lambda x: x[0], execute_sql(f"""
+                SELECT
+                    id - 1
+                FROM
+                    {base_table_name}
+                ORDER BY
+                    v <-> (
+                        SELECT
+                            v
+                        FROM
+                            {query_table_name}
+                        WHERE
+                            id = {query_id} 
+                    )
+                LIMIT {K}
+            """, select=True)))
+            recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
 
-      print(f"recall@{K}:".ljust(10), "{:.2f}".format(recall_at_k))
-  print()
+        # Calculate the average recall for this K
+        recall_at_k = recall_at_k_sum / len(query_ids) / K
+        save_result(
+            metric_type='recall',
+            metric_value=recall_at_k,
+            database=extension,
+            database_params=index_params,
+            dataset=dataset,
+            n=convert_string_to_number(N),
+            k=K,
+            conn=conn,
+            cur=cur,
+        )
+        recalls.append(recall_at_k)
 
-  cur.close()
-  conn.close()
+        print(f"recall@{K}:".ljust(10), "{:.2f}".format(recall_at_k))
+
+    print()
+
+    cur.close()
+    conn.close()
+    return recalls
 
 def print_results(extension, dataset):
     N_values = VALID_QUERY_DATASETS[dataset]
