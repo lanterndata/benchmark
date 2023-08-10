@@ -1,15 +1,15 @@
 import os
-import argparse
 import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_index
 from scripts.delete_index import delete_index
-from scripts.script_utils import execute_sql, VALID_DATASETS, VALID_EXTENSIONS, get_index_name, save_result, get_experiment_results, parse_args
+from scripts.script_utils import execute_sql, VALID_EXTENSIONS, get_index_name, save_result, get_experiment_results, parse_args
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
 from utils.print import print_labels, print_row
 
 METRIC_TYPE = 'disk usage (bytes)'
+
 
 def generate_result(extension, dataset, N, index_params={}):
     db_connection_string = os.environ.get('DATABASE_URL')
@@ -17,10 +17,12 @@ def generate_result(extension, dataset, N, index_params={}):
     cur = conn.cursor()
 
     delete_index(dataset, N, conn=conn, cur=cur)
-    create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
+    create_index(extension, dataset, N,
+                 index_params=index_params, conn=conn, cur=cur)
     index = get_index_name(dataset, N)
 
-    execute_sql(f"SELECT pg_size_pretty(pg_total_relation_size('{index}'))", conn=conn, cur=cur)
+    execute_sql(
+        f"SELECT pg_size_pretty(pg_total_relation_size('{index}'))", conn=conn, cur=cur)
     disk_usage = cur.fetchone()[0]
     save_result(
         metric_type='disk usage (bytes)',
@@ -32,22 +34,25 @@ def generate_result(extension, dataset, N, index_params={}):
         conn=conn,
         cur=cur,
     )
-    print(f"dataset={dataset}, extension={extension}, N={N} | disk usage  {disk_usage}")
-    
+    print(
+        f"dataset={dataset}, extension={extension}, N={N} | disk usage  {disk_usage}")
+
     cur.close()
     conn.close()
 
+
 def print_results(dataset):
-  for extension in VALID_EXTENSIONS:
-      results = get_experiment_results(METRIC_TYPE, extension, dataset)
-      if len(results) == 0:
-          print(f"No results for {extension}")
-          print("\n\n")
-      for (database_params, param_results) in results:
-          print_labels(dataset + ' - ' + extension, 'N', 'Disk Usage (MB)')
-          for N, disk_usage in data:
-              print_row(convert_number_to_string(N), disk_usage)
-          print('\n\n')
+    for extension in VALID_EXTENSIONS:
+        results = get_experiment_results(METRIC_TYPE, extension, dataset)
+        if len(results) == 0:
+            print(f"No results for {extension}")
+            print("\n\n")
+        for (database_params, param_results) in results:
+            print_labels(dataset + ' - ' + extension, 'N', 'Disk Usage (MB)')
+            for N, disk_usage in data:
+                print_row(convert_number_to_string(N), disk_usage)
+            print('\n\n')
+
 
 def plot_results(dataset):
     fig = go.Figure()
@@ -72,7 +77,9 @@ def plot_results(dataset):
     )
     fig.show()
 
+
 if __name__ == '__main__':
-    extension, index_params, dataset, N_values, _ = parse_args("disk usage experiment", ['extension', 'N'])
+    extension, index_params, dataset, N_values, _ = parse_args(
+        "disk usage experiment", ['extension', 'N'])
     for N in N_values:
         generate_result(extension, dataset, N, index_params)

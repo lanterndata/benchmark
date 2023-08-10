@@ -2,7 +2,7 @@ import os
 import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_custom_index
-from scripts.script_utils import get_table_name, save_result, VALID_DATASETS, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results, parse_args
+from scripts.script_utils import get_table_name, save_result, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results, parse_args
 from scripts.number_utils import convert_number_to_string
 from utils.colors import get_color_from_extension
 from utils.print import print_labels, print_row
@@ -12,11 +12,14 @@ N_INTERVAL = 1000
 N_MIN = 5000
 N_MAX = 40000
 
+
 def get_dest_table_name(dataset):
     return dataset + '_insert'
 
+
 def get_dest_index_name(dataset):
     return get_dest_table_name(dataset) + '_index'
+
 
 def create_dest_table(dataset):
     table_name = get_dest_table_name(dataset)
@@ -30,18 +33,22 @@ def create_dest_table(dataset):
     execute_sql(sql)
     return table_name
 
+
 def create_dest_index(extension, dataset, index_params):
     table = get_dest_table_name(dataset)
     index = get_dest_index_name(dataset)
     create_custom_index(extension, table, index, index_params)
+
 
 def delete_dest_table(dataset):
     table_name = get_dest_table_name(dataset)
     sql = f"DROP TABLE IF EXISTS {table_name}"
     execute_sql(sql)
 
+
 def get_metric_type(bulk):
     return 'insert bulk (latency s)' if bulk else 'insert (latency s)'
+
 
 def generate_result(extension, dataset, index_params={}, bulk=False):
     db_connection_string = os.environ.get('DATABASE_URL')
@@ -75,7 +82,8 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         'cur': cur,
     }
 
-    print(f"extension: {extension}, dataset: {dataset}, index_params: {index_params}")
+    print(
+        f"extension: {extension}, dataset: {dataset}, index_params: {index_params}")
     if bulk:
         for N in range(N_MIN + N_INTERVAL, N_MAX + 1, N_INTERVAL):
             query = f"""
@@ -97,7 +105,8 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                 n=N,
                 **result_params
             )
-            print(f"{N - N_INTERVAL} - {N - 1}:".ljust(16), "{:.2f}".format(insert_latency) + 's')
+            print(f"{N - N_INTERVAL} - {N - 1}:".ljust(16),
+                  "{:.2f}".format(insert_latency) + 's')
     else:
         t1 = time.time()
         for N in range(N_MIN, N_MAX):
@@ -109,7 +118,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                     {source_table}
                 WHERE
                     id = {N}
-            """ 
+            """
             execute_sql(query)
             if (N + 1) % N_INTERVAL == 0:
                 t2 = time.time()
@@ -119,14 +128,16 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                     n=N + 1,
                     **result_params
                 )
-                print(f"{N + 1 - N_INTERVAL} - {N}:".ljust(16), "{:.2f}".format(insert_latency) + 's')
+                print(f"{N + 1 - N_INTERVAL} - {N}:".ljust(16),
+                      "{:.2f}".format(insert_latency) + 's')
                 t1 = time.time()
     print()
-    
+
     delete_dest_table(dataset)
 
     cur.close()
     conn.close()
+
 
 def print_results(dataset, bulk=False):
     metric_type = get_metric_type(bulk)
@@ -139,8 +150,10 @@ def print_results(dataset, bulk=False):
             print(database_params)
             print_labels(dataset + ' - ' + extension, 'N', 'latency (s)')
             for N, latency in param_results:
-                print_row(convert_number_to_string(N), "{:.2f}".format(latency))
+                print_row(convert_number_to_string(
+                    N), "{:.2f}".format(latency))
             print('\n\n')
+
 
 def plot_results(dataset, bulk=False):
     metric_type = get_metric_type(bulk)
@@ -165,6 +178,8 @@ def plot_results(dataset, bulk=False):
     )
     fig.show()
 
+
 if __name__ == '__main__':
-    extension, index_params, dataset, _, _ = parse_args("insert experiment", ['extension'])
+    extension, index_params, dataset, _, _ = parse_args(
+        "insert experiment", ['extension'])
     generate_result(extension, dataset, index_params)

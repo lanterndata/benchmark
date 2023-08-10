@@ -9,15 +9,18 @@ from scripts.script_utils import get_table_name, run_command, save_result, extra
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
 
+
 def generate_result(extension, dataset, N, K_values, index_params={}):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
     delete_index(dataset, N, conn=conn, cur=cur)
-    create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
+    create_index(extension, dataset, N,
+                 index_params=index_params, conn=conn, cur=cur)
 
-    print(f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
+    print(
+        f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
     print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(12))
     print('-' * 32)
 
@@ -39,7 +42,8 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
             tmp_file.write(query)
             tmp_file_path = tmp_file.name
 
-        host, port, user, password, database = extract_connection_params(db_connection_string)
+        host, port, user, password, database = extract_connection_params(
+            db_connection_string)
         command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
         stdout, stderr = run_command(command)
 
@@ -57,7 +61,8 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
 
         # Extract latency average using regular expression
         latency_average = None
-        latency_average_match = re.search(r'latency average = (\d+\.\d+) ms', stdout)
+        latency_average_match = re.search(
+            r'latency average = (\d+\.\d+) ms', stdout)
         if latency_average_match:
             latency_average = float(latency_average_match.group(1))
             save_result(
@@ -77,20 +82,23 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
                 **save_result_params
             )
 
-        print(f"{K}".ljust(10), "{:.2f}".format(tps).ljust(10), "{:.2f}".format(latency_average))
+        print(f"{K}".ljust(10), "{:.2f}".format(tps).ljust(
+            10), "{:.2f}".format(latency_average))
 
     print()
-    
+
     if extension != 'none':
         delete_index(dataset, N, conn=conn, cur=cur)
 
     cur.close()
     conn.close()
 
+
 full_strings = {
     'N': 'Number of rows (N)',
     'K': 'Number of similar vectors (K)'
 }
+
 
 def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     fig = go.Figure()
@@ -131,14 +139,21 @@ def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     )
     fig.show()
 
+
 def plot_results(dataset):
     N_values = list(map(convert_string_to_number, VALID_DATASETS[dataset]))
-    plot_result(metric_type='select (latency ms)', dataset=dataset, x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
-    plot_result(metric_type='select (latency ms)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
-    plot_result(metric_type='select (tps)', dataset=dataset, x_params=N_values, x='N', y='transactions / second', fixed='K', fixed_value=5)
-    plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='transactions / second', fixed='N', fixed_value=100000)
+    plot_result(metric_type='select (latency ms)', dataset=dataset,
+                x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
+    plot_result(metric_type='select (latency ms)', dataset=dataset,
+                x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
+    plot_result(metric_type='select (tps)', dataset=dataset, x_params=N_values,
+                x='N', y='transactions / second', fixed='K', fixed_value=5)
+    plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES,
+                x='K', y='transactions / second', fixed='N', fixed_value=100000)
+
 
 if __name__ == '__main__':
-    extension, index_params, dataset, N_values, K_values = parse_args("select experiment", ['extension', 'N', 'K'])
+    extension, index_params, dataset, N_values, K_values = parse_args(
+        "select experiment", ['extension', 'N', 'K'])
     for N in N_values:
         generate_result(extension, dataset, N, K_values, index_params)
