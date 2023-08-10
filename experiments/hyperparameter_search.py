@@ -16,10 +16,10 @@ def get_extension_hyperparameters(extension, N):
         hyperparameters = [{'lists': l, 'probes': p}
                            for l in lists_options for p in probes_options]
     if extension == 'lantern':
-        m_options = [2, 4, 8, 16, 32, 48, 64]
-        ef_construction_options = [16, 32, 64, 128, 256]
-        ef_options = [10, 20, 40, 80, 160, 320]
-        hyperparameters = [{'m': m, 'ef_construction': efc, 'ef': ef}
+        m_options = [2, 4, 8, 16, 32]
+        ef_construction_options = [16]  # [16, 32, 64, 128, 256]
+        ef_options = [10]  # [10, 20, 40, 80, 160]
+        hyperparameters = [{'M': m, 'ef_construction': efc, 'ef': ef}
                            for m in m_options for efc in ef_construction_options for ef in ef_options]
     return hyperparameters
 
@@ -64,7 +64,7 @@ def plot_hyperparameter_search(extension, dataset, N):
         mode='markers',
         marker=dict(
             size=10,
-            color='blue',  # set color to blue
+            color='blue',
             opacity=0.8
         ),
         hovertext=index_params,
@@ -73,7 +73,7 @@ def plot_hyperparameter_search(extension, dataset, N):
 
     # Set the layout properties
     fig.update_layout(
-        title='Tradeoffs between Recall and Speed',
+        title=f"Tradeoffs between Recall and Speed for {extension} with {dataset} {N}",
         xaxis=dict(title='Latency Select (ms)'),
         yaxis=dict(title='Recall'),
         margin=dict(l=50, r=50, b=50, t=50),
