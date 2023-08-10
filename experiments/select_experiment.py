@@ -1,12 +1,11 @@
 import os
 import re
-import argparse
 import psycopg2
 import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql, VALID_EXTENSIONS_AND_NONE
+from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql, VALID_EXTENSIONS_AND_NONE, parse_args
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
 
@@ -17,6 +16,10 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
 
     delete_index(dataset, N, conn=conn, cur=cur)
     create_index(extension, dataset, N, index_params=index_params, conn=conn, cur=cur)
+
+    print(f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
+    print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(12))
+    print('-' * 32)
 
     for K in K_values:
         table = get_table_name(dataset, N)
@@ -74,8 +77,9 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
                 **save_result_params
             )
 
-        print(stdout)
-        print(f"Finished pgbench with dataset={dataset}, N={N}, extension={extension}, K={K}\n")
+        print(f"{K}".ljust(10), "{:.2f}".format(tps).ljust(10), "{:.2f}".format(latency_average))
+
+    print()
     
     if extension != 'none':
         delete_index(dataset, N, conn=conn, cur=cur)
@@ -135,17 +139,6 @@ def plot_results(dataset):
     plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES, x='K', y='transactions / second', fixed='N', fixed_value=100000)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="select experiment")
-    parser.add_argument("--dataset", type=str, choices=VALID_DATASETS.keys(), required=True, help="output file name (required)")
-    parser.add_argument('--extension', type=str, choices=VALID_EXTENSIONS_AND_NONE, required=True, help='extension type')
-    parser.add_argument("--N", nargs='+', type=str, help="dataset sizes (e.g., 10k)")
-    parser.add_argument("--K", nargs='+', type=int, help="K values (e.g., 5)")
-    args = parser.parse_args()
-    
-    extension = args.extension
-    dataset = args.dataset
-    N_values = args.N or VALID_DATASETS[dataset]
-    K_values = args.K or SUGGESTED_K_VALUES
-
+    extension, index_params, dataset, N_values, K_values = parse_args("select experiment", ['extension', 'N', 'K'])
     for N in N_values:
-        generate_result(extension, dataset, N, K_values)
+        generate_result(extension, dataset, N, K_values, index_params)

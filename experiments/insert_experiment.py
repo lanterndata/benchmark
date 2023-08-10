@@ -1,9 +1,8 @@
 import os
-import argparse
 import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_custom_index
-from scripts.script_utils import get_table_name, save_result, VALID_DATASETS, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results
+from scripts.script_utils import get_table_name, save_result, VALID_DATASETS, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results, parse_args
 from scripts.number_utils import convert_number_to_string
 from utils.colors import get_color_from_extension
 from utils.print import print_labels, print_row
@@ -76,6 +75,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         'cur': cur,
     }
 
+    print(f"extension: {extension}, dataset: {dataset}, index_params: {index_params}")
     if bulk:
         for N in range(N_MIN + N_INTERVAL, N_MAX + 1, N_INTERVAL):
             query = f"""
@@ -97,7 +97,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                 n=N,
                 **result_params
             )
-            print(f"extension: {extension}, dataset: {dataset}, latency for bulk insert {N - N_INTERVAL} - {N - 1}: {insert_latency}")
+            print(f"{N - N_INTERVAL} - {N - 1}:".ljust(16), "{:.2f}".format(insert_latency) + 's')
     else:
         t1 = time.time()
         for N in range(N_MIN, N_MAX):
@@ -119,8 +119,9 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                     n=N + 1,
                     **result_params
                 )
-                print(f"extension: {extension}, dataset: {dataset}, latency for inserts {N + 1 - N_INTERVAL} - {N}: {insert_latency}")
+                print(f"{N + 1 - N_INTERVAL} - {N}:".ljust(16), "{:.2f}".format(insert_latency) + 's')
                 t1 = time.time()
+    print()
     
     delete_dest_table(dataset)
 
@@ -135,6 +136,7 @@ def print_results(dataset, bulk=False):
             print(f"No results for {extension}")
             print("\n\n")
         for (database_params, param_results) in results:
+            print(database_params)
             print_labels(dataset + ' - ' + extension, 'N', 'latency (s)')
             for N, latency in param_results:
                 print_row(convert_number_to_string(N), "{:.2f}".format(latency))
@@ -148,13 +150,13 @@ def plot_results(dataset, bulk=False):
         results = get_experiment_results(metric_type, extension, dataset)
         for index, (database_params, param_results) in enumerate(results):
             x_values, y_values = zip(*param_results)
-            color = get_color_from_extension(extension)
+            color = get_color_from_extension(extension, index=index)
             fig.add_trace(go.Scatter(
                 x=x_values,
                 y=y_values,
                 marker=dict(color=color),
                 mode='lines+markers',
-                name=extension,
+                name=f"{extension} - {database_params}",
             ))
     fig.update_layout(
         title=f"{dataset} - {metric_type}",

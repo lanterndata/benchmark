@@ -57,7 +57,6 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
 
       # Calculate the average recall for this K
       recall_at_k = recall_at_k_sum / len(query_ids) / K
-      print(f"recall@{K}:".ljust(10), "{:.2f}".format(recall_at_k))
       save_result(
         metric_type='recall',
         metric_value=recall_at_k,
@@ -69,6 +68,8 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
         conn=conn,
         cur=cur,
       )
+
+      print(f"recall@{K}:".ljust(10), "{:.2f}".format(recall_at_k))
   print()
 
   cur.close()

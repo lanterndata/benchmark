@@ -1,6 +1,7 @@
 {
-    "recommendations": [
-      "eamodio.gitlens"
-    ]
-  }
-  
+  "recommendations": [
+    "eamodio.gitlens",
+    "ms-python.autopep8",
+    "ms-python.python"
+  ]
+}
