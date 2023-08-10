@@ -5,7 +5,7 @@ def get_create_pgvector_index_query(table, index, index_params):
     params = {**DEFAULT_INDEX_PARAMS['pgvector'], **index_params}
     sql = f"""
         SET maintenance_work_mem = '2GB';
-        CREATE INDEX IF NOT EXISTS {index} ON {table} USING
+        CREATE INDEX {index} ON {table} USING
         ivfflat (v vector_l2_ops) WITH (
             lists = {params['lists']}
         );
@@ -18,7 +18,7 @@ def get_create_lantern_index_query(table, index, index_params):
     params = {**DEFAULT_INDEX_PARAMS['lantern'], **index_params}
     sql = f"""
         SET maintenance_work_mem = '2GB';
-        CREATE INDEX IF NOT EXISTS {index} ON {table} USING
+        CREATE INDEX {index} ON {table} USING
         hnsw (v) WITH (
             M={params['M']},
             ef_construction={params['ef_construction']},
