@@ -10,7 +10,15 @@ from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number
 
 
-def generate_result(extension, dataset, N, K_values, index_params={}):
+def get_latency_metric(bulk=False):
+    return 'select (latency ms)' if not bulk else 'select bulk (latency ms)'
+
+
+def get_tps_metric(bulk=False):
+    return 'select (tps)' if not bulk else 'select bulk (tps)'
+
+
+def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False):
     db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
@@ -24,20 +32,53 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
     print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(12))
     print('-' * 32)
 
-    for K in K_values:
-        table = get_table_name(dataset, N)
-        query = f"""
-            \set id random(1, 10000)
+    base_table_name = f"{dataset}_base{N}"
+    query_table_name = f"{dataset}_query{N}"
+    N_number = convert_string_to_number(N)
 
-            SELECT *
-            FROM {table}
-            ORDER BY v <-> (
-                SELECT v
-                FROM {table}
-                WHERE id = :id
-            )
-            LIMIT {K};
-        """
+    for K in K_values:
+        if bulk:
+            query = f"""
+                SELECT
+                    q.id AS query_id,
+                    ARRAY_AGG(b.id) AS base_ids
+                FROM (
+                    SELECT
+                        *
+                    FROM
+                        {query_table_name}
+                    ORDER BY
+                        RANDOM()
+                    LIMIT
+                        100
+                ) q
+                JOIN LATERAL (
+                    SELECT
+                        id,
+                        v
+                    FROM
+                        {base_table_name}
+                    ORDER BY
+                        q.v <-> v
+                    LIMIT
+                        {K}
+                ) b ON true
+                GROUP BY
+                    q.id
+            """
+        else:
+            query = f"""
+                \set id random(1, {N_number})
+
+                SELECT *
+                FROM {base_table_name}
+                ORDER BY v <-> (
+                    SELECT v
+                    FROM {query_table_name}
+                    WHERE id = :id
+                )
+                LIMIT {K};
+            """
         with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
             tmp_file.write(query)
             tmp_file_path = tmp_file.name
@@ -140,15 +181,15 @@ def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
     fig.show()
 
 
-def plot_results(dataset):
+def plot_results(dataset, bulk=False):
     N_values = list(map(convert_string_to_number, VALID_DATASETS[dataset]))
-    plot_result(metric_type='select (latency ms)', dataset=dataset,
+    plot_result(metric_type=get_latency_metric(bulk), dataset=dataset,
                 x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
-    plot_result(metric_type='select (latency ms)', dataset=dataset,
+    plot_result(metric_type=get_latency_metric(bulk), dataset=dataset,
                 x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
-    plot_result(metric_type='select (tps)', dataset=dataset, x_params=N_values,
+    plot_result(metric_type=get_tps_metric(bulk), dataset=dataset, x_params=N_values,
                 x='N', y='transactions / second', fixed='K', fixed_value=5)
-    plot_result(metric_type='select (tps)', dataset=dataset, x_params=SUGGESTED_K_VALUES,
+    plot_result(metric_type=get_tps_metric(bulk), dataset=dataset, x_params=SUGGESTED_K_VALUES,
                 x='K', y='transactions / second', fixed='N', fixed_value=100000)
 
 
