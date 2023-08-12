@@ -5,21 +5,155 @@ import plotly.graph_objects as go
 from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import get_table_name, run_command, save_result, extract_connection_params, VALID_DATASETS, SUGGESTED_K_VALUES, execute_sql, VALID_EXTENSIONS_AND_NONE, parse_args
-from utils.colors import get_color_from_extension
+from scripts.script_utils import run_command, save_result, extract_connection_params, execute_sql, parse_args
 from scripts.number_utils import convert_string_to_number
+import math
+
+db_connection_string = os.environ.get('DATABASE_URL')
 
 
-def get_latency_metric(bulk=False):
-    return 'select (latency ms)' if not bulk else 'select bulk (latency ms)'
+def get_latency_metric(bulk):
+    return 'select bulk (latency ms)' if bulk else 'select (latency ms)'
 
 
-def get_tps_metric(bulk=False):
-    return 'select (tps)' if not bulk else 'select bulk (tps)'
+def get_tps_metric(bulk):
+    return 'select bulk (tps)' if bulk else 'select (tps)'
+
+
+def generate_performance_result(dataset, N, K, bulk):
+    base_table_name = f"{dataset}_base{N}"
+    query_table_name = f"{dataset}_query{N}"
+    N_number = convert_string_to_number(N)
+    if bulk:
+        query = f"""
+            SELECT
+                q.id AS query_id,
+                ARRAY_AGG(b.id) AS base_ids
+            FROM (
+                SELECT
+                    *
+                FROM
+                    {query_table_name}
+                ORDER BY
+                    RANDOM()
+                LIMIT
+                    100
+            ) q
+            JOIN LATERAL (
+                SELECT
+                    id,
+                    v
+                FROM
+                    {base_table_name}
+                ORDER BY
+                    q.v <-> v
+                LIMIT
+                    {K}
+            ) b ON true
+            GROUP BY
+                q.id
+        """
+    else:
+        query = f"""
+            \set id random(1, {N_number})
+
+            SELECT *
+            FROM {base_table_name}
+            ORDER BY v <-> (
+                SELECT v
+                FROM {query_table_name}
+                WHERE id = :id
+            )
+            LIMIT {K};
+        """
+    with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
+        tmp_file.write(query)
+        tmp_file_path = tmp_file.name
+
+    host, port, user, password, database = extract_connection_params(
+        db_connection_string)
+    command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
+    stdout, stderr = run_command(command)
+
+    # Extract latency average using regular expression
+    latency_average = None
+    latency_average_match = re.search(
+        r'latency average = (\d+\.\d+) ms', stdout)
+    if latency_average_match:
+        latency_average = float(latency_average_match.group(1))
+
+    # Extract TPS (Transactions Per Second) using regular expression
+    tps = None
+    tps_match = re.search(r'tps = (\d+\.\d+)', stdout)
+    if tps_match:
+        tps = float(tps_match.group(1))
+
+    shared_response = {
+        'out': stdout,
+        'err': stderr,
+    }
+
+    tps_response = {
+        **shared_response,
+        'metric_value': tps,
+        'metric_type': get_tps_metric(bulk),
+    }
+
+    latency_response = {
+        **shared_response,
+        'metric_value': latency_average,
+        'metric_type': get_latency_metric(bulk),
+    }
+
+    return tps_response, latency_response
+
+
+def generate_recall_result(dataset, N, K):
+    base_table_name = f"{dataset}_base{N}"
+    truth_table_name = f"{dataset}_truth{N}"
+    query_table_name = f"{dataset}_query{N}"
+
+    query_ids = execute_sql(
+        f"SELECT id FROM {query_table_name} LIMIT 100", select=True)
+
+    recall_at_k_sum = 0
+    for query_id, in query_ids:
+        truth_ids = execute_sql(f"""
+            SELECT
+                indices[1:{K}]
+            FROM
+                {truth_table_name}
+            WHERE
+                id = {query_id}
+        """, select_one=True)
+        base_ids = list(map(lambda x: x[0], execute_sql(f"""
+            SELECT
+                id - 1
+            FROM
+                {base_table_name}
+            ORDER BY
+                v <-> (
+                    SELECT
+                        v
+                    FROM
+                        {query_table_name}
+                    WHERE
+                        id = {query_id} 
+                )
+            LIMIT {K}
+        """, select=True)))
+        recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
+
+    # Calculate the average recall for this K
+    recall_at_k = recall_at_k_sum / len(query_ids) / K
+    recall_response = {
+        'metric_type': 'recall',
+        'metric_value': recall_at_k,
+    }
+    return recall_response
 
 
 def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False):
-    db_connection_string = os.environ.get('DATABASE_URL')
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
@@ -29,102 +163,33 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
 
     print(
         f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
-    print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(12))
-    print('-' * 32)
-
-    base_table_name = f"{dataset}_base{N}"
-    query_table_name = f"{dataset}_query{N}"
-    N_number = convert_string_to_number(N)
+    print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(15), 'Recall')
+    print('-' * 48)
 
     for K in K_values:
-        if bulk:
-            query = f"""
-                SELECT
-                    q.id AS query_id,
-                    ARRAY_AGG(b.id) AS base_ids
-                FROM (
-                    SELECT
-                        *
-                    FROM
-                        {query_table_name}
-                    ORDER BY
-                        RANDOM()
-                    LIMIT
-                        100
-                ) q
-                JOIN LATERAL (
-                    SELECT
-                        id,
-                        v
-                    FROM
-                        {base_table_name}
-                    ORDER BY
-                        q.v <-> v
-                    LIMIT
-                        {K}
-                ) b ON true
-                GROUP BY
-                    q.id
-            """
-        else:
-            query = f"""
-                \set id random(1, {N_number})
-
-                SELECT *
-                FROM {base_table_name}
-                ORDER BY v <-> (
-                    SELECT v
-                    FROM {query_table_name}
-                    WHERE id = :id
-                )
-                LIMIT {K};
-            """
-        with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
-            tmp_file.write(query)
-            tmp_file_path = tmp_file.name
-
-        host, port, user, password, database = extract_connection_params(
-            db_connection_string)
-        command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
-        stdout, stderr = run_command(command)
-
         save_result_params = {
             'database': extension,
             'database_params': index_params,
             'dataset': dataset,
             'n': convert_string_to_number(N),
             'k': K,
-            'out': stdout,
-            'err': stderr,
             'conn': conn,
             'cur': cur,
         }
 
-        # Extract latency average using regular expression
-        latency_average = None
-        latency_average_match = re.search(
-            r'latency average = (\d+\.\d+) ms', stdout)
-        if latency_average_match:
-            latency_average = float(latency_average_match.group(1))
-            save_result(
-                metric_type='select (latency ms)',
-                metric_value=latency_average,
-                **save_result_params
-            )
+        tps_response, latency_response = generate_performance_result(
+            dataset, N, K, bulk)
+        recall_response = generate_recall_result(dataset, N, K)
+        save_result(**tps_response, **save_result_params)
+        save_result(**latency_response, **save_result_params)
+        save_result(**recall_response, **save_result_params)
 
-        # Extract TPS (Transactions Per Second) using regular expression
-        tps = None
-        tps_match = re.search(r'tps = (\d+\.\d+)', stdout)
-        if tps_match:
-            tps = float(tps_match.group(1))
-            save_result(
-                metric_type='select (tps)',
-                metric_value=tps,
-                **save_result_params
-            )
-
-        print(f"{K}".ljust(10), "{:.2f}".format(tps).ljust(
-            10), "{:.2f}".format(latency_average))
+        print(
+            f"{K}".ljust(10),
+            "{:.2f}".format(tps_response['metric_value']).ljust(10),
+            "{:.2f}".format(latency_response['metric_value']).ljust(15),
+            "{:.2f}".format(recall_response['metric_value'])
+        )
 
     print()
 
@@ -135,62 +200,84 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
     conn.close()
 
 
-full_strings = {
-    'N': 'Number of rows (N)',
-    'K': 'Number of similar vectors (K)'
-}
+def get_extension_hyperparameters(extension, N):
+    hyperparameters = []
+    if extension == 'pgvector':
+        sqrt_N = int(math.sqrt(convert_string_to_number(N)))
+        lists_options = list(
+            map(lambda p: int(p * sqrt_N), [0.6, 0.8, 1.0, 1.2, 1.4]))
+        probes_options = [1, 2, 4, 8, 16, 32]
+        hyperparameters = [{'lists': l, 'probes': p}
+                           for l in lists_options for p in probes_options]
+    if extension == 'lantern':
+        m_options = [2, 4, 6, 8, 12, 16, 24, 32, 48, 64]
+        ef_construction_options = [16]  # [16, 32, 64, 128, 256]
+        ef_options = [10]  # [10, 20, 40, 80, 160]
+        hyperparameters = [{'M': m, 'ef_construction': efc, 'ef': ef}
+                           for m in m_options for efc in ef_construction_options for ef in ef_options]
+    return hyperparameters
 
 
-def plot_result(metric_type, dataset, x_params, x, y, fixed, fixed_value):
+def run_hyperparameter_search(extension, dataset, N, bulk=False):
+    hyperparameters = get_extension_hyperparameters(extension, N)
+    for hyperparameter in hyperparameters:
+        generate_result(
+            extension, dataset, N, [5], index_params=hyperparameter, bulk=bulk)
+
+
+def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='select (latency ms)'):
+    colors = ['blue', 'red', 'green', 'yellow', 'purple']
+
     fig = go.Figure()
-    for extension in VALID_EXTENSIONS_AND_NONE:
-        x_values = []
-        y_values = []
-        for x_param in x_params:
-            sql = f"""
-                SELECT
-                    metric_value
-                FROM
-                    experiment_results
-                WHERE
+
+    for idx, extension in enumerate(extensions):
+        sql = """
+            SELECT
+                database_params,
+                MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END),
+                MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END)
+            FROM
+                experiment_results
+            WHERE
+                database = %s
+                AND dataset = %s
+                AND N = %s
+                AND (
                     metric_type = %s
-                    AND database = %s
-                    AND dataset = %s
-                    AND {x} = %s
-                    AND {fixed} = %s
-            """
-            data = (metric_type, extension, dataset, x_param, fixed_value)
-            value = execute_sql(sql, data, select_one=True)
-            if value is not None:
-                x_values.append(x_param)
-                y_values.append(value)
-        if len(x_values) > 0:
-            color = get_color_from_extension(extension)
-            fig.add_trace(go.Scatter(
-                x=x_values,
-                y=y_values,
-                marker=dict(color=color),
-                mode='lines+markers',
-                name=extension
-            ))
+                    OR metric_type = %s
+                )
+            GROUP BY
+                database_params
+        """
+        data = (xaxis, yaxis, extension, dataset,
+                convert_string_to_number(N), xaxis, yaxis)
+        results = execute_sql(sql, data, select=True)
+
+        index_params, xaxis_data, yaxis_data = zip(*results)
+
+        fig.add_trace(go.Scatter(
+            x=xaxis_data,
+            y=yaxis_data,
+            mode='markers',
+            marker=dict(
+                size=8,
+                color=colors[idx % len(colors)],
+                opacity=0.8
+            ),
+            hovertext=index_params,
+            hoverinfo="x+y+text",
+            name=extension
+        ))
+
     fig.update_layout(
-        title=f"{y} vs. {x}",
-        xaxis_title=full_strings[x],
-        yaxis_title=y
+        title=f"{yaxis} and {xaxis} for with {dataset} {N}",
+        xaxis=dict(title=xaxis),
+        yaxis=dict(title=yaxis),
+        margin=dict(l=50, r=50, b=50, t=50),
+        hovermode='closest'
     )
+
     fig.show()
-
-
-def plot_results(dataset, bulk=False):
-    N_values = list(map(convert_string_to_number, VALID_DATASETS[dataset]))
-    plot_result(metric_type=get_latency_metric(bulk), dataset=dataset,
-                x_params=N_values, x='N', y='latency (ms)', fixed='K', fixed_value=5)
-    plot_result(metric_type=get_latency_metric(bulk), dataset=dataset,
-                x_params=SUGGESTED_K_VALUES, x='K', y='latency (ms)', fixed='N', fixed_value=100000)
-    plot_result(metric_type=get_tps_metric(bulk), dataset=dataset, x_params=N_values,
-                x='N', y='transactions / second', fixed='K', fixed_value=5)
-    plot_result(metric_type=get_tps_metric(bulk), dataset=dataset, x_params=SUGGESTED_K_VALUES,
-                x='K', y='transactions / second', fixed='N', fixed_value=100000)
 
 
 if __name__ == '__main__':

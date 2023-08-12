@@ -7,8 +7,14 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
         extension, dataset, N, K_values, index_params=index_params, bulk=True)
 
 
-def plot_results(dataset):
-    select_experiment.plot_results(dataset, bulk=True)
+def run_hyperparameter_search(extension, dataset, N):
+    select_experiment.run_hyperparameter_search(
+        extension, dataset, N, bulk=True)
+
+
+def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='select bulk (latency ms)'):
+    select_experiment.plot_hyperparameter_search(
+        extensions, dataset, N, xaxis, yaxis)
 
 
 if __name__ == '__main__':

@@ -33,9 +33,19 @@ def get_missing_extension_parameter_sets(extension, extension_params, metric_typ
         columns = 'database, dataset'
     else:
         columns = 'database, dataset, n'
-    sql = f"SELECT {columns} FROM experiment_results WHERE metric_type = %s AND extension_params = %s"
+    sql = f"""
+        SELECT
+            {columns}
+        FROM
+            experiment_results
+        WHERE
+            metric_type = %s
+            AND database = %s
+            AND database_params = %s
+    """
 
-    found_parameter_sets = execute_sql(sql, data=(metric_type,), select=True)
+    data = (metric_type, extension, extension_params)
+    found_parameter_sets = execute_sql(sql, data=data, select=True)
     if metric_type in METRICS_WITHOUT_N:
         found_parameter_sets = {(database, dataset, convert_number_to_string(
             n), *rest) for (database, dataset, n, *rest) in found_parameter_sets}
