@@ -1,10 +1,9 @@
 import os
-import re
 import psycopg2
 import plotly.graph_objects as go
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import run_pgbench, save_result, extract_connection_params, execute_sql, parse_args
+from scripts.script_utils import run_pgbench, save_result, execute_sql, parse_args
 from scripts.number_utils import convert_string_to_number
 import math
 
@@ -65,20 +64,7 @@ def generate_performance_result(dataset, N, K, bulk):
             )
             LIMIT {K};
         """
-    stdout, stderr = run_pgbench(query)
-
-    # Extract latency average using regular expression
-    latency_average = None
-    latency_average_match = re.search(
-        r'latency average = (\d+\.\d+) ms', stdout)
-    if latency_average_match:
-        latency_average = float(latency_average_match.group(1))
-
-    # Extract TPS (Transactions Per Second) using regular expression
-    tps = None
-    tps_match = re.search(r'tps = (\d+\.\d+)', stdout)
-    if tps_match:
-        tps = float(tps_match.group(1))
+    stdout, stderr, tps, latency_average = run_pgbench(query)
 
     shared_response = {
         'out': stdout,

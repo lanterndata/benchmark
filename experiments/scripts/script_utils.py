@@ -5,6 +5,7 @@ import psycopg2
 import csv
 import argparse
 import json
+import re
 from tempfile import NamedTemporaryFile
 from .number_utils import convert_string_to_number
 
@@ -225,7 +226,7 @@ def execute_sql(sql, data=None, conn=None, cur=None, select=False, select_one=Fa
 # Bash utils
 
 
-def run_pgbench(query):
+def run_pgbench(query, clients=8, threads=8, transactions=15):
     db_connection_string = os.environ.get('DATABASE_URL')
 
     with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
@@ -234,9 +235,23 @@ def run_pgbench(query):
 
     host, port, user, password, database = extract_connection_params(
         db_connection_string)
-    command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
+    command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c {clients} -j {threads} -t {transactions} -r'
     stdout, stderr = run_command(command)
-    return stdout, stderr
+
+    # Extract latency average using regular expression
+    latency_average = None
+    latency_average_match = re.search(
+        r'latency average = (\d+\.\d+) ms', stdout)
+    if latency_average_match:
+        latency_average = float(latency_average_match.group(1))
+
+    # Extract TPS (Transactions Per Second) using regular expression
+    tps = None
+    tps_match = re.search(r'tps = (\d+\.\d+)', stdout)
+    if tps_match:
+        tps = float(tps_match.group(1))
+
+    return stdout, stderr, tps, latency_average
 
 
 def run_command(command):
