@@ -2,10 +2,9 @@ import os
 import re
 import psycopg2
 import plotly.graph_objects as go
-from tempfile import NamedTemporaryFile
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import run_command, save_result, extract_connection_params, execute_sql, parse_args
+from scripts.script_utils import run_pgbench, save_result, extract_connection_params, execute_sql, parse_args
 from scripts.number_utils import convert_string_to_number
 import math
 
@@ -66,14 +65,7 @@ def generate_performance_result(dataset, N, K, bulk):
             )
             LIMIT {K};
         """
-    with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
-        tmp_file.write(query)
-        tmp_file_path = tmp_file.name
-
-    host, port, user, password, database = extract_connection_params(
-        db_connection_string)
-    command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
-    stdout, stderr = run_command(command)
+    stdout, stderr = run_pgbench(query)
 
     # Extract latency average using regular expression
     latency_average = None

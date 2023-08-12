@@ -5,6 +5,7 @@ import psycopg2
 import csv
 import argparse
 import json
+from tempfile import NamedTemporaryFile
 from .number_utils import convert_string_to_number
 
 # Allowed parameters
@@ -222,6 +223,20 @@ def execute_sql(sql, data=None, conn=None, cur=None, select=False, select_one=Fa
             conn.close()
 
 # Bash utils
+
+
+def run_pgbench(query):
+    db_connection_string = os.environ.get('DATABASE_URL')
+
+    with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
+        tmp_file.write(query)
+        tmp_file_path = tmp_file.name
+
+    host, port, user, password, database = extract_connection_params(
+        db_connection_string)
+    command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c 8 -j 8 -t 15 -r'
+    stdout, stderr = run_command(command)
+    return stdout, stderr
 
 
 def run_command(command):
