@@ -2,15 +2,10 @@ import os
 import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_custom_index
-from scripts.script_utils import get_table_name, save_result, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results, parse_args
+from scripts.script_utils import get_table_name, save_result, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results, get_distinct_database_params, parse_args, run_pgbench
 from scripts.number_utils import convert_number_to_string
-from utils.colors import get_color_from_extension
 from utils.print import print_labels, print_row
-import time
-
-N_INTERVAL = 1000
-N_MIN = 5000
-N_MAX = 40000
+from utils.colors import get_color_from_extension
 
 
 def get_dest_table_name(dataset):
@@ -46,8 +41,16 @@ def delete_dest_table(dataset):
     execute_sql(sql)
 
 
-def get_metric_type(bulk):
-    return 'insert bulk (latency s)' if bulk else 'insert (latency s)'
+def get_latency_metric(bulk):
+    return 'insert bulk (latency ms)' if bulk else 'insert (latency ms)'
+
+
+def get_tps_metric(bulk):
+    return 'insert bulk (tps)' if bulk else 'insert (tps)'
+
+
+def get_metric_types(bulk):
+    return [get_tps_metric(bulk), get_latency_metric(bulk)]
 
 
 def generate_result(extension, dataset, index_params={}, bulk=False):
@@ -59,78 +62,64 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
     delete_dest_table(dataset)
     dest_table = create_dest_table(dataset)
 
-    if N_MIN > 0:
-        query = f"""
-            INSERT INTO
-                {dest_table}
-            SELECT *
-            FROM
-                {source_table}
-            WHERE
-                id < {N_MIN}
-        """
-        execute_sql(query)
+    query = f"""
+        INSERT INTO
+            {dest_table} (v)
+        SELECT v
+        FROM
+            {source_table}
+        WHERE
+            id < 8000
+    """
+    execute_sql(query)
 
     create_dest_index(extension, dataset, index_params)
 
-    result_params = {
-        'metric_type': get_metric_type(bulk),
-        'database': extension,
-        'database_params': index_params,
-        'dataset': dataset,
-        'conn': conn,
-        'cur': cur,
-    }
-
     print(
         f"extension: {extension}, dataset: {dataset}, index_params: {index_params}")
-    if bulk:
-        for N in range(N_MIN + N_INTERVAL, N_MAX + 1, N_INTERVAL):
-            query = f"""
-                INSERT INTO
-                    {dest_table}
-                SELECT *
-                FROM
-                    {source_table}
-                WHERE
-                    id < {N}
-                    AND id >= {N - N_INTERVAL}
-            """
-            t1 = time.time()
-            execute_sql(query)
-            t2 = time.time()
-            insert_latency = t2 - t1
-            save_result(
-                metric_value=insert_latency,
-                n=N,
-                **result_params
-            )
-            print(f"{N - N_INTERVAL} - {N - 1}:".ljust(16),
-                  "{:.2f}".format(insert_latency) + 's')
-    else:
-        t1 = time.time()
-        for N in range(N_MIN, N_MAX):
-            query = f"""
-                INSERT INTO
-                    {dest_table}
-                SELECT *
-                FROM
-                    {source_table}
-                WHERE
-                    id = {N}
-            """
-            execute_sql(query)
-            if (N + 1) % N_INTERVAL == 0:
-                t2 = time.time()
-                insert_latency = t2 - t1
-                save_result(
-                    metric_value=insert_latency,
-                    n=N + 1,
-                    **result_params
-                )
-                print(f"{N + 1 - N_INTERVAL} - {N}:".ljust(16),
-                      "{:.2f}".format(insert_latency) + 's')
-                t1 = time.time()
+    print("N".ljust(16), "TPS".ljust(10), "Latency (ms)")
+    print('-' * 42)
+    for N in range(8000, 80001, 8000):
+
+        if bulk:
+            id_query = "id >= :id AND id < :id + 100"
+            transactions = 10
+        else:
+            id_query = "id = :id"
+            transactions = 1000
+        query = f"""
+            \set id random(1, 1000000)
+
+            INSERT INTO
+                {dest_table} (v)
+            SELECT v
+            FROM
+                {source_table}
+            WHERE
+                {id_query};
+        """
+
+        stdout, stderr, tps, latency = run_pgbench(
+            query, transactions=transactions)
+
+        save_result_params = {
+            'database': extension,
+            'database_params': index_params,
+            'dataset': dataset,
+            'n': N,
+            'out': stdout,
+            'err': stderr,
+            'conn': conn,
+            'cur': cur,
+        }
+        save_result(get_latency_metric(bulk), latency, **save_result_params)
+        save_result(get_tps_metric(bulk), tps, **save_result_params)
+        print(
+            f"{N} - {N + 8000 - 1}".ljust(16),
+            "{:.2f}".format(tps).ljust(10),
+            "{:.2f}".format(latency).ljust(15)
+        )
+
     print()
 
     delete_dest_table(dataset)
@@ -140,43 +129,67 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 
 
 def print_results(dataset, bulk=False):
-    metric_type = get_metric_type(bulk)
+    metric_types = get_metric_types(bulk)
+
     for extension in VALID_EXTENSIONS_AND_NONE:
-        results = get_experiment_results(metric_type, extension, dataset)
-        if len(results) == 0:
-            print(f"No results for {extension}")
-            print("\n\n")
-        for (database_params, param_results) in results:
-            print(database_params)
-            print_labels(dataset + ' - ' + extension, 'N', 'latency (s)')
-            for N, latency in param_results:
-                print_row(convert_number_to_string(
-                    N), "{:.2f}".format(latency))
+        database_params_list = get_distinct_database_params(
+            metric_types, extension, dataset)
+
+        for database_params in database_params_list:
+            sql = """
+                SELECT
+                    N,
+                    MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END),
+                    MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END)
+                FROM
+                    experiment_results
+                WHERE
+                    metric_type = ANY(%s)
+                    AND database = %s
+                    AND database_params = %s
+                    AND dataset = %s
+                GROUP BY
+                    N
+                ORDER BY
+                    N
+            """
+            data = (metric_types[0], metric_types[1],
+                    metric_types, extension, database_params, dataset)
+            results = execute_sql(sql, data=data, select=True)
+
+            title = f"{extension} - {dataset} - {database_params}"
+            print_labels(title, 'N', 'TPS', 'latency (s)')
+            for N, tps, latency in results:
+                print_row(
+                    convert_number_to_string(N),
+                    "{:.2f}".format(tps),
+                    "{:.2f}".format(latency)
+                )
             print('\n\n')
 
 
 def plot_results(dataset, bulk=False):
-    metric_type = get_metric_type(bulk)
-
-    fig = go.Figure()
-    for extension in VALID_EXTENSIONS_AND_NONE:
-        results = get_experiment_results(metric_type, extension, dataset)
-        for index, (database_params, param_results) in enumerate(results):
-            x_values, y_values = zip(*param_results)
-            color = get_color_from_extension(extension, index=index)
-            fig.add_trace(go.Scatter(
-                x=x_values,
-                y=y_values,
-                marker=dict(color=color),
-                mode='lines+markers',
-                name=f"{extension} - {database_params}",
-            ))
-    fig.update_layout(
-        title=f"{dataset} - {metric_type}",
-        xaxis_title=f"latency of inserting last {N_INTERVAL} rows",
-        yaxis_title='latency (s)',
-    )
-    fig.show()
+    metric_types = get_metric_types(bulk)
+    for metric_type in metric_types:
+        fig = go.Figure()
+        for extension in VALID_EXTENSIONS_AND_NONE:
+            results = get_experiment_results(metric_type, extension, dataset)
+            for index, (database_params, param_results) in enumerate(results):
+                x_values, y_values = zip(*param_results)
+                color = get_color_from_extension(extension, index=index)
+                fig.add_trace(go.Scatter(
+                    x=x_values,
+                    y=y_values,
+                    marker=dict(color=color),
+                    mode='lines+markers',
+                    name=f"{extension} - {database_params}",
+                ))
+        fig.update_layout(
+            title=f"{dataset} - {metric_type}",
+            xaxis_title=f"latency of inserting 8000 rows",
+            yaxis_title='latency (s)',
+        )
+        fig.show()
 
 
 if __name__ == '__main__':

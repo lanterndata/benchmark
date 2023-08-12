@@ -40,7 +40,7 @@ VALID_QUERY_DATASETS = {
     'gist': ['1m'],
 }
 
-SUGGESTED_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
+SUGGESTExD_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
 
 # Argument parser
 
@@ -93,15 +93,23 @@ def parse_args(description, args):
 # Parameters
 
 
-def get_distinct_database_params(metric_type, extension, dataset, N):
+def get_metric_type_sql(metric_type):
+    if isinstance(metric_type, str):
+        return 'metric_type = %s'
+    else:
+        return 'metric_type = ANY(%s)'
+
+
+def get_distinct_database_params(metric_type, extension, dataset, N=None):
     n_sql = '' if N is None else 'AND N = %s'
+    metric_type_sql = get_metric_type_sql(metric_type)
     sql = f"""
         SELECT DISTINCT
             database_params
         FROM
             experiment_results
         WHERE
-            metric_type = %s
+            {metric_type_sql}
             AND database = %s
             AND dataset = %s
             {n_sql}
@@ -114,7 +122,7 @@ def get_distinct_database_params(metric_type, extension, dataset, N):
     return database_params
 
 
-def get_experiment_results_for_params(metric_type, database, database_params, dataset, N):
+def get_experiment_results_for_params(metric_type, database, database_params, dataset, N=None):
     x_param = 'N' if N is None else 'K'
     n_sql = '' if N is None else 'AND N = %s'
     sql = f"""
