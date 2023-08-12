@@ -12,12 +12,12 @@ import math
 db_connection_string = os.environ.get('DATABASE_URL')
 
 
-def get_latency_metric(bulk=False):
-    return 'select (latency ms)' if not bulk else 'select bulk (latency ms)'
+def get_latency_metric(bulk):
+    return 'select bulk (latency ms)' if bulk else 'select (latency ms)'
 
 
-def get_tps_metric(bulk=False):
-    return 'select (tps)' if not bulk else 'select bulk (tps)'
+def get_tps_metric(bulk):
+    return 'select bulk (tps)' if bulk else 'select (tps)'
 
 
 def generate_performance_result(dataset, N, K, bulk):
@@ -180,9 +180,9 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
         tps_response, latency_response = generate_performance_result(
             dataset, N, K, bulk)
         recall_response = generate_recall_result(dataset, N, K)
-        save_result(**save_result_params, **tps_response)
-        save_result(**save_result_params, **latency_response)
-        save_result(**save_result_params, **recall_response)
+        save_result(**tps_response, **save_result_params)
+        save_result(**latency_response, **save_result_params)
+        save_result(**recall_response, **save_result_params)
 
         print(
             f"{K}".ljust(10),
@@ -210,7 +210,7 @@ def get_extension_hyperparameters(extension, N):
         hyperparameters = [{'lists': l, 'probes': p}
                            for l in lists_options for p in probes_options]
     if extension == 'lantern':
-        m_options = [2, 4, 8, 16, 32]
+        m_options = [2, 4, 6, 8, 12, 16, 24, 32, 48, 64]
         ef_construction_options = [16]  # [16, 32, 64, 128, 256]
         ef_options = [10]  # [10, 20, 40, 80, 160]
         hyperparameters = [{'M': m, 'ef_construction': efc, 'ef': ef}
@@ -218,11 +218,11 @@ def get_extension_hyperparameters(extension, N):
     return hyperparameters
 
 
-def run_hyperparameter_search(extension, dataset, N):
+def run_hyperparameter_search(extension, dataset, N, bulk=False):
     hyperparameters = get_extension_hyperparameters(extension, N)
     for hyperparameter in hyperparameters:
         generate_result(
-            extension, dataset, N, [5], index_params=hyperparameter)
+            extension, dataset, N, [5], index_params=hyperparameter, bulk=bulk)
 
 
 def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='select (latency ms)'):
