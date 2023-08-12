@@ -69,7 +69,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         FROM
             {source_table}
         WHERE
-            id < 8000
+            id < 10000
     """
     execute_sql(query)
 
@@ -79,7 +79,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         f"extension: {extension}, dataset: {dataset}, index_params: {index_params}")
     print("N".ljust(16), "TPS".ljust(10), "Latency (ms)")
     print('-' * 42)
-    for N in range(8000, 80001, 8000):
+    for N in range(10000, 20001, 1000):
 
         if bulk:
             id_query = "id >= :id AND id < :id + 100"
@@ -100,7 +100,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         """
 
         stdout, stderr, tps, latency = run_pgbench(
-            query, transactions=transactions)
+            query, clients=1, transactions=transactions)
 
         save_result_params = {
             'database': extension,
@@ -115,7 +115,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         save_result(get_latency_metric(bulk), latency, **save_result_params)
         save_result(get_tps_metric(bulk), tps, **save_result_params)
         print(
-            f"{N} - {N + 8000 - 1}".ljust(16),
+            f"{N} - {N + 1000 - 1}".ljust(16),
             "{:.2f}".format(tps).ljust(10),
             "{:.2f}".format(latency).ljust(15)
         )

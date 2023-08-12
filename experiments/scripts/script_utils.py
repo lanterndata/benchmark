@@ -40,7 +40,7 @@ VALID_QUERY_DATASETS = {
     'gist': ['1m'],
 }
 
-SUGGESTExD_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
+SUGGESTED_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
 
 # Argument parser
 
@@ -67,7 +67,7 @@ def parse_args(description, args):
         for index, valid_index_params in VALID_INDEX_PARAMS.items():
             for param in valid_index_params:
                 parser.add_argument(
-                    f"--{paran}", type=int, help=f"parameter for {index}")
+                    f"--{param}", type=int, help=f"parameter for {index}")
 
     parsed_args = parser.parse_args()
 
