@@ -5,6 +5,8 @@ import psycopg2
 import csv
 import argparse
 import json
+import re
+from tempfile import NamedTemporaryFile
 from .number_utils import convert_string_to_number
 
 # Allowed parameters
@@ -65,7 +67,7 @@ def parse_args(description, args):
         for index, valid_index_params in VALID_INDEX_PARAMS.items():
             for param in valid_index_params:
                 parser.add_argument(
-                    f"--{paran}", type=int, help=f"parameter for {index}")
+                    f"--{param}", type=int, help=f"parameter for {index}")
 
     parsed_args = parser.parse_args()
 
@@ -91,15 +93,23 @@ def parse_args(description, args):
 # Parameters
 
 
-def get_distinct_database_params(metric_type, extension, dataset, N):
+def get_metric_type_sql(metric_type):
+    if isinstance(metric_type, str):
+        return 'metric_type = %s'
+    else:
+        return 'metric_type = ANY(%s)'
+
+
+def get_distinct_database_params(metric_type, extension, dataset, N=None):
     n_sql = '' if N is None else 'AND N = %s'
+    metric_type_sql = get_metric_type_sql(metric_type)
     sql = f"""
         SELECT DISTINCT
             database_params
         FROM
             experiment_results
         WHERE
-            metric_type = %s
+            {metric_type_sql}
             AND database = %s
             AND dataset = %s
             {n_sql}
@@ -112,7 +122,7 @@ def get_distinct_database_params(metric_type, extension, dataset, N):
     return database_params
 
 
-def get_experiment_results_for_params(metric_type, database, database_params, dataset, N):
+def get_experiment_results_for_params(metric_type, database, database_params, dataset, N=None):
     x_param = 'N' if N is None else 'K'
     n_sql = '' if N is None else 'AND N = %s'
     sql = f"""
@@ -222,6 +232,34 @@ def execute_sql(sql, data=None, conn=None, cur=None, select=False, select_one=Fa
             conn.close()
 
 # Bash utils
+
+
+def run_pgbench(query, clients=8, threads=8, transactions=15):
+    db_connection_string = os.environ.get('DATABASE_URL')
+
+    with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
+        tmp_file.write(query)
+        tmp_file_path = tmp_file.name
+
+    host, port, user, password, database = extract_connection_params(
+        db_connection_string)
+    command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c {clients} -j {threads} -t {transactions} -r'
+    stdout, stderr = run_command(command)
+
+    # Extract latency average using regular expression
+    latency_average = None
+    latency_average_match = re.search(
+        r'latency average = (\d+\.\d+) ms', stdout)
+    if latency_average_match:
+        latency_average = float(latency_average_match.group(1))
+
+    # Extract TPS (Transactions Per Second) using regular expression
+    tps = None
+    tps_match = re.search(r'tps = (\d+\.\d+)', stdout)
+    if tps_match:
+        tps = float(tps_match.group(1))
+
+    return stdout, stderr, tps, latency_average
 
 
 def run_command(command):
