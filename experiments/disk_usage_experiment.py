@@ -6,7 +6,7 @@ from scripts.delete_index import delete_index
 from scripts.script_utils import execute_sql, VALID_EXTENSIONS, get_index_name, save_result, get_experiment_results, parse_args
 from utils.colors import get_color_from_extension
 from scripts.number_utils import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
-from utils.print import print_labels, print_row
+from utils.print import print_labels, print_row, get_title
 
 METRIC_TYPE = 'disk usage (bytes)'
 
@@ -16,14 +16,15 @@ def generate_result(extension, dataset, N, index_params={}):
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
-    delete_index(dataset, N, conn=conn, cur=cur)
+    delete_index(extension, dataset, N, conn=conn, cur=cur)
     create_index(extension, dataset, N,
                  index_params=index_params, conn=conn, cur=cur)
-    index = get_index_name(dataset, N)
+    index = get_index_name(extension, dataset, N)
 
     execute_sql(
         f"SELECT pg_size_pretty(pg_total_relation_size('{index}'))", conn=conn, cur=cur)
     disk_usage = cur.fetchone()[0]
+
     save_result(
         metric_type='disk usage (bytes)',
         metric_value=convert_bytes_to_number(disk_usage),
@@ -34,8 +35,8 @@ def generate_result(extension, dataset, N, index_params={}):
         conn=conn,
         cur=cur,
     )
-    print(
-        f"dataset={dataset}, extension={extension}, N={N} | disk usage  {disk_usage}")
+    print(get_title(extension, index_params, dataset, N) +
+          " | disk usage: " + disk_usage)
 
     cur.close()
     conn.close()
@@ -48,8 +49,9 @@ def print_results(dataset):
             print(f"No results for {extension}")
             print("\n\n")
         for (database_params, param_results) in results:
-            print_labels(dataset + ' - ' + extension, 'N', 'Disk Usage (MB)')
-            for N, disk_usage in data:
+            print_labels(get_title(extension, database_params,
+                         dataset), 'N', 'Disk Usage (MB)')
+            for N, disk_usage in param_results:
                 print_row(convert_number_to_string(N), disk_usage)
             print('\n\n')
 
@@ -64,7 +66,8 @@ def plot_results(dataset):
             fig.add_trace(go.Scatter(
                 x=N_values,
                 y=disk_usages,
-                marker=dict(color=get_color_from_extension(extension)),
+                marker=dict(color=get_color_from_extension(
+                    extension, index=index)),
                 mode='lines+markers',
                 name=f"{extension} - {database_params}",
                 legendgroup=extension,

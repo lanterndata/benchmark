@@ -4,7 +4,7 @@ import urllib.request
 import psycopg2
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--datapath", default="/app/data",
+parser.add_argument("-d", "--datapath", default="/app/data/new_data",
                     help="Path to data directory")
 args = parser.parse_args()
 
@@ -13,7 +13,7 @@ conn = psycopg2.connect(os.environ["DATABASE_URL"])
 cur = conn.cursor()
 
 
-def table_exists(conn, table):
+def table_exists(table):
     """Check if a table exists in the database."""
     try:
         with conn.cursor() as cur:
@@ -31,9 +31,9 @@ def table_exists(conn, table):
         return False
 
 
-def has_rows(conn, table):
+def has_rows(table):
     """Check if the table has non-zero rows."""
-    if not table_exists(conn, table):
+    if not table_exists(table):
         print(f"Table {table} does not exist.")
         return False
     try:
@@ -46,24 +46,26 @@ def has_rows(conn, table):
         return False
 
 
-def create_table(dest_table, vector_size):
-    if 'query' in dest_table:
+def create_table(schema, name, vector_size):
+    table_name = f"{schema}.{name}"
+    if schema == 'public':
         sql = f"""
-            CREATE TABLE IF NOT EXISTS {dest_table} (
+            CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
                 indices INTEGER[]
             );
         """
     else:
         sql = f"""
-            CREATE TABLE IF NOT EXISTS {dest_table} (
+            CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
-                v VECTOR({vector_size})
+                v {schema}({vector_size})
             );
         """
     with conn.cursor() as cur:
         cur.execute(sql)
         conn.commit()
+    return table_name
 
 
 def insert_table(dest_table, source_csv):
@@ -77,47 +79,83 @@ def insert_table(dest_table, source_csv):
     conn.commit()
 
 
+SCHEMAS = ['vector', 'real']
+
+# Create schemas if they don't exist
+
+with conn.cursor() as cur:
+    for schema in SCHEMAS:
+        cur.execute(f"CREATE SCHEMA IF NOT EXISTS {schema}")
+    conn.commit()
+
 # Create tables if they don't exist
-BASE_TABLES = [
-    [128, "siftsmall", "siftsmall_base.csv", "sift_base10k"],
-    [128, "siftsmall", "siftsmall_query.csv", "sift_query10k"],
-    [128, "siftsmall", "siftsmall_truth.csv", "sift_truth10k"],
 
-    [128, "sift", "sift_base.csv", "sift_base1m"],
-    [128, "sift", "sift_query.csv", "sift_query1m"],
-    [128, "sift", "sift_truth.csv", "sift_truth1m"],
+TABLES = [
+    [128, "sift_base10k"],
+    [128, "sift_query10k"],
+    [128, "sift_truth10k"],
 
-    # [128, "siftbig", "bigann_base.csv", "sift_base1b"],
-    # [128, "siftbig", "bigann_query.csv", "sift_query1b"],
-    # [128, "siftbig/gnd", "idx_2M.csv", "sift_truth2m"],
-    # [128, "siftbig/gnd", "idx_5M.csv", "sift_truth5m"],
-    # [128, "siftbig/gnd", "idx_10M.csv", "sift_truth10m"],
-    # [128, "siftbig/gnd", "idx_20M.csv", "sift_truth20m"],
-    # [128, "siftbig/gnd", "idx_50M.csv", "sift_truth50m"],
-    # [128, "siftbig/gnd", "idx_100M.csv", "sift_truth100m"],
-    # [128, "siftbig/gnd", "idx_200M.csv", "sift_truth200m"],
-    # [128, "siftbig/gnd", "idx_500M.csv", "sift_truth500m"],
+    [128, "sift_base1m"],
+    [128, "sift_query1m"],
+    [128, "sift_truth1m"],
 
-    [960, "gist", "gist_base.csv", "gist_base1m"],
-    [960, "gist", "gist_query.csv", "gist_query1m"],
-    [960, "gist", "gist_truth.csv", "gist_truth1m"],
+    [128, "sift_base1b"],
+    [128, "sift_query1b"],
+    [128, "sift_truth2m"],
+    [128, "sift_truth5m"],
+    [128, "sift_truth10m"],
+    [128, "sift_truth20m"],
+    [128, "sift_truth50m"],
+    [128, "sift_truth100m"],
+    [128, "sift_truth200m"],
+    [128, "sift_truth500m"],
+
+    [960, "gist_base1m"],
+    [960, "gist_query1m"],
+    [960, "gist_truth1m"],
 ]
-for vector_size, source_dir, source_file, dest_table in BASE_TABLES:
-    create_table(dest_table, vector_size)
-    if not has_rows(conn, dest_table):
-        source_path = os.path.join(args.datapath, source_dir, source_file)
-        if not os.path.exists(source_path):
-            print(f"Source file {source_path} does not exist. Downloading...")
-            if not os.path.exists(os.path.join(args.datapath, source_dir)):
-                os.makedirs(os.path.join(args.datapath, source_dir))
-            urllib.request.urlretrieve(
-                f"https://storage.googleapis.com/lanterndata/{os.path.join(source_dir, source_file)}", source_path)
-            print("Download complete.")
-        insert_table(dest_table, source_path)
-        print(f"Inserted data into {dest_table}")
-    else:
-        print(f"Table {dest_table} already exists. Skipping.")
 
+
+def create_or_download_table(schema, vector_size, name):
+    table_name = create_table(schema, name, vector_size)
+    if not has_rows(table_name):
+        source_file = os.path.join(args.datapath, f"{name}.csv")
+        if not os.path.exists(source_file):
+            print(f"Source file {source_file} does not exist. Downloading...")
+            if not os.path.exists(args.datapath):
+                os.makedirs(args.datapath)
+            urllib.request.urlretrieve(
+                f"https://storage.googleapis.com/lanterndata/{source_file}", source_file)
+            print("Download complete.")
+        insert_table(table_name, source_file)
+        print(f"Inserted data into {table_name}")
+    else:
+        print(f"Table {table_name} already exists. Skipping.")
+
+
+def create_vector_table(vector_size, name):
+    table_name = create_table('vector', name, vector_size)
+    if not has_rows(table_name):
+        sql = f"""
+            INSERT INTO {table_name} (id, v)
+            SELECT id, v FROM real.{name};
+        """
+        with conn.cursor():
+            cur.execute(sql)
+            conn.commit()
+        print(f"Inserted data into {table_name}")
+    else:
+        print(f"Table {table_name} already exists. Skipping.")
+
+
+for vector_size, name in TABLES:
+    if 'truth' in name:
+        create_or_download_table('public', vector_size, name)
+    else:
+        create_or_download_table('real', vector_size, name)
+        create_vector_table(vector_size, name)
+
+# Create experiment results table if it doesn't exist
 
 with conn.cursor() as cur:
     sql = """
