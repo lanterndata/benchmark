@@ -3,28 +3,28 @@ import time
 import psycopg2
 
 BASE_TABLES = [
-    # [128, "siftsmall", "siftsmall_base.csv", "sift_base10k"],
-    # [128, "siftsmall", "siftsmall_query.csv", "sift_query10k"],
-    # [128, "siftsmall", "siftsmall_truth.csv", "sift_truth10k"],
+    [128, "siftsmall", "siftsmall_base.csv", "sift_base10k"],
+    [128, "siftsmall", "siftsmall_query.csv", "sift_query10k"],
+    [128, "siftsmall", "siftsmall_truth.csv", "sift_truth10k"],
 
-    # [128, "sift", "sift_base.csv", "sift_base1m"],
-    # [128, "sift", "sift_query.csv", "sift_query1m"],
-    # [128, "sift", "sift_truth.csv", "sift_truth1m"],
+    [128, "sift", "sift_base.csv", "sift_base1m"],
+    [128, "sift", "sift_query.csv", "sift_query1m"],
+    [128, "sift", "sift_truth.csv", "sift_truth1m"],
 
     [128, "siftbig", "bigann_base.csv", "sift_base1b"],
-    # [128, "siftbig", "bigann_query.csv", "sift_query1b"],
-    # [128, "siftbig/gnd", "idx_2M.csv", "sift_truth2m"],
-    # [128, "siftbig/gnd", "idx_5M.csv", "sift_truth5m"],
-    # [128, "siftbig/gnd", "idx_10M.csv", "sift_truth10m"],
-    # [128, "siftbig/gnd", "idx_20M.csv", "sift_truth20m"],
-    # [128, "siftbig/gnd", "idx_50M.csv", "sift_truth50m"],
-    # [128, "siftbig/gnd", "idx_100M.csv", "sift_truth100m"],
-    # [128, "siftbig/gnd", "idx_200M.csv", "sift_truth200m"],
-    # [128, "siftbig/gnd", "idx_500M.csv", "sift_truth500m"],
+    [128, "siftbig", "bigann_query.csv", "sift_query1b"],
+    [128, "siftbig/gnd", "idx_2M.csv", "sift_truth2m"],
+    [128, "siftbig/gnd", "idx_5M.csv", "sift_truth5m"],
+    [128, "siftbig/gnd", "idx_10M.csv", "sift_truth10m"],
+    [128, "siftbig/gnd", "idx_20M.csv", "sift_truth20m"],
+    [128, "siftbig/gnd", "idx_50M.csv", "sift_truth50m"],
+    [128, "siftbig/gnd", "idx_100M.csv", "sift_truth100m"],
+    [128, "siftbig/gnd", "idx_200M.csv", "sift_truth200m"],
+    [128, "siftbig/gnd", "idx_500M.csv", "sift_truth500m"],
 
-    # [960, "gist", "gist_base.csv", "gist_base1m"],
-    # [960, "gist", "gist_query.csv", "gist_query1m"],
-    # [960, "gist", "gist_truth.csv", "gist_truth1m"],
+    [960, "gist", "gist_base.csv", "gist_base1m"],
+    [960, "gist", "gist_query.csv", "gist_query1m"],
+    [960, "gist", "gist_truth.csv", "gist_truth1m"],
 ]
 
 
@@ -72,15 +72,14 @@ def create_and_dump_new_truth_tables():
     # Create new truth tables and dump to CSVs in new folder
     for dataset, num_query in [("sift", 10000), ("gist", 1000)]:
         query_table_name = f"{dataset}_query1m"
-        for N in ['600k', '800k']:
+        for N in ['100k', '200k', '400k', '600k', '800k']:
             base_table_name = f"{dataset}_base{N}"
             truth_table_name = f"{dataset}_truth{N}"
 
-            if truth_table_name in ['sift_truth100k', 'sift_truth200k', 'sift_truth400k']:
-                continue
-
             sql = f"""
                 DROP TABLE IF EXISTS {truth_table_name};
+
+                DROP INDEX IF EXISTS {base_table_name}_index;
 
                 CREATE TABLE {truth_table_name} (
                     id SERIAL PRIMARY KEY,
@@ -131,4 +130,3 @@ def create_and_dump_new_truth_tables():
 
 
 create_and_dump_new_truth_tables()
-convert_existing_csvs()
