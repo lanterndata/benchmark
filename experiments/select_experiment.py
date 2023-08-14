@@ -86,7 +86,7 @@ def generate_performance_result(extension, dataset, N, K, bulk):
     return tps_response, latency_response
 
 
-def generate_recall_result(dataset, N, K):
+def generate_recall_result(extension, dataset, N, K):
     base_table_name = get_table_name(extension, dataset, N, type='base')
     truth_table_name = get_table_name(extension, dataset, N, type='truth')
     query_table_name = get_table_name(extension, dataset, N, type='query')
@@ -187,7 +187,7 @@ def get_extension_hyperparameters(extension, N):
         probes_options = [1, 2, 4, 8, 16, 32]
         hyperparameters = [{'lists': l, 'probes': p}
                            for l in lists_options for p in probes_options]
-    if extension == 'lantern':
+    if extension == 'lantern' or extension == 'neon':
         m_options = [2, 4, 6, 8, 12, 16, 24, 32, 48, 64]
         ef_construction_options = [16]  # [16, 32, 64, 128, 256]
         ef_options = [10]  # [10, 20, 40, 80, 160]

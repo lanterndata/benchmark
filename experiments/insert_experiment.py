@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from scripts.create_index import create_custom_index
 from scripts.script_utils import (
     get_table_name, save_result, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results,
-    get_distinct_database_params, parse_args, run_pgbench, get_schema_name
+    get_distinct_database_params, parse_args, run_pgbench, get_schema_name, get_vector_dim
 )
 from scripts.number_utils import convert_number_to_string
 from utils.print import print_labels, print_row
@@ -23,7 +23,7 @@ def get_dest_index_name(extension, dataset):
 def create_dest_table(extension, dataset):
     schema = get_schema_name(extension)
     table_name = get_dest_table_name(extension, dataset)
-    vector_dim = 128 if dataset == 'sift' else 960
+    vector_dim = get_vector_dim(dataset)
     sql = f"""
       CREATE TABLE IF NOT EXISTS {schema}.{table_name} (
         id SERIAL PRIMARY KEY,

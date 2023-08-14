@@ -13,7 +13,8 @@ from .number_utils import convert_string_to_number
 
 DEFAULT_INDEX_PARAMS = {
     'pgvector': {'lists': 100, 'probes': 1},
-    'lantern': {'M': 2, 'ef_construction': 10, 'ef': 4}
+    'lantern': {'M': 2, 'ef_construction': 10, 'ef': 4},
+    'neon': {'m': 2, 'efconstruction': 10, 'efsearch': 4}
 }
 
 VALID_INDEX_PARAMS = {index: list(default_params.keys())
@@ -26,7 +27,7 @@ METRICS_WITHOUT_N = ['insert (latency s)', 'insert bulk (latency s)']
 VALID_METRICS = METRICS_WITH_K + METRICS_WITHOUT_N + \
     ['disk usage (bytes)', 'create (latency ms)']
 
-VALID_EXTENSIONS = ['pgvector', 'lantern']
+VALID_EXTENSIONS = list(DEFAULT_INDEX_PARAMS.keys())
 
 VALID_EXTENSIONS_AND_NONE = ['none'] + VALID_EXTENSIONS
 
@@ -162,6 +163,13 @@ def get_experiment_results(metric_type, extension, dataset, N=None):
 # Get names
 
 
+def get_vector_dim(data):
+    if 'sift' in data:
+        return 128
+    if 'gist' in data:
+        return 960
+
+
 def get_schema_name(extension):
     if extension not in VALID_EXTENSIONS:
         raise Exception(
@@ -172,7 +180,7 @@ def get_schema_name(extension):
         return 'real'
 
 
-def get_table_name(extension, dataset, N, type='base'):
+def get_table_name(extension, dataset, N, type='base', schema=True):
     if dataset not in VALID_DATASETS:
         raise Exception(
             f"Invalid dataset name = '{dataset}'. Valid dataset names are: {', '.join(VALID_DATASETS.keys())}")
@@ -185,12 +193,14 @@ def get_table_name(extension, dataset, N, type='base'):
         raise Exception(
             f"Invalid table type = '{type}'. Valid table types are: {', '.join(VALID_TABLE_TYPES)}")
 
-    schema = get_schema_name(extension)
-    return f"{schema}.{dataset}_{VALID_TABLE_TYPES}{N}"
+    table_name = f"{dataset}_{type}{N}"
+    if schema:
+        return f"{get_schema_name(extension)}.{table_name}"
+    return table_name
 
 
-def get_index_name(extension, dataset, N):
-    return get_table_name(extension, dataset, N) + "_index"
+def get_index_name(extension, dataset, N, schema=True):
+    return get_table_name(extension, dataset, N, schema=schema) + "_index"
 
 # Database utils
 

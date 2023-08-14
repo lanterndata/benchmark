@@ -34,9 +34,7 @@ COPY ./db/scripts/ /app/db/scripts/
 RUN chmod +x /app/db/scripts/*
 RUN /app/db/scripts/install_pgvector.sh
 RUN /app/db/scripts/install_lantern.sh
-
-# Copt over initialization scripts
-COPY ./db/init /docker-entrypoint-initdb.d
+RUN /app/db/scripts/install_neon.sh
 
 # Expose ports
 EXPOSE 8888

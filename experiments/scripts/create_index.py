@@ -1,15 +1,17 @@
-from .script_utils import parse_args, get_table_name, get_index_name, execute_sql, DEFAULT_INDEX_PARAMS
+from .script_utils import parse_args, get_table_name, get_index_name, execute_sql, DEFAULT_INDEX_PARAMS, get_vector_dim
 
 
 def get_create_pgvector_index_query(table, index, index_params):
     params = {**DEFAULT_INDEX_PARAMS['pgvector'], **index_params}
     sql = f"""
+        CREATE EXTENSION IF NOT EXISTS vector SCHEMA vector;
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
         ivfflat (v vector_l2_ops) WITH (
             lists = {params['lists']}
         );
         SET LOCAL ivfflat.probes = {params['probes']};
+        SET enable_seqscan = off;
     """
     return sql
 
@@ -17,13 +19,33 @@ def get_create_pgvector_index_query(table, index, index_params):
 def get_create_lantern_index_query(table, index, index_params):
     params = {**DEFAULT_INDEX_PARAMS['lantern'], **index_params}
     sql = f"""
+        CREATE EXTENSION IF NOT EXISTS lanterndb SCHEMA real;
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
         hnsw (v) WITH (
             M={params['M']},
             ef_construction={params['ef_construction']},
             ef={params['ef']}
-        )
+        );
+        SET enable_seqscan = off;
+    """
+    return sql
+
+
+def get_create_neon_index_query(table, index, index_params):
+    params = {**DEFAULT_INDEX_PARAMS['neon'], **index_params}
+    vector_dim = get_vector_dim(table)
+    sql = f"""
+        CREATE EXTENSION IF NOT EXISTS embedding SCHEMA real;
+        SET maintenance_work_mem = '2GB';
+        CREATE INDEX {index} ON {table} USING
+        hnsw (v) WITH (
+            dims={vector_dim},
+            m={params['m']},
+            efconstruction={params['efconstruction']},
+            efsearch={params['efsearch']}
+        );
+        SET enable_seqscan = off;
     """
     return sql
 
@@ -33,11 +55,13 @@ def create_custom_index_query(extension, table, index, index_params):
         return get_create_lantern_index_query(table, index, index_params)
     elif extension == 'pgvector':
         return get_create_pgvector_index_query(table, index, index_params)
+    elif extension == 'neon':
+        return get_create_neon_index_query(table, index, index_params)
 
 
 def get_create_index_query(extension, dataset, N, index_params):
     table = get_table_name(extension, dataset, N)
-    index = get_index_name(extension, dataset, N)
+    index = get_index_name(extension, dataset, N, schema=False)
     return create_custom_index_query(extension, table, index, index_params)
 
 

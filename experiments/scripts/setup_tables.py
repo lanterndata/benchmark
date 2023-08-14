@@ -13,17 +13,20 @@ conn = psycopg2.connect(os.environ["DATABASE_URL"])
 cur = conn.cursor()
 
 
-def table_exists(table):
+def table_exists(schema, table):
     """Check if a table exists in the database."""
     try:
         with conn.cursor() as cur:
             cur.execute("""
             SELECT EXISTS (
                 SELECT 1 
-                FROM information_schema.tables 
-                WHERE table_name = %s
+                FROM
+                    information_schema.tables
+                WHERE
+                    table_schema = %s
+                    AND table_name = %s
             );
-            """, (table,))
+            """, (schema, table))
             exists = cur.fetchone()[0]
             return exists
     except Exception as e:
@@ -31,18 +34,18 @@ def table_exists(table):
         return False
 
 
-def has_rows(table):
+def has_rows(schema, table):
     """Check if the table has non-zero rows."""
-    if not table_exists(table):
-        print(f"Table {table} does not exist.")
+    if not table_exists(schema, table):
+        print(f"Table {schema}.{table} does not exist.")
         return False
     try:
         with conn.cursor() as cur:
-            cur.execute(f"SELECT COUNT(*) FROM {table};")
+            cur.execute(f"SELECT COUNT(*) FROM {schema}.{table};")
             count = cur.fetchone()[0]
             return count > 0
     except Exception as e:
-        print(f"Error checking row count for table {table}: {e}")
+        print(f"Error checking row count for table {schema}.{table}: {e}")
         return False
 
 
@@ -55,13 +58,23 @@ def create_table(schema, name, vector_size):
                 indices INTEGER[]
             );
         """
-    else:
+    elif schema == 'real':
         sql = f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
-                v {schema}({vector_size})
+                v REAL[{vector_size}]
             );
         """
+    elif schema == 'vector':
+        sql = f"""
+            CREATE EXTENSION IF NOT EXISTS vector SCHEMA vector;
+            CREATE TABLE IF NOT EXISTS {table_name} (
+                id SERIAL PRIMARY KEY,
+                v vector.VECTOR({vector_size})
+            );
+        """
+    else:
+        raise ValueError(f"Invalid schema {schema}")
     with conn.cursor() as cur:
         cur.execute(sql)
         conn.commit()
@@ -71,7 +84,7 @@ def create_table(schema, name, vector_size):
 def insert_table(dest_table, source_csv):
     with conn.cursor() as cur:
         with open(source_csv, 'r') as f:
-            if 'query' in dest_table:
+            if 'truth' in dest_table:
                 sql = f"COPY {dest_table} (indices) FROM '{source_csv}' WITH csv"
             else:
                 sql = f"COPY {dest_table} (v) FROM '{source_csv}' WITH csv"
@@ -99,7 +112,7 @@ TABLES = [
     [128, "sift_query1m"],
     [128, "sift_truth1m"],
 
-    [128, "sift_base1b"],
+    # [128, "sift_base1b"],
     [128, "sift_query1b"],
     [128, "sift_truth2m"],
     [128, "sift_truth5m"],
@@ -118,7 +131,7 @@ TABLES = [
 
 def create_or_download_table(schema, vector_size, name):
     table_name = create_table(schema, name, vector_size)
-    if not has_rows(table_name):
+    if not has_rows(schema, name):
         source_file = os.path.join(args.datapath, f"{name}.csv")
         if not os.path.exists(source_file):
             print(f"Source file {source_file} does not exist. Downloading...")
@@ -135,12 +148,12 @@ def create_or_download_table(schema, vector_size, name):
 
 def create_vector_table(vector_size, name):
     table_name = create_table('vector', name, vector_size)
-    if not has_rows(table_name):
+    if not has_rows('vector', name):
         sql = f"""
             INSERT INTO {table_name} (id, v)
             SELECT id, v FROM real.{name};
         """
-        with conn.cursor():
+        with conn.cursor() as cur:
             cur.execute(sql)
             conn.commit()
         print(f"Inserted data into {table_name}")
