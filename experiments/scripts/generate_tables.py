@@ -101,7 +101,7 @@ def create_and_dump_new_truth_tables():
                         FROM
                             {query_table_name}
                         WHERE
-                            id >= {N - 100} AND id < {N}
+                            id > {N - 100} AND id <= {N}
                     ) q
                     JOIN LATERAL (
                         SELECT
@@ -127,6 +127,3 @@ def create_and_dump_new_truth_tables():
 
     cur.close()
     conn.close()
-
-
-create_and_dump_new_truth_tables()
