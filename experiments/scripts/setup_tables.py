@@ -4,7 +4,7 @@ import urllib.request
 import psycopg2
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--datapath", default="/app/data/new_data",
+parser.add_argument("-d", "--datapath", default="/app/data",
                     help="Path to data directory")
 args = parser.parse_args()
 
@@ -125,7 +125,7 @@ def create_or_download_table(schema, vector_size, name):
             if not os.path.exists(args.datapath):
                 os.makedirs(args.datapath)
             urllib.request.urlretrieve(
-                f"https://storage.googleapis.com/lanterndata/{source_file}", source_file)
+                f"https://storage.googleapis.com/lanterndata/datasets/{source_file}", source_file)
             print("Download complete.")
         insert_table(table_name, source_file)
         print(f"Inserted data into {table_name}")
