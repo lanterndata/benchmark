@@ -8,3 +8,14 @@ def print_labels(title, *cols):
     print('-' * len(cols) * 10)
     print_row(*cols)
     print('-' * len(cols) * 10)
+
+
+def get_title(extension, database_params, dataset, N):
+    strings = [
+        f"extension: {extension}",
+        f"extension_params: {database_params}",
+        f"dataset: {dataset}",
+    ]
+    if N:
+        strings.append(f"N: {N}")
+    return ', '.join(strings)

@@ -2,25 +2,30 @@ import os
 import psycopg2
 import plotly.graph_objects as go
 from scripts.create_index import create_custom_index
-from scripts.script_utils import get_table_name, save_result, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results, get_distinct_database_params, parse_args, run_pgbench
+from scripts.script_utils import (
+    get_table_name, save_result, execute_sql, VALID_EXTENSIONS_AND_NONE, get_experiment_results,
+    get_distinct_database_params, parse_args, run_pgbench, get_schema_name
+)
 from scripts.number_utils import convert_number_to_string
 from utils.print import print_labels, print_row
 from utils.colors import get_color_from_extension
 
 
-def get_dest_table_name(dataset):
-    return dataset + '_insert'
+def get_dest_table_name(extension, dataset):
+    schema = get_schema_name(extension)
+    return f"{schema}.{dataset}_insert"
 
 
-def get_dest_index_name(dataset):
-    return get_dest_table_name(dataset) + '_index'
+def get_dest_index_name(extension, dataset):
+    return get_dest_table_name(extension, dataset) + '_index'
 
 
-def create_dest_table(dataset):
-    table_name = get_dest_table_name(dataset)
+def create_dest_table(extension, dataset):
+    schema = get_schema_name(extension)
+    table_name = get_dest_table_name(extension, dataset)
     vector_dim = 128 if dataset == 'sift' else 960
     sql = f"""
-      CREATE TABLE IF NOT EXISTS {table_name} (
+      CREATE TABLE IF NOT EXISTS {schema}.{table_name} (
         id SERIAL PRIMARY KEY,
         v VECTOR({vector_dim})
       )
@@ -30,13 +35,13 @@ def create_dest_table(dataset):
 
 
 def create_dest_index(extension, dataset, index_params):
-    table = get_dest_table_name(dataset)
-    index = get_dest_index_name(dataset)
+    table = get_dest_table_name(extension, dataset)
+    index = get_dest_index_name(extension, dataset)
     create_custom_index(extension, table, index, index_params)
 
 
-def delete_dest_table(dataset):
-    table_name = get_dest_table_name(dataset)
+def delete_dest_table(extension, dataset):
+    table_name = get_dest_table_name(extension, dataset)
     sql = f"DROP TABLE IF EXISTS {table_name}"
     execute_sql(sql)
 
@@ -58,9 +63,9 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
-    source_table = get_table_name(dataset, '1m')
-    delete_dest_table(dataset)
-    dest_table = create_dest_table(dataset)
+    source_table = get_table_name(extension, dataset, '1m')
+    delete_dest_table(extension, dataset)
+    dest_table = create_dest_table(extension, dataset)
 
     query = f"""
         INSERT INTO
@@ -122,7 +127,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 
     print()
 
-    delete_dest_table(dataset)
+    delete_dest_table(extension, dataset)
 
     cur.close()
     conn.close()

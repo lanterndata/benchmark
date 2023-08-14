@@ -3,7 +3,7 @@ import psycopg2
 import plotly.graph_objects as go
 from scripts.delete_index import delete_index
 from scripts.create_index import create_index
-from scripts.script_utils import run_pgbench, save_result, execute_sql, parse_args
+from scripts.script_utils import run_pgbench, save_result, execute_sql, parse_args, get_table_name
 from scripts.number_utils import convert_string_to_number
 import math
 
@@ -18,9 +18,9 @@ def get_tps_metric(bulk):
     return 'select bulk (tps)' if bulk else 'select (tps)'
 
 
-def generate_performance_result(dataset, N, K, bulk):
-    base_table_name = f"{dataset}_base{N}"
-    query_table_name = f"{dataset}_query{N}"
+def generate_performance_result(extension, dataset, N, K, bulk):
+    base_table_name = get_table_name(extension, dataset, N, type='base')
+    query_table_name = get_table_name(extension, dataset, N, type='query')
     N_number = convert_string_to_number(N)
     if bulk:
         query = f"""
@@ -87,9 +87,9 @@ def generate_performance_result(dataset, N, K, bulk):
 
 
 def generate_recall_result(dataset, N, K):
-    base_table_name = f"{dataset}_base{N}"
-    truth_table_name = f"{dataset}_truth{N}"
-    query_table_name = f"{dataset}_query{N}"
+    base_table_name = get_table_name(extension, dataset, N, type='base')
+    truth_table_name = get_table_name(extension, dataset, N, type='truth')
+    query_table_name = get_table_name(extension, dataset, N, type='query')
 
     query_ids = execute_sql(
         f"SELECT id FROM {query_table_name} LIMIT 100", select=True)
@@ -135,7 +135,7 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
     conn = psycopg2.connect(db_connection_string)
     cur = conn.cursor()
 
-    delete_index(dataset, N, conn=conn, cur=cur)
+    delete_index(extension, dataset, N, conn=conn, cur=cur)
     create_index(extension, dataset, N,
                  index_params=index_params, conn=conn, cur=cur)
 
@@ -156,8 +156,8 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
         }
 
         tps_response, latency_response = generate_performance_result(
-            dataset, N, K, bulk)
-        recall_response = generate_recall_result(dataset, N, K)
+            extension, dataset, N, K, bulk)
+        recall_response = generate_recall_result(extension, dataset, N, K)
         save_result(**tps_response, **save_result_params)
         save_result(**latency_response, **save_result_params)
         save_result(**recall_response, **save_result_params)
@@ -172,7 +172,7 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
     print()
 
     if extension != 'none':
-        delete_index(dataset, N, conn=conn, cur=cur)
+        delete_index(extension, dataset, N, conn=conn, cur=cur)
 
     cur.close()
     conn.close()

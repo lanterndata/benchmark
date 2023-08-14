@@ -28,7 +28,7 @@ def get_create_lantern_index_query(table, index, index_params):
     return sql
 
 
-def create_custom_index_query(extension, table, index, index_params, conn=None, cur=None):
+def create_custom_index_query(extension, table, index, index_params):
     if extension == 'lantern':
         return get_create_lantern_index_query(table, index, index_params)
     elif extension == 'pgvector':
@@ -36,21 +36,21 @@ def create_custom_index_query(extension, table, index, index_params, conn=None, 
 
 
 def get_create_index_query(extension, dataset, N, index_params):
-    table = get_table_name(dataset, N)
-    index = get_index_name(dataset, N)
+    table = get_table_name(extension, dataset, N)
+    index = get_index_name(extension, dataset, N)
     return create_custom_index_query(extension, table, index, index_params)
 
 
-def create_custom_index(*args, **kwargs):
-    sql = create_custom_index_query(*args, **kwargs)
+def create_custom_index(extension, table, index, index_params={}, conn=None, cur=None):
+    sql = create_custom_index_query(extension, table, index, index_params)
     if sql is not None:
-        execute_sql(sql, conn=None, cur=None)
+        execute_sql(sql, conn=conn, cur=cur)
 
 
 def create_index(extension, dataset, N, index_params={}, conn=None, cur=None):
     sql = get_create_index_query(extension, dataset, N, index_params)
     if sql is not None:
-        execute_sql(sql, conn=None, cur=None)
+        execute_sql(sql, conn=conn, cur=cur)
 
 
 if __name__ == '__main__':

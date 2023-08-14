@@ -1,6 +1,5 @@
 from scripts.script_utils import execute_sql, VALID_METRICS, METRICS_WITH_K, METRICS_WITHOUT_N, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, VALID_DATASETS, VALID_QUERY_DATASETS, SUGGESTED_K_VALUES
 from scripts.number_utils import convert_number_to_string
-import recall_experiment
 import select_experiment
 import disk_usage_experiment
 import create_experiment
@@ -74,8 +73,6 @@ def get_generate_result(metric_type):
         return select_experiment.generate_result
     if metric_type == 'select (latency ms)':
         return select_experiment.generate_result
-    if metric_type == 'recall':
-        return recall_experiment.generate_result
     if metric_type == 'disk usage (bytes)':
         return disk_usage_experiment.generate_result
     if metric_type == 'create (latency ms)':

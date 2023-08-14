@@ -40,6 +40,8 @@ VALID_QUERY_DATASETS = {
     'gist': ['1m'],
 }
 
+VALID_TABLE_TYPES = ['base', 'query', 'truth']
+
 SUGGESTED_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
 
 # Argument parser
@@ -160,7 +162,17 @@ def get_experiment_results(metric_type, extension, dataset, N=None):
 # Get names
 
 
-def get_table_name(dataset, N):
+def get_schema_name(extension):
+    if extension not in VALID_EXTENSIONS:
+        raise Exception(
+            f"Invalid extension = '{extension}'. Valid extensions are: {', '.join(VALID_EXTENSIONS)}")
+    if extension == 'pgvector' or extension == 'none':
+        return 'vector'
+    else:
+        return 'real'
+
+
+def get_table_name(extension, dataset, N, type='base'):
     if dataset not in VALID_DATASETS:
         raise Exception(
             f"Invalid dataset name = '{dataset}'. Valid dataset names are: {', '.join(VALID_DATASETS.keys())}")
@@ -169,11 +181,16 @@ def get_table_name(dataset, N):
         raise Exception(
             f"Invalid N = '{N}'. Valid N values given dataset {dataset} are: {', '.join(VALID_DATASETS[dataset])}")
 
-    return f"{dataset}_base{N}"
+    if type not in VALID_TABLE_TYPES:
+        raise Exception(
+            f"Invalid table type = '{type}'. Valid table types are: {', '.join(VALID_TABLE_TYPES)}")
+
+    schema = get_schema_name(extension)
+    return f"{schema}.{dataset}_{VALID_TABLE_TYPES}{N}"
 
 
-def get_index_name(dataset, N):
-    return get_table_name(dataset, N) + "_index"
+def get_index_name(extension, dataset, N):
+    return get_table_name(extension, dataset, N) + "_index"
 
 # Database utils
 
