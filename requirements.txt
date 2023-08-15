@@ -2,17 +2,6 @@ psycopg2
 numpy
 matplotlib
 jupyterlab
-httpx
-torch
-openai-clip
 requests
-Pillow
-tqdm
-torchvision
-transformers
-ipywidgets
 pgvector
-nest_asyncio
-aiohttp
-asyncpg
 plotly

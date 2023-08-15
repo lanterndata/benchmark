@@ -1,6 +1,3 @@
-# Private
-id_rsa
-
 # Data / Postgres
 db/data
 *.tsv

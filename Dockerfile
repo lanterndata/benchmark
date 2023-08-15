@@ -18,11 +18,6 @@ RUN apt-get update && apt-get install -y git build-essential postgresql-server-d
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Enable ssh credential forwarding for Github
-COPY ./id_rsa /root/.ssh/id_rsa
-RUN chmod 600 /root/.ssh/id_rsa
-RUN echo "    ForwardAgent yes" >> /etc/ssh/ssh_config
-
 # Create the directory for pg_hba.conf to enable access to DB
 RUN mkdir -p /etc/postgresql/15/main
 RUN echo "local all postgres md5" > /etc/postgresql/15/main/pg_hba.conf
