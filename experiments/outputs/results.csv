@@ -1,67 +1,133 @@
 extension,index_params,dataset,n,k,metric_type,metric_value
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (latency ms),2.42
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert bulk (latency ms),6.287
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert bulk (latency ms),5.047
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert bulk (latency ms),5.09
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert bulk (latency ms),5.442
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert bulk (latency ms),5.25
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert bulk (latency ms),5.87
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert bulk (latency ms),5.081
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert bulk (latency ms),5.788
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert bulk (latency ms),5.602
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert bulk (latency ms),5.47
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert bulk (latency ms),5.577
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert bulk (latency ms),5.565
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert bulk (latency ms),5.786
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert bulk (latency ms),5.304
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert bulk (latency ms),5.383
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert bulk (latency ms),5.323
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert bulk (latency ms),6.58
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert bulk (latency ms),6.002
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert bulk (latency ms),5.95
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert bulk (latency ms),5.499
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert bulk (latency ms),5.783
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert bulk (latency ms),5.341
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,11000,0,insert bulk (latency ms),5.728
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,10000,0,insert bulk (latency ms),6.381
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,20000,0,insert bulk (latency ms),5.805
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,19000,0,insert bulk (latency ms),5.818
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,18000,0,insert bulk (latency ms),6.456
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,17000,0,insert bulk (latency ms),5.72
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,16000,0,insert bulk (latency ms),6.224
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,15000,0,insert bulk (latency ms),6.322
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,14000,0,insert bulk (latency ms),5.551
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,13000,0,insert bulk (latency ms),5.315
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,12000,0,insert bulk (latency ms),5.261
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert bulk (tps),182.828726
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert bulk (tps),179.298227
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert bulk (tps),172.777221
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert bulk (tps),178.504489
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert bulk (tps),170.363556
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert bulk (tps),196.811651
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert bulk (tps),183.745843
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert bulk (tps),190.472562
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert bulk (tps),198.153212
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert bulk (tps),196.448216
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert bulk (tps),159.048255
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert bulk (tps),172.84292
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert bulk (tps),187.22034
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert bulk (tps),179.700978
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert bulk (tps),172.911659
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert bulk (tps),181.841325
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert bulk (tps),168.061578
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert bulk (tps),166.600027
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert bulk (tps),151.980303
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert bulk (tps),187.856928
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert bulk (tps),185.770017
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert bulk (tps),188.533399
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,20000,0,insert bulk (tps),172.271224
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,10000,0,insert bulk (tps),156.712792
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,11000,0,insert bulk (tps),174.57491
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,12000,0,insert bulk (tps),190.077932
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,13000,0,insert bulk (tps),188.143215
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,14000,0,insert bulk (tps),180.141231
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,15000,0,insert bulk (tps),158.170286
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,16000,0,insert bulk (tps),160.66838
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,17000,0,insert bulk (tps),174.819062
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,18000,0,insert bulk (tps),154.885075
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,19000,0,insert bulk (tps),171.880371
 lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert (latency ms),1.944
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert (latency ms),2.491
 lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert (latency ms),1.867
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert (latency ms),2.232
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert (latency ms),1.871
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (latency ms),2.008
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert (latency ms),1.866
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (latency ms),1.822
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (latency ms),1.964
 lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert (latency ms),2.707
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert (latency ms),2.595
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (latency ms),1.973
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert (latency ms),2.031
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert (latency ms),2.104
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (latency ms),1.923
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (latency ms),2.103
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert (latency ms),2.003
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert (latency ms),1.948
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (latency ms),2.135
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (latency ms),2.008
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (latency ms),1.822
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert (latency ms),2.232
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert (latency ms),2.491
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (latency ms),1.964
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert (latency ms),1.866
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert (latency ms),1.871
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (latency ms),2.42
 neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert (latency ms),2.441
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert (latency ms),1.948
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (latency ms),1.923
 neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert (latency ms),2.002
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (latency ms),2.103
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert (latency ms),2.104
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert (latency ms),2.003
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert (latency ms),2.031
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (latency ms),2.135
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (latency ms),1.973
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert (latency ms),2.595
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,11000,0,insert (latency ms),1.995
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,20000,0,insert (latency ms),1.891
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,19000,0,insert (latency ms),1.831
 pgvector,"{""lists"": 200, ""probes"": 4}",sift,18000,0,insert (latency ms),1.845
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,17000,0,insert (latency ms),1.916
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,16000,0,insert (latency ms),1.903
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,15000,0,insert (latency ms),1.9
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,12000,0,insert (latency ms),1.963
 pgvector,"{""lists"": 200, ""probes"": 4}",sift,14000,0,insert (latency ms),1.928
 pgvector,"{""lists"": 200, ""probes"": 4}",sift,10000,0,insert (latency ms),2.053
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,15000,0,insert (latency ms),1.9
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,16000,0,insert (latency ms),1.903
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,17000,0,insert (latency ms),1.916
 pgvector,"{""lists"": 200, ""probes"": 4}",sift,13000,0,insert (latency ms),1.889
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,19000,0,insert (latency ms),1.831
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,20000,0,insert (latency ms),1.891
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,11000,0,insert (latency ms),1.995
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,12000,0,insert (latency ms),1.963
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (tps),548.797119
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (tps),509.190636
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (tps),498.045173
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert (tps),514.535367
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert (tps),448.01382
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert (tps),534.355306
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (tps),413.19531
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert (tps),535.643887
+lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert (tps),401.404756
 lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert (tps),536.018572
 lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert (tps),369.396668
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert (tps),401.404756
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (tps),413.19531
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert (tps),448.01382
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (tps),498.045173
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (tps),509.190636
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert (tps),514.535367
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert (tps),534.355306
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert (tps),535.643887
-lantern,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (tps),548.797119
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (tps),506.938981
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert (tps),385.369078
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert (tps),409.664644
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (tps),468.43388
 neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,13000,0,insert (tps),499.281285
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (tps),475.51027
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (tps),519.987811
-neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert (tps),513.391562
 neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,17000,0,insert (tps),499.518714
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,10000,0,insert (tps),385.369078
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,14000,0,insert (tps),475.51027
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,20000,0,insert (tps),506.938981
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,15000,0,insert (tps),519.987811
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,11000,0,insert (tps),409.664644
 neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,18000,0,insert (tps),475.266648
 neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,19000,0,insert (tps),492.457763
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,16000,0,insert (tps),513.391562
+neon,"{""M"": 4, ""ef_construction"": 16, ""ef"": 10}",sift,12000,0,insert (tps),468.43388
 pgvector,"{""lists"": 200, ""probes"": 4}",sift,10000,0,insert (tps),487.052441
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,14000,0,insert (tps),518.678656
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,19000,0,insert (tps),546.25824
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,11000,0,insert (tps),501.267957
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,18000,0,insert (tps),541.956952
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,13000,0,insert (tps),529.250063
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,17000,0,insert (tps),521.82589
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,20000,0,insert (tps),528.918626
-pgvector,"{""lists"": 200, ""probes"": 4}",sift,16000,0,insert (tps),525.499053
 pgvector,"{""lists"": 200, ""probes"": 4}",sift,12000,0,insert (tps),509.494688
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,14000,0,insert (tps),518.678656
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,13000,0,insert (tps),529.250063
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,11000,0,insert (tps),501.267957
 pgvector,"{""lists"": 200, ""probes"": 4}",sift,15000,0,insert (tps),526.382557
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,20000,0,insert (tps),528.918626
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,19000,0,insert (tps),546.25824
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,18000,0,insert (tps),541.956952
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,17000,0,insert (tps),521.82589
+pgvector,"{""lists"": 200, ""probes"": 4}",sift,16000,0,insert (tps),525.499053

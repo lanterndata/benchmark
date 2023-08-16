@@ -1,5 +1,5 @@
 from utils.cli import parse_args
-import insert_experiment
+from . import insert_experiment
 
 
 def generate_result(extension, dataset, index_params={}):
