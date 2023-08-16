@@ -1,6 +1,6 @@
 from .cli import parse_args
 from .names import get_table_name, get_index_name
-from .constants import DEFAULT_INDEX_PARAMS, get_vector_dim
+from .constants import DEFAULT_INDEX_PARAMS, get_vector_dim, Extension
 from .database import DatabaseConnection
 
 
@@ -9,7 +9,7 @@ def get_index_params(extension, index_params):
 
 
 def get_create_pgvector_index_query(table, index, index_params):
-    params = get_index_params('pgvector', index_params)
+    params = get_index_params(Extension.PGVECTOR, index_params)
     sql = f"""
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
@@ -23,11 +23,13 @@ def get_create_pgvector_index_query(table, index, index_params):
 
 
 def get_create_lantern_index_query(table, index, index_params):
-    params = get_index_params('lantern', index_params)
+    params = get_index_params(Extension.LANTERN, index_params)
+    vector_dim = get_vector_dim(table)
     sql = f"""
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
         hnsw (v) WITH (
+            dims={vector_dim},
             M={params['M']},
             ef_construction={params['ef_construction']},
             ef={params['ef']}
@@ -38,7 +40,7 @@ def get_create_lantern_index_query(table, index, index_params):
 
 
 def get_create_neon_index_query(table, index, index_params):
-    params = get_index_params('neon', index_params)
+    params = get_index_params(Extension.NEON, index_params)
     vector_dim = get_vector_dim(table)
     sql = f"""
         SET maintenance_work_mem = '2GB';
@@ -55,11 +57,11 @@ def get_create_neon_index_query(table, index, index_params):
 
 
 def create_custom_index_query(extension, table, index, index_params):
-    if extension == 'lantern':
+    if extension == Extension.LANTERN:
         return get_create_lantern_index_query(table, index, index_params)
-    elif extension == 'pgvector':
+    elif extension == Extension.PGVECTOR:
         return get_create_pgvector_index_query(table, index, index_params)
-    elif extension == 'neon':
+    elif extension == Extension.NEON:
         return get_create_neon_index_query(table, index, index_params)
 
 

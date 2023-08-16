@@ -106,7 +106,7 @@ def generate_recall_result(extension, dataset, N, K):
                 WHERE
                     id = {query_id}
             """)[0]
-            base_ids = conn.select_many(f"""
+            base_ids = conn.select(f"""
                 SELECT
                     id - 1
                 FROM
@@ -123,12 +123,12 @@ def generate_recall_result(extension, dataset, N, K):
                 LIMIT {K}
             """)
             base_ids = list(map(lambda x: x[0], base_ids))
-        recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
+            recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
 
     # Calculate the average recall for this K
     recall_at_k = recall_at_k_sum / len(query_ids) / K
     recall_response = {
-        'metric_type': 'recall',
+        'metric_type': Metric.RECALL,
         'metric_value': recall_at_k,
     }
     return recall_response
@@ -186,6 +186,8 @@ def get_extension_hyperparameters(extension, N):
         ef_options = [10]  # [10, 20, 40, 80, 160]
         hyperparameters = [{'M': m, 'ef_construction': efc, 'ef': ef}
                            for m in m_options for efc in ef_construction_options for ef in ef_options]
+    if extension == Extension.NONE:
+        return [{}]
     return hyperparameters
 
 
@@ -196,8 +198,8 @@ def run_hyperparameter_search(extension, dataset, N, bulk=False):
             extension, dataset, N, [5], index_params=hyperparameter, bulk=bulk)
 
 
-def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='select (latency ms)'):
-    colors = ['blue', 'red', 'green', 'yellow', 'purple']
+def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxis=Metric.SELECT_LATENCY):
+    colors = ['blue', 'red', 'green', 'purple']
 
     fig = go.Figure()
 
@@ -220,9 +222,9 @@ def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='se
             GROUP BY
                 index_params
         """
-        data = (xaxis, yaxis, extension, dataset,
-                convert_string_to_number(N), xaxis, yaxis)
-        with DatabaseConnection(extension) as conn:
+        data = (xaxis.value, yaxis.value, extension.value, dataset.value,
+                convert_string_to_number(N), xaxis.value, yaxis.value)
+        with DatabaseConnection() as conn:
             results = conn.select(sql, data=data)
 
         index_params, xaxis_data, yaxis_data = zip(*results)
@@ -238,13 +240,13 @@ def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='se
             ),
             hovertext=index_params,
             hoverinfo="x+y+text",
-            name=extension
+            name=extension.value.upper()
         ))
 
     fig.update_layout(
-        title=f"{yaxis} and {xaxis} for with {dataset.value} {N}",
-        xaxis=dict(title=xaxis),
-        yaxis=dict(title=yaxis),
+        title=f"{yaxis.value} and {xaxis.value} for with {dataset.value} {N}",
+        xaxis=dict(title=xaxis.value),
+        yaxis=dict(title=yaxis.value),
         margin=dict(l=50, r=50, b=50, t=50),
         hovermode='closest'
     )
