@@ -1,4 +1,4 @@
-from scripts.script_utils import parse_args
+from ..utils.cli import parse_args
 import select_experiment
 
 

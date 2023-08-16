@@ -1,22 +1,25 @@
-from .script_utils import get_index_name, execute_sql, parse_args
+from .cli import parse_args
+from .names import get_index_name
+from .database import DatabaseConnection
 
 
-def get_drop_index_query(extension, dataset, N):
-    index_name = get_index_name(extension, dataset, N)
+def get_drop_index_query(dataset, N):
+    index_name = get_index_name(dataset, N)
     sql = f"DROP INDEX IF EXISTS {index_name};"
     return sql
 
 
-def delete_index(extension, dataset, N, conn=None, cur=None):
+def delete_index(extension, dataset, N):
     commands = ['SET enable_seqscan = on;']
     if extension != 'none':
-        commands.append(get_drop_index_query(extension, dataset, N))
+        commands.append(get_drop_index_query(dataset, N))
     if extension == 'lantern':
         commands.append('DROP EXTENSION IF EXISTS lantern;')
     if extension == 'neon':
         commands.append('DROP EXTENSION IF EXISTS embedding;')
     sql = '\n'.join(commands)
-    execute_sql(sql, conn=conn, cur=cur)
+    with DatabaseConnection(extension) as conn:
+        conn.execute(sql)
 
 
 if __name__ == '__main__':

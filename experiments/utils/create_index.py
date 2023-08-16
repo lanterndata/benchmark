@@ -1,10 +1,16 @@
-from .script_utils import parse_args, get_table_name, get_index_name, execute_sql, DEFAULT_INDEX_PARAMS, get_vector_dim
+from .cli import parse_args
+from .names import get_table_name, get_index_name
+from .constants import DEFAULT_INDEX_PARAMS, get_vector_dim
+from .database import DatabaseConnection
+
+
+def get_index_params(extension, index_params):
+    return {**DEFAULT_INDEX_PARAMS[extension], **index_params}
 
 
 def get_create_pgvector_index_query(table, index, index_params):
-    params = {**DEFAULT_INDEX_PARAMS['pgvector'], **index_params}
+    params = get_index_params('pgvector', index_params)
     sql = f"""
-        CREATE EXTENSION IF NOT EXISTS vector SCHEMA vector;
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
         ivfflat (v vector_l2_ops) WITH (
@@ -17,9 +23,8 @@ def get_create_pgvector_index_query(table, index, index_params):
 
 
 def get_create_lantern_index_query(table, index, index_params):
-    params = {**DEFAULT_INDEX_PARAMS['lantern'], **index_params}
+    params = get_index_params('lantern', index_params)
     sql = f"""
-        CREATE EXTENSION IF NOT EXISTS lanterndb SCHEMA real;
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
         hnsw (v) WITH (
@@ -33,10 +38,9 @@ def get_create_lantern_index_query(table, index, index_params):
 
 
 def get_create_neon_index_query(table, index, index_params):
-    params = {**DEFAULT_INDEX_PARAMS['neon'], **index_params}
+    params = get_index_params('neon', index_params)
     vector_dim = get_vector_dim(table)
     sql = f"""
-        CREATE EXTENSION IF NOT EXISTS embedding SCHEMA real;
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
         hnsw (v) WITH (
@@ -60,21 +64,23 @@ def create_custom_index_query(extension, table, index, index_params):
 
 
 def get_create_index_query(extension, dataset, N, index_params):
-    table = get_table_name(extension, dataset, N)
-    index = get_index_name(extension, dataset, N, schema=False)
+    table = get_table_name(dataset, N)
+    index = get_index_name(dataset, N)
     return create_custom_index_query(extension, table, index, index_params)
 
 
-def create_custom_index(extension, table, index, index_params={}, conn=None, cur=None):
+def create_custom_index(extension, table, index, index_params={}):
     sql = create_custom_index_query(extension, table, index, index_params)
     if sql is not None:
-        execute_sql(sql, conn=conn, cur=cur)
+        with DatabaseConnection(extension) as conn:
+            conn.execute(sql)
 
 
-def create_index(extension, dataset, N, index_params={}, conn=None, cur=None):
+def create_index(extension, dataset, N, index_params={}):
     sql = get_create_index_query(extension, dataset, N, index_params)
     if sql is not None:
-        execute_sql(sql, conn=conn, cur=cur)
+        with DatabaseConnection(extension) as conn:
+            conn.execute(sql)
 
 
 if __name__ == '__main__':

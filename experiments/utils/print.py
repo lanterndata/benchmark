@@ -1,20 +1,18 @@
 def print_row(*cols):
-    row = ''.join([col.ljust(10) for col in cols])
+    row = ''.join([col.ljust(15) for col in cols])
     print(row)
 
 
-def print_labels(title, *cols):
-    print_row(title)
-    print('-' * len(cols) * 10)
+def print_labels(*cols):
     print_row(*cols)
-    print('-' * len(cols) * 10)
+    print('-' * len(cols) * 15)
 
 
-def get_title(extension, database_params, dataset, N):
+def get_title(extension, index_params, dataset, N):
     strings = [
-        f"extension: {extension}",
-        f"extension_params: {database_params}",
-        f"dataset: {dataset}",
+        f"extension: {extension.value}",
+        f"index params: {index_params}",
+        f"dataset: {dataset.value}",
     ]
     if N:
         strings.append(f"N: {N}")

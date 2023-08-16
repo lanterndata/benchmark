@@ -1,6 +1,8 @@
-from scripts.script_utils import execute_sql, VALID_METRICS, METRICS_WITH_K, METRICS_WITHOUT_N, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, VALID_DATASETS, VALID_QUERY_DATASETS, SUGGESTED_K_VALUES
-from scripts.number_utils import convert_number_to_string
+from ..utils.database import DatabaseConnection
+from ..utils.constants import ExperimentParams, Metric, NO_INDEX_METRICS, EXPERIMENT_PARAMETERS, VALID_METRICS, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, VALID_DATASETS, VALID_QUERY_DATASETS, SUGGESTED_K_VALUES
+from ..utils.numbers import convert_number_to_string
 import select_experiment
+import select_bulk_experiment
 import disk_usage_experiment
 import create_experiment
 import insert_experiment
@@ -12,12 +14,12 @@ import insert_bulk_experiment
 def get_extension_parameter_sets(extension, metric_type):
     valid_parameter_sets = []
     for dataset in VALID_DATASETS.keys():
-        if metric_type in METRICS_WITHOUT_N:
+        if ExperimentParams.N in EXPERIMENT_PARAMETERS[metric_type]:
             valid_parameter_sets.append((extension, dataset))
         else:
             valid_N = VALID_QUERY_DATASETS[dataset] if metric_type == 'recall' else VALID_DATASETS[dataset]
             for N in valid_N:
-                if metric_type in METRICS_WITH_K:
+                if ExperimentParams.K in EXPERIMENT_PARAMETERS[metric_type]:
                     for K in SUGGESTED_K_VALUES:
                         valid_parameter_sets.append((extension, dataset, N, K))
                 else:
@@ -26,12 +28,12 @@ def get_extension_parameter_sets(extension, metric_type):
 
 
 def get_missing_extension_parameter_sets(extension, extension_params, metric_type, valid_parameter_sets):
-    if metric_type in METRICS_WITH_K:
-        columns = 'database, dataset, n, k'
-    elif metric_type in METRICS_WITHOUT_N:
-        columns = 'database, dataset'
+    if ExperimentParams.K in EXPERIMENT_PARAMETERS[metric_type]:
+        columns = 'extension, dataset, n, k'
+    if ExperimentParams.N in EXPERIMENT_PARAMETERS[metric_type]:
+        columns = 'extension, dataset, n'
     else:
-        columns = 'database, dataset, n'
+        columns = 'extension, dataset'
     sql = f"""
         SELECT
             {columns}
@@ -39,18 +41,19 @@ def get_missing_extension_parameter_sets(extension, extension_params, metric_typ
             experiment_results
         WHERE
             metric_type = %s
-            AND database = %s
-            AND database_params = %s
+            AND extension = %s
+            AND index_params = %s
     """
 
     data = (metric_type, extension, extension_params)
-    found_parameter_sets = execute_sql(sql, data=data, select=True)
-    if metric_type in METRICS_WITHOUT_N:
+    with DatabaseConnection(extension) as conn:
+        found_parameter_sets = conn.select(sql, data=data)
+    if len(EXPERIMENT_PARAMETERS[metric_type]) == 0:
         found_parameter_sets = {(database, dataset, convert_number_to_string(
             n), *rest) for (database, dataset, n, *rest) in found_parameter_sets}
 
     missing_parameter_sets = [
-        parameter_set for parameter_set in valid_parameter_sets if parameter_set not in found_parameter_sets]
+        ps for ps in valid_parameter_sets if ps not in found_parameter_sets]
     return missing_parameter_sets
 
 
@@ -69,24 +72,24 @@ def group_parameter_sets_with_k(parameter_sets):
 
 
 def get_generate_result(metric_type):
-    if metric_type == 'select (tps)':
+    if metric_type == Metric.SELECT_LATENCY or metric_type == Metric.SELECT_TPS:
         return select_experiment.generate_result
-    if metric_type == 'select (latency ms)':
-        return select_experiment.generate_result
-    if metric_type == 'disk usage (bytes)':
+    if metric_type == Metric.SELECT_BULK_LATENCY or metric_type == Metric.SELECT_BULK_TPS:
+        return select_bulk_experiment.generate_result
+    if metric_type == Metric.DISK_USAGE:
         return disk_usage_experiment.generate_result
-    if metric_type == 'create (latency ms)':
+    if metric_type == Metric.CREATE_LATENCY:
         return create_experiment.generate_result
-    if metric_type == 'insert (latency s)':
+    if metric_type == Metric.INSERT_LATENCY or metric_type == Metric.INSERT_TPS:
         return insert_experiment.generate_result
-    if metric_type == 'insert bulk (latency s)':
+    if metric_type == Metric.INSERT_BULK_LATENCY or metric_type == Metric.INSERT_BULK_TPS:
         return insert_bulk_experiment.generate_result
 
 
 def generate_extension_results(extension, extension_params, metric_type, missing_only=False):
     assert metric_type in VALID_METRICS
     if extension is not None:
-        if 'select' in metric_type or 'recall' in metric_type or 'insert' in metric_type:
+        if extension in NO_INDEX_METRICS:
             assert extension in VALID_EXTENSIONS_AND_NONE
         else:
             assert extension in VALID_EXTENSIONS
@@ -95,7 +98,7 @@ def generate_extension_results(extension, extension_params, metric_type, missing
     if missing_only:
         parameter_sets = get_missing_extension_parameter_sets(
             extension, extension_params, metric_type, parameter_sets)
-    if metric_type in METRICS_WITH_K:
+    if ExperimentParams.K in EXPERIMENT_PARAMETERS[metric_type]:
         parameter_sets = group_parameter_sets_with_k(parameter_sets)
 
     if len(parameter_sets) == 0:

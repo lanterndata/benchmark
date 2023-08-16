@@ -1,108 +1,89 @@
 import os
 import argparse
 import urllib.request
-import psycopg2
+from ..utils.database import DatabaseConnection
+from ..utils.constants import Extension, EXTENSION_NAMES
 
+# Set up an argument parser for command-line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--datapath", default="/app/data",
                     help="Path to data directory")
 args = parser.parse_args()
 
 
-conn = psycopg2.connect(os.environ["DATABASE_URL"])
-cur = conn.cursor()
-
-
-def table_exists(schema, table):
+def table_exists(extension, table):
     """Check if a table exists in the database."""
     try:
-        with conn.cursor() as cur:
-            cur.execute("""
+        sql = """
             SELECT EXISTS (
                 SELECT 1 
                 FROM
                     information_schema.tables
                 WHERE
-                    table_schema = %s
-                    AND table_name = %s
+                    table_name = %s
             );
-            """, (schema, table))
-            exists = cur.fetchone()[0]
+        """
+        with DatabaseConnection(extension) as conn:
+            exists = conn.select_one(sql, (table,))[0]
             return exists
     except Exception as e:
         print(f"Error checking if table {table} exists: {e}")
         return False
 
 
-def has_rows(schema, table):
+def has_rows(extension, table):
     """Check if the table has non-zero rows."""
-    if not table_exists(schema, table):
-        print(f"Table {schema}.{table} does not exist.")
+    if not table_exists(table):
+        print(f"Table {table} does not exist.")
         return False
     try:
-        with conn.cursor() as cur:
-            cur.execute(f"SELECT COUNT(*) FROM {schema}.{table};")
-            count = cur.fetchone()[0]
+        with DatabaseConnection(extension) as conn:
+            count = conn.select_one(f"SELECT COUNT(*) FROM {table};")[0]
             return count > 0
     except Exception as e:
-        print(f"Error checking row count for table {schema}.{table}: {e}")
+        print(f"Error checking row count for table {table}: {e}")
         return False
 
 
-def create_table(schema, name, vector_size):
-    table_name = f"{schema}.{name}"
-    if schema == 'public':
+def create_table(extension, table_name, vector_size):
+    """Creates a table based on the extension and table name."""
+    if 'truth' in table_name:
         sql = f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
                 indices INTEGER[]
             );
         """
-    elif schema == 'real':
+    elif extension == Extension.PGVECTOR or extension == Extension.NONE:
+        sql = f"""
+            CREATE TABLE IF NOT EXISTS {table_name} (
+                id SERIAL PRIMARY KEY,
+                v VECTOR({vector_size})
+            );
+        """
+    else:
         sql = f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
                 v REAL[{vector_size}]
             );
         """
-    elif schema == 'vector':
-        sql = f"""
-            CREATE EXTENSION IF NOT EXISTS vector SCHEMA vector;
-            CREATE TABLE IF NOT EXISTS {table_name} (
-                id SERIAL PRIMARY KEY,
-                v vector.VECTOR({vector_size})
-            );
-        """
+    with DatabaseConnection(extension) as conn:
+        conn.execute(sql)
+
+
+def insert_table(extension, dest_table, source_csv):
+    """Inserts data from a CSV file into the specified table."""
+    if 'truth' in dest_table:
+        sql = f"COPY {dest_table} (indices) FROM '{source_csv}' WITH csv"
     else:
-        raise ValueError(f"Invalid schema {schema}")
-    with conn.cursor() as cur:
-        cur.execute(sql)
-        conn.commit()
-    return table_name
-
-
-def insert_table(dest_table, source_csv):
-    with conn.cursor() as cur:
+        sql = f"COPY {dest_table} (v) FROM '{source_csv}' WITH csv"
+    with DatabaseConnection(extension) as conn:
         with open(source_csv, 'r') as f:
-            if 'truth' in dest_table:
-                sql = f"COPY {dest_table} (indices) FROM '{source_csv}' WITH csv"
-            else:
-                sql = f"COPY {dest_table} (v) FROM '{source_csv}' WITH csv"
-            cur.copy_expert(sql, f)
-    conn.commit()
+            conn.copy_expert(sql, f)
 
 
-SCHEMAS = ['vector', 'real']
-
-# Create schemas if they don't exist
-
-with conn.cursor() as cur:
-    for schema in SCHEMAS:
-        cur.execute(f"CREATE SCHEMA IF NOT EXISTS {schema}")
-    conn.commit()
-
-# Create tables if they don't exist
-
+# List of tables and their corresponding vector sizes
 TABLES = [
     [128, "sift_base10k"],
     [128, "sift_query10k"],
@@ -129,53 +110,64 @@ TABLES = [
 ]
 
 
-def create_or_download_table(schema, vector_size, name):
-    table_name = create_table(schema, name, vector_size)
-    if not has_rows(schema, name):
-        source_file = os.path.join(args.datapath, f"{name}.csv")
+def create_or_download_table(extension, vector_size, table_name):
+    """
+    Creates a table if it does not exist, and downloads and inserts data if the table 
+    is empty. 
+    """
+
+    create_table(extension, table_name, vector_size)
+
+    if not has_rows(extension, table_name):
+        source_file = os.path.join(args.datapath, f"{table_name}.csv")
         if not os.path.exists(source_file):
             print(f"Source file {source_file} does not exist. Downloading...")
             if not os.path.exists(args.datapath):
                 os.makedirs(args.datapath)
             urllib.request.urlretrieve(
-                f"https://storage.googleapis.com/lanterndata/datasets/{name}.csv", source_file)
+                f"https://storage.googleapis.com/lanterndata/datasets/{table_name}.csv", source_file)
             print("Download complete.")
-        insert_table(table_name, source_file)
+
+        insert_table(extension, table_name, source_file)
+
         print(f"Inserted data into {table_name}")
+
     else:
         print(f"Table {table_name} already exists. Skipping.")
 
 
-def create_vector_table(vector_size, name):
-    table_name = create_table('vector', name, vector_size)
-    if not has_rows('vector', name):
-        sql = f"""
-            INSERT INTO {table_name} (id, v)
-            SELECT id, v FROM real.{name};
-        """
-        with conn.cursor() as cur:
-            cur.execute(sql)
-            conn.commit()
-        print(f"Inserted data into {table_name}")
-    else:
-        print(f"Table {table_name} already exists. Skipping.")
+# Creates the databases if they don't exist
+for extension in Extension:
+    with DatabaseConnection(autocommit=True) as conn:
+        exists = conn.select_one(
+            "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (extension.value,))
+        if exists is None:
+            conn.execute(f"CREATE DATABASE {extension.value};")
+            print(f"Created database {extension.value}.")
+        else:
+            print(f"Database {extension.value} already exists. Skipping.")
 
 
-for vector_size, name in TABLES:
-    if 'truth' in name:
-        create_or_download_table('public', vector_size, name)
-    else:
-        create_or_download_table('real', vector_size, name)
-        create_vector_table(vector_size, name)
+# Enables the extensions if they are not already enabled
+for extension, name in EXTENSION_NAMES.items():
+    with DatabaseConnection(extension) as conn:
+        conn.execute(f"CREATE EXTENSION IF NOT EXISTS {name};")
+    print(f"Extension {name} is enabled.")
 
-# Create experiment results table if it doesn't exist
 
-with conn.cursor() as cur:
+# Loop through each extension and table to ensure they are created and populated
+for extension in Extension:
+    for vector_size, table_name in TABLES:
+        create_or_download_table(extension, vector_size, table_name)
+
+
+# Connect to the database and create the experiment_results table if it doesn't exist
+with DatabaseConnection() as conn:
     sql = """
         CREATE TABLE IF NOT EXISTS experiment_results (
             id SERIAL PRIMARY KEY,
-            database TEXT NOT NULL,
-            database_params TEXT NOT NULL,
+            extension TEXT NOT NULL,
+            index_params TEXT NOT NULL,
             dataset TEXT NOT NULL,
             n INTEGER NOT NULL,
             k INTEGER NOT NULL DEFAULT 0,
@@ -183,13 +175,10 @@ with conn.cursor() as cur:
             err TEXT,
             metric_type TEXT NOT NULL,
             metric_value DOUBLE PRECISION NOT NULL,
-            CONSTRAINT unique_result UNIQUE (metric_type, database_params, database, dataset, n, k)
+            CONSTRAINT unique_result UNIQUE (metric_type, extension, index_params, dataset, n, k)
         );
     """
-    cur.execute(sql)
-    conn.commit()
+    conn.execute(sql)
 
-cur.close()
-conn.close()
 
 print("Done!")
