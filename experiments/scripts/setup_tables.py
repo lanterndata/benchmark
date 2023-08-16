@@ -33,7 +33,7 @@ def table_exists(extension, table):
 
 def has_rows(extension, table):
     """Check if the table has non-zero rows."""
-    if not table_exists(table):
+    if not table_exists(extension, table):
         print(f"Table {table} does not exist.")
         return False
     try:
@@ -54,11 +54,12 @@ def create_table(extension, table_name, vector_size):
                 indices INTEGER[]
             );
         """
-    elif extension == Extension.PGVECTOR or extension == Extension.NONE:
+    elif extension == Extension.PGVECTOR:
         sql = f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
-                v VECTOR({vector_size})
+                v VECTOR({vector_size}),
+                r REAL[{vector_size}]
             );
         """
     else:
@@ -76,11 +77,16 @@ def insert_table(extension, dest_table, source_csv):
     """Inserts data from a CSV file into the specified table."""
     if 'truth' in dest_table:
         sql = f"COPY {dest_table} (indices) FROM '{source_csv}' WITH csv"
+    elif extension == Extension.PGVECTOR:
+        sql = f"COPY {dest_table} (r) FROM '{source_csv}' WITH csv"
     else:
         sql = f"COPY {dest_table} (v) FROM '{source_csv}' WITH csv"
     with DatabaseConnection(extension) as conn:
         with open(source_csv, 'r') as f:
             conn.copy_expert(sql, f)
+        if not 'truth' in dest_table and extension == Extension.PGVECTOR:
+            sql = f"UPDATE {dest_table} SET v = r; ALTER TABLE {dest_table} DROP COLUMN r;"
+            conn.execute(sql)
 
 
 # List of tables and their corresponding vector sizes
@@ -119,6 +125,8 @@ def create_or_download_table(extension, vector_size, table_name):
     create_table(extension, table_name, vector_size)
 
     if not has_rows(extension, table_name):
+
+        # Download data if it doesn't exist
         source_file = os.path.join(args.datapath, f"{table_name}.csv")
         if not os.path.exists(source_file):
             print(f"Source file {source_file} does not exist. Downloading...")
@@ -128,12 +136,15 @@ def create_or_download_table(extension, vector_size, table_name):
                 f"https://storage.googleapis.com/lanterndata/datasets/{table_name}.csv", source_file)
             print("Download complete.")
 
+        # Insert data into the table
         insert_table(extension, table_name, source_file)
 
-        print(f"Inserted data into {table_name}")
+        print(
+            f"Inserted data into table {table_name} for extension {extension.value}")
 
     else:
-        print(f"Table {table_name} already exists. Skipping.")
+        print(
+            f"Table {table_name} already exists for extension {extension.value}. Skipping.")
 
 
 # Creates the databases if they don't exist

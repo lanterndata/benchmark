@@ -17,6 +17,7 @@ EXTENSION_NAMES = {
     Extension.PGVECTOR: 'vector',
     Extension.LANTERN: 'lanterndb',
     Extension.NEON: 'embedding',
+    Extension.NONE: 'lanterndb',
 }
 
 VALID_EXTENSIONS = [

@@ -6,7 +6,7 @@ import subprocess
 import os
 import re
 from tempfile import NamedTemporaryFile
-from .constants import VALID_EXTENSIONS
+from .constants import VALID_EXTENSIONS_AND_NONE
 
 
 class DatabaseConnection:
@@ -24,7 +24,7 @@ class DatabaseConnection:
         self.cur.close()
         self.conn.close()
 
-    def copy_expert(self, sql, file, data=None):
+    def copy_expert(self, sql, file):
         """
         Use psycopg2's copy_expert method to copy data between a file and the database.
 
@@ -34,7 +34,7 @@ class DatabaseConnection:
         - data (tuple, optional): Parameters to use with the SQL command.
         """
         try:
-            self.cur.copy_expert(sql, file, data)
+            self.cur.copy_expert(sql, file)
             self.conn.commit()
         except Exception as e:
             logging.error("Error using copy_expert: %s", e)
@@ -129,9 +129,9 @@ def _get_database_url(extension):
     """
     if extension is None:
         key = "DATABASE_URL"
-    elif extension in VALID_EXTENSIONS:
+    elif extension in VALID_EXTENSIONS_AND_NONE:
         key = extension.value.upper() + "_DATABASE_URL"
     else:
-        raise ValueError("Unknown extension: " + extension)
+        raise ValueError("Unknown extension: " + extension.value)
 
     return os.environ[key]
