@@ -1,13 +1,13 @@
 import plotly.graph_objects as go
-from ..utils.delete_index import delete_index
-from ..utils.create_index import create_index
-from ..utils.constants import Metric, Extension
-from ..utils.database import DatabaseConnection, run_pgbench
-from ..utils.process import save_result
-from ..utils.cli import parse_args
-from ..utils.names import get_table_name
-from ..utils.numbers import convert_string_to_number
-from ..utils.print import get_title
+from utils.delete_index import delete_index
+from utils.create_index import create_index
+from utils.constants import Metric, Extension
+from utils.database import DatabaseConnection, run_pgbench
+from utils.process import save_result
+from utils.cli import parse_args
+from utils.names import get_table_name
+from utils.numbers import convert_string_to_number
+from utils.print import get_title
 import math
 
 
@@ -242,7 +242,7 @@ def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='se
         ))
 
     fig.update_layout(
-        title=f"{yaxis} and {xaxis} for with {dataset} {N}",
+        title=f"{yaxis} and {xaxis} for with {dataset.value} {N}",
         xaxis=dict(title=xaxis),
         yaxis=dict(title=yaxis),
         margin=dict(l=50, r=50, b=50, t=50),

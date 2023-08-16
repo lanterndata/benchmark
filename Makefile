@@ -1,4 +1,5 @@
 DOCKER_EXEC = docker exec -it benchmark
+PSQL_EXEC = $(DOCKER_EXEC) psql -U postgres
 
 build:
 	docker compose build
@@ -19,10 +20,12 @@ bash:
 	$(DOCKER_EXEC) bash
 
 psql:
-	$(DOCKER_EXEC) psql -U postgres -d experiments
+	$(PSQL_EXEC)
+psql-none:
+	$(PSQL_EXEC) -d none
 psql-pgvector:
-	$(DOCKER_EXEC) psql -U postgres -d pgvector
+	$(PSQL_EXEC) -d pgvector
 psql-lantern:
-	$(DOCKER_EXEC) psql -U postgres -d lantern
+	$(PSQL_EXEC) -d lantern
 psql-neon:
-	$(DOCKER_EXEC) psql -U postgres -d neon
+	$(PSQL_EXEC) -d neon

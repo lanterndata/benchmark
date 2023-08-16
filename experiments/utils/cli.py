@@ -1,5 +1,5 @@
 import argparse
-from .constants import VALID_DATASETS, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, NO_INDEX_METRICS, VALID_INDEX_PARAMS, SUGGESTED_K_VALUES, Extension
+from .constants import VALID_DATASETS, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, NO_INDEX_METRICS, VALID_INDEX_PARAMS, SUGGESTED_K_VALUES, Extension, Dataset
 
 
 def parse_args(description, args):
@@ -35,15 +35,16 @@ def parse_args(description, args):
 
     extension, N_values, K = None, None, None
 
-    dataset = parsed_args.dataset
+    dataset = Dataset(parsed_args.dataset)
     if 'extension' in args:
         extension = Extension(parsed_args.extension)
     if 'N' in parsed_args:
-        N_values = parsed_args.N or VALID_DATASETS[dataset]
-        if any(N not in VALID_DATASETS[dataset] for N in N_values):
-            valid_sizes = ', '.join(VALID_DATASETS[dataset])
+        valid_datasets = VALID_DATASETS[dataset]
+        N_values = parsed_args.N or valid_datasets
+        if any(N not in valid_datasets for N in N_values):
+            valid_sizes = ', '.join(valid_datasets)
             parser.error(
-                f"Invalid dataset size(s): {', '.join(N_values)}. Valid dataset sizes for {dataset} are: {valid_sizes}")
+                f"Invalid dataset size(s): {', '.join(N_values)}. Valid dataset sizes for {dataset.value} are: {valid_sizes}")
     if 'K' in parsed_args:
         K = parsed_args.K or SUGGESTED_K_VALUES
 

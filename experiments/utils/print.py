@@ -8,7 +8,7 @@ def print_labels(*cols):
     print('-' * len(cols) * 15)
 
 
-def get_title(extension, index_params, dataset, N):
+def get_title(extension, index_params, dataset, N=None):
     strings = [
         f"extension: {extension.value}",
         f"index params: {index_params}",

@@ -1,17 +1,18 @@
 import plotly.graph_objects as go
-from ..utils.create_index import create_custom_index
-from ..utils.constants import VALID_EXTENSIONS_AND_NONE, get_vector_dim, Metric
-from ..utils.cli import parse_args
-from ..utils.names import get_table_name
-from ..utils.process import save_result, get_experiment_results, get_distinct_index_params
-from ..utils.database import DatabaseConnection, run_pgbench
-from ..utils.numbers import convert_number_to_string
-from ..utils.print import print_labels, print_row, get_title
-from ..utils.colors import get_color_from_extension
+from utils.create_index import create_custom_index
+from utils.constants import Extension, Metric
+from utils.cli import parse_args
+from utils.names import get_table_name
+from utils.process import save_result, get_experiment_results, get_distinct_index_params
+from utils.database import DatabaseConnection, run_pgbench
+from utils.numbers import convert_number_to_string
+from utils.print import print_labels, print_row, get_title
+from utils.colors import get_color_from_extension
+from .setup_tables import create_table
 
 
 def get_dest_table_name(dataset):
-    return f"{dataset}_insert"
+    return f"{dataset.value}_insert"
 
 
 def get_dest_index_name(dataset):
@@ -20,15 +21,7 @@ def get_dest_index_name(dataset):
 
 def create_dest_table(extension, dataset):
     table_name = get_dest_table_name(dataset)
-    vector_dim = get_vector_dim(dataset)
-    sql = f"""
-      CREATE TABLE IF NOT EXISTS {table_name} (
-        id SERIAL PRIMARY KEY,
-        v VECTOR({vector_dim})
-      )
-    """
-    with DatabaseConnection(extension) as conn:
-        conn.execute(sql)
+    create_table(extension, table_name)
     return table_name
 
 
@@ -58,7 +51,7 @@ def get_metric_types(bulk):
 
 
 def generate_result(extension, dataset, index_params={}, bulk=False):
-    source_table = get_table_name(extension, dataset, '1m')
+    source_table = get_table_name(dataset, '1m')
     delete_dest_table(extension, dataset)
     dest_table = create_dest_table(extension, dataset)
 
@@ -99,7 +92,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         """
 
         stdout, stderr, tps, latency = run_pgbench(
-            query, clients=1, transactions=transactions)
+            extension, query, clients=1, transactions=transactions)
 
         save_result_params = {
             'extension': extension,
@@ -125,7 +118,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 def print_results(dataset, bulk=False):
     metric_types = get_metric_types(bulk)
 
-    for extension in VALID_EXTENSIONS_AND_NONE:
+    for extension in Extension:
         index_params_list = get_distinct_index_params(
             metric_types, extension, dataset)
 
@@ -147,10 +140,10 @@ def print_results(dataset, bulk=False):
                 ORDER BY
                     N
             """
-            data = (metric_types[0], metric_types[1],
-                    metric_types, extension, index_params, dataset)
-            with DatabaseConnection(extension) as conn:
-                conn.select(sql, data=data)
+            data = (metric_types[0].value, metric_types[1].value,
+                    list(map(lambda m: m.value, metric_types)), extension.value, index_params, dataset.value)
+            with DatabaseConnection() as conn:
+                results = conn.select(sql, data=data)
 
             print(get_title(extension, index_params, dataset))
             print_labels('N', 'TPS', 'latency (s)')
@@ -167,7 +160,7 @@ def plot_results(dataset, bulk=False):
     metric_types = get_metric_types(bulk)
     for metric_type in metric_types:
         fig = go.Figure()
-        for extension in VALID_EXTENSIONS_AND_NONE:
+        for extension in Extension:
             results = get_experiment_results(metric_type, extension, dataset)
             for index, (index_params, param_results) in enumerate(results):
                 x_values, y_values = zip(*param_results)
@@ -177,10 +170,10 @@ def plot_results(dataset, bulk=False):
                     y=y_values,
                     marker=dict(color=color),
                     mode='lines+markers',
-                    name=f"{extension} - {index_params}",
+                    name=f"{extension.value.upper()} - {index_params}",
                 ))
         fig.update_layout(
-            title=f"{dataset} - {metric_type}",
+            title=f"{dataset.value} - {metric_type.value}",
             xaxis_title=f"latency of inserting 8000 rows",
             yaxis_title='latency (s)',
         )

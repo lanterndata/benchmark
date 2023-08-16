@@ -1,6 +1,6 @@
-from ..utils.database import DatabaseConnection
-from ..utils.constants import ExperimentParams, Metric, NO_INDEX_METRICS, EXPERIMENT_PARAMETERS, VALID_METRICS, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, VALID_DATASETS, VALID_QUERY_DATASETS, SUGGESTED_K_VALUES
-from ..utils.numbers import convert_number_to_string
+from utils.database import DatabaseConnection
+from utils.constants import ExperimentParams, Metric, NO_INDEX_METRICS, EXPERIMENT_PARAMETERS, VALID_METRICS, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, VALID_DATASET_SIZES, VALID_QUERY_DATASET_SIZES, SUGGESTED_K_VALUES, Dataset
+from utils.numbers import convert_number_to_string
 import select_experiment
 import select_bulk_experiment
 import disk_usage_experiment
@@ -13,11 +13,14 @@ import insert_bulk_experiment
 
 def get_extension_parameter_sets(extension, metric_type):
     valid_parameter_sets = []
-    for dataset in VALID_DATASETS.keys():
+    for dataset in Dataset:
         if ExperimentParams.N in EXPERIMENT_PARAMETERS[metric_type]:
             valid_parameter_sets.append((extension, dataset))
         else:
-            valid_N = VALID_QUERY_DATASETS[dataset] if metric_type == 'recall' else VALID_DATASETS[dataset]
+            if metric_type == Metric.RECALL:
+                valid_N = VALID_QUERY_DATASET_SIZES[dataset]
+            else:
+                valid_N = VALID_DATASET_SIZES[dataset]
             for N in valid_N:
                 if ExperimentParams.K in EXPERIMENT_PARAMETERS[metric_type]:
                     for K in SUGGESTED_K_VALUES:

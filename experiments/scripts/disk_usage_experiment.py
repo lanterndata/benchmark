@@ -1,14 +1,14 @@
 import plotly.graph_objects as go
-from ..utils.create_index import create_index
-from ..utils.delete_index import delete_index
-from ..utils.database import DatabaseConnection
-from ..utils.cli import parse_args
-from ..utils.names import get_index_name
-from ..utils.constants import VALID_EXTENSIONS, Metric
-from ..utils.process import save_result, get_experiment_results
-from ..utils.colors import get_color_from_extension
-from ..utils.numbers import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
-from ..utils.print import print_labels, print_row, get_title
+from utils.create_index import create_index
+from utils.delete_index import delete_index
+from utils.database import DatabaseConnection
+from utils.cli import parse_args
+from utils.names import get_index_name
+from utils.constants import VALID_EXTENSIONS, Metric
+from utils.process import save_result, get_experiment_results
+from utils.colors import get_color_from_extension
+from utils.numbers import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
+from utils.print import print_labels, print_row, get_title
 
 
 def generate_result(extension, dataset, N, index_params={}):
@@ -67,7 +67,7 @@ def plot_results(dataset):
                 legendgrouptitle={'text': extension}
             ))
     fig.update_layout(
-        title=f"Disk Usage over Data Size for {dataset}",
+        title=f"Disk Usage over Data Size for {dataset.value}",
         xaxis=dict(title='Number of rows'),
         yaxis=dict(title='Disk Usage (bytes)'),
     )

@@ -102,10 +102,7 @@ DATASET_DIMENSIONS = {
     Dataset.SIFT: 128,
     Dataset.GIST: 960,
 }
-
-VALID_DATASETS = [dataset for dataset in Dataset]
-
-VALID_QUERY_DATASETS = [dataset for dataset in Dataset]
+VALID_DATASETS = [dataset.value for dataset in Dataset]
 
 VALID_DATASET_SIZES = {
     Dataset.SIFT: ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
@@ -118,12 +115,15 @@ VALID_QUERY_DATASET_SIZES = {
 }
 
 
-def get_vector_dim(s):
-    if 'sift' in s:
-        return DATASET_DIMENSIONS[Dataset.SIFT]
-    if 'gist' in s:
-        return DATASET_DIMENSIONS[Dataset.GIST]
-    raise ValueError(f'Invalid input: {s}')
+def get_vector_dim(x):
+    if isinstance(x, str):
+        if 'sift' in x:
+            dataset = Dataset.SIFT
+        elif 'gist' in x:
+            dataset = Dataset.GIST
+    else:
+        dataset = x
+    return DATASET_DIMENSIONS[dataset]
 
 
 """

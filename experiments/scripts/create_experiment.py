@@ -2,14 +2,14 @@ import os
 import subprocess
 import statistics
 import plotly.graph_objects as go
-from ..utils.delete_index import get_drop_index_query, delete_index
-from ..utils.create_index import get_create_index_query
-from ..utils.colors import get_color_from_extension
-from ..utils.numbers import convert_string_to_number, convert_number_to_string
-from ..utils.constants import VALID_EXTENSIONS
-from ..utils.cli import parse_args
-from ..utils.process import save_result, get_experiment_results
-from ..utils.print import print_labels, print_row, get_title
+from utils.delete_index import get_drop_index_query, delete_index
+from utils.create_index import get_create_index_query
+from utils.colors import get_color_from_extension
+from utils.numbers import convert_string_to_number, convert_number_to_string
+from utils.constants import VALID_EXTENSIONS
+from utils.cli import parse_args
+from utils.process import save_result, get_experiment_results
+from utils.print import print_labels, print_row, get_title
 
 METRIC_TYPE = 'create (latency ms)'
 PG_USER = os.environ.get('POSTGRES_USER')
@@ -88,7 +88,7 @@ def plot_results(dataset):
                 legendgrouptitle={'text': extension}
             ))
     fig.update_layout(
-        title=f"Create Index Latency over Number of Rows for {dataset}",
+        title=f"Create Index Latency over Number of Rows for {dataset.value}",
         xaxis=dict(title='Number of rows'),
         yaxis=dict(title='Latency (ms)'),
     )

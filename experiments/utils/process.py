@@ -5,16 +5,16 @@ from .numbers import convert_string_to_number
 from .database import DatabaseConnection
 
 
-def _get_metric_type_sql(metric_type):
-    if isinstance(metric_type, str):
-        return 'metric_type = %s'
-    else:
-        return 'metric_type = ANY(%s)'
-
-
 def get_distinct_index_params(metric_type, extension, dataset, N=None):
     n_sql = '' if N is None else 'AND N = %s'
-    metric_type_sql = _get_metric_type_sql(metric_type)
+
+    if hasattr(metric_type, "__len__"):
+        metric_type_sql = 'metric_type = ANY(%s)'
+        metric_type_value = list(map(lambda m: m.value, metric_type))
+    else:
+        metric_type_sql = 'metric_type = %s'
+        metric_type_value = metric_type.value
+
     sql = f"""
         SELECT DISTINCT
             index_params
@@ -26,12 +26,15 @@ def get_distinct_index_params(metric_type, extension, dataset, N=None):
             AND dataset = %s
             {n_sql}
     """
-    data = (metric_type, extension, dataset)
+
+    data = (metric_type_value, extension.value, dataset.value)
     if N is not None:
         data += (convert_string_to_number(N),)
-    with DatabaseConnection(extension) as conn:
+
+    with DatabaseConnection() as conn:
         index_params = conn.select(sql, data=data)
     index_params = [p[0] for p in index_params]
+
     return index_params
 
 
@@ -53,10 +56,10 @@ def get_experiment_results_for_params(metric_type, extension, index_params, data
         ORDER BY
             {x_param}
     """
-    data = (metric_type, extension, index_params, dataset)
+    data = (metric_type.value, extension.value, index_params, dataset.value)
     if N is not None:
         data += (convert_string_to_number(N),)
-    with DatabaseConnection(extension) as conn:
+    with DatabaseConnection() as conn:
         results = conn.select(sql, data=data)
     return results
 
@@ -72,8 +75,8 @@ def get_experiment_results(metric_type, extension, dataset, N=None):
     return values
 
 
-TABLE_COLUMNS = ['extension', 'index_params', 'dataset',
-                 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
+TABLE_COLUMNS = [
+    'extension', 'index_params', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
 
 
 def dump_results_to_csv():
@@ -117,10 +120,10 @@ def save_result(metric_type, metric_value, extension, index_params, dataset, n, 
             {updates}
     """
 
-    data = (TABLE_COLUMNS, json.dumps(index_params), dataset,
-            n, k, metric_type, metric_value, out, err)
+    data = (
+        extension.value, json.dumps(index_params), dataset.value, n, k, metric_type.value, metric_value, out, err)
 
-    with DatabaseConnection(extension) as conn:
+    with DatabaseConnection() as conn:
         conn.execute(sql, data=data)
 
     dump_results_to_csv()

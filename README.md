@@ -6,6 +6,13 @@ sudo apt install build-essential
 ```
 2. Install Docker: https://docs.docker.com/engine/install/debian/
 
+3. Setup tables
+```
+sudo make build
+sudo make up &
+python3 -m experiments.scripts.setup_tables
+```
+
 # Overview
 - Check db/init to see DB setup.
 - Check db/scripts for scripts to install / update lantern / pgvector
