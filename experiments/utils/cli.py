@@ -1,14 +1,13 @@
 import argparse
-from .constants import VALID_DATASETS, VALID_EXTENSIONS, VALID_EXTENSIONS_AND_NONE, NO_INDEX_METRICS, VALID_INDEX_PARAMS, SUGGESTED_K_VALUES, Extension, Dataset
+from .constants import VALID_DATASETS, VALID_EXTENSIONS, NO_INDEX_METRICS, VALID_INDEX_PARAMS, SUGGESTED_K_VALUES, Extension, Dataset
 
 
 def parse_args(description, args):
     parser = argparse.ArgumentParser(description=description)
 
     if 'extension' in args:
-        valid_extensions = VALID_EXTENSIONS_AND_NONE if description in list(
-            NO_INDEX_METRICS) in args else VALID_EXTENSIONS
-        valid_extensions = list(valid_extensions)
+        valid_extensions = list(Extension) if Extension(
+            description) in NO_INDEX_METRICS else VALID_EXTENSIONS
         parser.add_argument(
             '--extension',
             type=str, choices=valid_extensions, required=True, help='Extension type')

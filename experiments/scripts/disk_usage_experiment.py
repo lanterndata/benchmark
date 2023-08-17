@@ -21,7 +21,7 @@ def generate_result(extension, dataset, N, index_params={}):
         disk_usage = conn.select_one(sql)[0]
 
     save_result(
-        metric_type='disk usage (bytes)',
+        metric_type=Metric.DISK_USAGE,
         metric_value=convert_bytes_to_number(disk_usage),
         extension=extension,
         index_params=index_params,
@@ -62,9 +62,9 @@ def plot_results(dataset):
                 marker=dict(color=get_color_from_extension(
                     extension, index=index)),
                 mode='lines+markers',
-                name=f"{extension} - {index_params}",
-                legendgroup=extension,
-                legendgrouptitle={'text': extension}
+                name=f"{extension.value.upper()} - {index_params}",
+                legendgroup=extension.value.upper(),
+                legendgrouptitle={'text': extension.value.upper()}
             ))
     fig.update_layout(
         title=f"Disk Usage over Data Size for {dataset.value}",

@@ -26,8 +26,6 @@ VALID_EXTENSIONS = [
     Extension.NEON,
 ]
 
-VALID_EXTENSIONS_AND_NONE = [extension for extension in Extension]
-
 DEFAULT_INDEX_PARAMS = {
     Extension.PGVECTOR: {'lists': 100, 'probes': 1},
     Extension.LANTERN: {'M': 2, 'ef_construction': 10, 'ef': 4},
@@ -109,9 +107,9 @@ VALID_DATASET_SIZES = {
     Dataset.GIST: ['100k', '200k', '400k', '600k', '800k', '1m'],
 }
 
-VALID_QUERY_DATASET_SIZES = {
-    Dataset.SIFT: ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
-    Dataset.GIST: ['100k', '200k', '400k', '600k', '800k', '1m'],
+VALID_DATASET_QUERY_SIZES = {
+    Dataset.SIFT: ['10k', '1m', '1b'],
+    Dataset.GIST: ['1m'],
 }
 
 

@@ -6,12 +6,11 @@ from utils.delete_index import get_drop_index_query, delete_index
 from utils.create_index import get_create_index_query
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number, convert_number_to_string
-from utils.constants import VALID_EXTENSIONS
+from utils.constants import Metric, VALID_EXTENSIONS
 from utils.cli import parse_args
 from utils.process import save_result, get_experiment_results
 from utils.print import print_labels, print_row, get_title
 
-METRIC_TYPE = 'create (latency ms)'
 PG_USER = os.environ.get('POSTGRES_USER')
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
 
@@ -42,7 +41,7 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
 
     average_latency = statistics.mean(current_results)
     save_result(
-        metric_type=METRIC_TYPE,
+        metric_type=Metric.CREATE_LATENCY,
         metric_value=average_latency,
         extension=extension,
         index_params=index_params,
@@ -56,7 +55,8 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
 
 def print_results(dataset):
     for extension in VALID_EXTENSIONS:
-        results = get_experiment_results(METRIC_TYPE, extension, dataset)
+        results = get_experiment_results(
+            Metric.CREATE_LATENCY, extension, dataset)
         if len(results) == 0:
             print(f"No results for {extension}")
             print("\n\n")
@@ -75,7 +75,8 @@ def plot_results(dataset):
     fig = go.Figure()
 
     for extension in VALID_EXTENSIONS:
-        results = get_experiment_results(METRIC_TYPE, extension, dataset)
+        results = get_experiment_results(
+            Metric.CREATE_LATENCY, extension, dataset)
         for index, (index_params, param_results) in enumerate(results):
             N_values, times = zip(*param_results)
             fig.add_trace(go.Scatter(
@@ -83,9 +84,9 @@ def plot_results(dataset):
                 y=times,
                 marker=dict(color=get_color_from_extension(extension, index)),
                 mode='lines+markers',
-                name=f"{extension} - {index_params}",
-                legendgroup=extension,
-                legendgrouptitle={'text': extension}
+                name=f"{extension.value.upper()} - {index_params}",
+                legendgroup=extension.value.upper(),
+                legendgrouptitle={'text': extension.value.upper()}
             ))
     fig.update_layout(
         title=f"Create Index Latency over Number of Rows for {dataset.value}",

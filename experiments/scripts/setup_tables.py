@@ -92,15 +92,25 @@ def insert_table(extension, dest_table, source_csv):
 # List of tables and their corresponding vector sizes
 TABLES = [
     "sift_base10k",
-    "sift_query10k",
-    "sift_truth10k",
-
+    "sift_base100k",
+    "sift_base200k",
+    "sift_base400k",
+    "sift_base600k",
+    "sift_base800k",
     "sift_base1m",
-    "sift_query1m",
-    "sift_truth1m",
-
     # "sift_base1b",
+
+    "sift_query10k",
+    "sift_query1m",
     "sift_query1b",
+
+    "sift_truth10k",
+    "sift_truth100k",
+    "sift_truth200k",
+    "sift_truth400k",
+    "sift_truth600k",
+    "sift_truth800k",
+    "sift_truth1m",
     "sift_truth2m",
     "sift_truth5m",
     "sift_truth10m",
@@ -110,8 +120,20 @@ TABLES = [
     "sift_truth200m",
     "sift_truth500m",
 
+    "gist_base100k",
+    "gist_base200k",
+    "gist_base400k",
+    "gist_base600k",
+    "gist_base800k",
     "gist_base1m",
+
     "gist_query1m",
+
+    "gist_truth100k",
+    "gist_truth200k",
+    "gist_truth400k",
+    "gist_truth600k",
+    "gist_truth800k",
     "gist_truth1m",
 ]
 

@@ -6,7 +6,7 @@ import subprocess
 import os
 import re
 from tempfile import NamedTemporaryFile
-from .constants import VALID_EXTENSIONS_AND_NONE
+from .constants import Extension
 
 
 class DatabaseConnection:
@@ -129,7 +129,7 @@ def _get_database_url(extension):
     """
     if extension is None:
         key = "DATABASE_URL"
-    elif extension in VALID_EXTENSIONS_AND_NONE:
+    elif isinstance(extension, Extension):
         key = extension.value.upper() + "_DATABASE_URL"
     else:
         raise ValueError("Unknown extension: " + extension.value)
