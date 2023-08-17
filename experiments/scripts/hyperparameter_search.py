@@ -5,6 +5,8 @@ from utils.numbers import convert_string_to_number
 from .select_experiment import generate_result
 import math
 
+HYPERPARAMETER_SEARCH_K = 5
+
 
 def get_extension_hyperparameters(extension, N):
     hyperparameters = []
@@ -30,7 +32,7 @@ def run_hyperparameter_search(extension, dataset, N, bulk=False):
     hyperparameters = get_extension_hyperparameters(extension, N)
     for hyperparameter in hyperparameters:
         generate_result(
-            extension, dataset, N, [5], index_params=hyperparameter, bulk=bulk)
+            extension, dataset, N, [HYPERPARAMETER_SEARCH_K], index_params=hyperparameter, bulk=bulk)
 
 
 def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxis=Metric.SELECT_LATENCY):
@@ -50,15 +52,13 @@ def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxi
                 extension = %s
                 AND dataset = %s
                 AND N = %s
-                AND (
-                    metric_type = %s
-                    OR metric_type = %s
-                )
+                AND K = {HYPERPARAMETER_SEARCH_K}
+                AND metric_type = ANY(%s)
             GROUP BY
                 index_params
         """
         data = (xaxis.value, yaxis.value, extension.value, dataset.value,
-                convert_string_to_number(N), xaxis.value, yaxis.value)
+                convert_string_to_number(N), [xaxis.value, yaxis.value])
         with DatabaseConnection() as conn:
             results = conn.select(sql, data=data)
 

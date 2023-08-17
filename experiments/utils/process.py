@@ -44,10 +44,11 @@ def get_distinct_index_params(metric_type, extension, dataset, N=None):
     return index_params
 
 
-def get_experiment_results_for_params(metric_type, extension, index_params, dataset, N=None):
+def get_experiment_results_for_params(metric_type, extension, index_params, dataset, N=None, K=None):
     x_param = 'N' if N is None else 'K'
 
-    n_sql = '' if N is None else 'AND N = %s'
+    n_sql = '' if N is None else f"AND N = {convert_string_to_number(N)}"
+    k_sql = '' if K is None else f"AND K = {K}"
 
     metric_type_sql, metric_type_value, multiple_metrics = get_metric_sql_and_value(
         metric_type)
@@ -72,6 +73,7 @@ def get_experiment_results_for_params(metric_type, extension, index_params, data
             AND index_params = %s
             AND dataset = %s
             {n_sql}
+            {k_sql}
         {group_by_sql}
         ORDER BY
             {x_param}
@@ -80,8 +82,6 @@ def get_experiment_results_for_params(metric_type, extension, index_params, data
     data = (metric_type_value, extension.value, index_params, dataset.value)
     if multiple_metrics:
         data = tuple([m.value for m in metric_type]) + data
-    if N is not None:
-        data += (convert_string_to_number(N),)
 
     with DatabaseConnection() as conn:
         results = conn.select(sql, data=data)

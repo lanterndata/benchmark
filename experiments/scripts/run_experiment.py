@@ -1,6 +1,6 @@
 import json
 from utils.database import DatabaseConnection
-from utils.constants import ExperimentParams, Metric, Extension, NO_INDEX_METRICS, EXPERIMENT_PARAMETERS, VALID_DATASET_SIZES, SUGGESTED_K_VALUES, Dataset
+from utils.constants import ExperimentParam, Metric, Extension, NO_INDEX_METRICS, EXPERIMENT_PARAMETERS, VALID_DATASET_SIZES, SUGGESTED_K_VALUES, Dataset
 from utils.numbers import convert_number_to_string
 from . import select_experiment
 from . import select_bulk_experiment
@@ -15,10 +15,10 @@ from . import insert_bulk_experiment
 def get_extension_parameter_sets(extension, metric_type):
     valid_parameter_sets = []
     for dataset in Dataset:
-        if ExperimentParams.N in EXPERIMENT_PARAMETERS[metric_type]:
+        if ExperimentParam.N in EXPERIMENT_PARAMETERS[metric_type]:
             valid_N = VALID_DATASET_SIZES[dataset]
             for N in valid_N:
-                if ExperimentParams.K in EXPERIMENT_PARAMETERS[metric_type]:
+                if ExperimentParam.K in EXPERIMENT_PARAMETERS[metric_type]:
                     for K in SUGGESTED_K_VALUES:
                         valid_parameter_sets.append((extension, dataset, N, K))
                 else:
@@ -29,9 +29,9 @@ def get_extension_parameter_sets(extension, metric_type):
 
 
 def get_missing_extension_parameter_sets(extension, index_params, metric_type, valid_parameter_sets):
-    if ExperimentParams.K in EXPERIMENT_PARAMETERS[metric_type]:
+    if ExperimentParam.K in EXPERIMENT_PARAMETERS[metric_type]:
         columns = 'extension, dataset, n, k'
-    if ExperimentParams.N in EXPERIMENT_PARAMETERS[metric_type]:
+    if ExperimentParam.N in EXPERIMENT_PARAMETERS[metric_type]:
         columns = 'extension, dataset, n'
     else:
         columns = 'extension, dataset'
@@ -49,7 +49,7 @@ def get_missing_extension_parameter_sets(extension, index_params, metric_type, v
     data = (metric_type.value, extension.value, json.dumps(index_params))
     with DatabaseConnection() as conn:
         found_parameter_sets = conn.select(sql, data=data)
-    if ExperimentParams.N in EXPERIMENT_PARAMETERS[metric_type]:
+    if ExperimentParam.N in EXPERIMENT_PARAMETERS[metric_type]:
         found_parameter_sets = {
             (Extension(e), Dataset(d), convert_number_to_string(n), *other)
             for (e, d, n, *other) in found_parameter_sets}
@@ -103,7 +103,7 @@ def generate_extension_results(extension, index_params, metric_type, missing_onl
     if missing_only:
         parameter_sets = get_missing_extension_parameter_sets(
             extension, index_params, metric_type, parameter_sets)
-    if ExperimentParams.K in EXPERIMENT_PARAMETERS[metric_type]:
+    if ExperimentParam.K in EXPERIMENT_PARAMETERS[metric_type]:
         parameter_sets = group_parameter_sets_with_k(parameter_sets)
 
     if len(parameter_sets) == 0:
