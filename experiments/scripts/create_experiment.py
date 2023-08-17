@@ -10,6 +10,7 @@ from utils.constants import Metric, VALID_EXTENSIONS
 from utils.cli import parse_args
 from utils.process import save_result, get_experiment_results
 from utils.print import print_labels, print_row, get_title
+from utils.plot import plot_line_with_stddev
 
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
 
@@ -85,37 +86,13 @@ def print_results(dataset):
 def plot_results(dataset):
     fig = go.Figure()
 
+    metric_types = [Metric.CREATE_LATENCY, Metric.CREATE_LATENCY_STDDEV]
     for extension in VALID_EXTENSIONS:
-        results = get_experiment_results(
-            [Metric.CREATE_LATENCY, Metric.CREATE_LATENCY_STDDEV], extension, dataset)
+        results = get_experiment_results(metric_types, extension, dataset)
         for index, (index_params, param_results) in enumerate(results):
             N_values, averages, stddevs = zip(*param_results)
-
-            # Standard deviation area (transparent fill)
-            fig.add_trace(go.Scatter(
-                # x values for both the top and bottom bounds
-                x=N_values + N_values[::-1],
-                y=[t + (s or 0) for t, s in zip(averages, stddevs)] + [t - (s or 0) for t, s in zip(
-                    averages, stddevs)][::-1],  # upper bound followed by lower bound
-                fill='toself',
-                fillcolor=get_transparent_color(
-                    get_color_from_extension(extension, index)),
-                # make the line invisible
-                line=dict(color='rgba(255,255,255,0)'),
-                showlegend=False,
-                legendgroup=extension.value.upper(),
-            ))
-
-            # Average line
-            fig.add_trace(go.Scatter(
-                x=N_values,
-                y=averages,
-                marker=dict(color=get_color_from_extension(extension, index)),
-                mode='lines+markers',
-                name=f"{extension.value.upper()} - {index_params}",
-                legendgroup=extension.value.upper(),
-                legendgrouptitle={'text': extension.value.upper()}
-            ))
+            plot_line_with_stddev(
+                fig, extension, index_params, N_values, averages, stddevs, index=index)
     fig.update_layout(
         title=f"Create Index Latency over Number of Rows for {dataset.value}",
         xaxis=dict(title='Number of rows'),

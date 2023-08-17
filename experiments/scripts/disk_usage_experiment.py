@@ -9,6 +9,7 @@ from utils.process import save_result, get_experiment_results
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
 from utils.print import print_labels, print_row, get_title
+from utils.plot import plot_line
 
 
 def generate_result(extension, dataset, N, index_params={}):
@@ -56,16 +57,8 @@ def plot_results(dataset):
         results = get_experiment_results(Metric.DISK_USAGE, extension, dataset)
         for index, (index_params, param_results) in enumerate(results):
             N_values, disk_usages = zip(*param_results)
-            fig.add_trace(go.Scatter(
-                x=N_values,
-                y=disk_usages,
-                marker=dict(color=get_color_from_extension(
-                    extension, index=index)),
-                mode='lines+markers',
-                name=f"{extension.value.upper()} - {index_params}",
-                legendgroup=extension.value.upper(),
-                legendgrouptitle={'text': extension.value.upper()}
-            ))
+            plot_line(fig, extension, index_params,
+                      N_values, disk_usages, index=index)
     fig.update_layout(
         title=f"Disk Usage over Data Size for {dataset.value}",
         xaxis=dict(title='Number of rows'),

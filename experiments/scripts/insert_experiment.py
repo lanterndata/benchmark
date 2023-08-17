@@ -6,7 +6,7 @@ from utils.names import get_table_name
 from utils.process import save_result, get_experiment_results
 from utils.database import DatabaseConnection, run_pgbench
 from utils.print import print_labels, print_row, get_title
-from utils.colors import get_color_from_extension
+from utils.plot import plot_line_with_stddev, plot_line
 from .setup_tables import create_table
 
 
@@ -47,10 +47,6 @@ def get_latency_stddev_metric(bulk):
 
 def get_tps_metric(bulk):
     return Metric.INSERT_BULK_TPS if bulk else Metric.INSERT_TPS
-
-
-def get_metric_types(bulk):
-    return [get_tps_metric(bulk), get_latency_metric(bulk), get_latency_stddev_metric(bulk)]
 
 
 def print_insert_title_and_labels(extension, index_params, dataset):
@@ -132,7 +128,9 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 
 
 def print_results(dataset, bulk=False):
-    metric_types = get_metric_types(bulk)
+    metric_types = [get_tps_metric(bulk), get_latency_metric(
+        bulk), get_latency_stddev_metric(bulk)]
+
     for extension in Extension:
         results = get_experiment_results(metric_types, extension, dataset)
         for index_params, param_results in results:
@@ -143,23 +141,29 @@ def print_results(dataset, bulk=False):
 
 
 def plot_results(dataset, bulk=False):
-    metric_types = get_metric_types(bulk)
+    metric_types = [
+        get_tps_metric(bulk),
+        (get_latency_metric(bulk), get_latency_stddev_metric(bulk))
+    ]
     for metric_type in metric_types:
         fig = go.Figure()
         for extension in Extension:
             results = get_experiment_results(metric_type, extension, dataset)
             for index, (index_params, param_results) in enumerate(results):
-                x_values, y_values = zip(*param_results)
-                color = get_color_from_extension(extension, index=index)
-                fig.add_trace(go.Scatter(
-                    x=x_values,
-                    y=y_values,
-                    marker=dict(color=color),
-                    mode='lines+markers',
-                    name=f"{extension.value.upper()} - {index_params}",
-                ))
+                if isinstance(metric_type, tuple):
+                    x_values, y_means, y_stddevs = zip(*param_results)
+                    plot_line_with_stddev(
+                        fig, extension, index_params, x_values, y_means, y_stddevs, index=index)
+                else:
+                    x_values, y_values = zip(*param_results)
+                    plot_line(fig, extension, index_params,
+                              x_values, y_values, index=index)
+        if isinstance(metric_type, tuple):
+            plot_title = f"{dataset.value} - {metric_type[0].value}"
+        else:
+            plot_title = f"{dataset.value} - {metric_type.value}"
         fig.update_layout(
-            title=f"{dataset.value} - {metric_type.value}",
+            title=plot_title,
             xaxis_title=f"latency of inserting 8000 rows",
             yaxis_title='latency (s)',
         )
