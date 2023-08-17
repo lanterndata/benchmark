@@ -178,11 +178,9 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
             "{:.2f}".format(latency_average_response['metric_value']),
             "{:.2f}".format(latency_stddev_response['metric_value']),
         )
-
     print()
 
-    if extension != Extension.NONE:
-        delete_index(extension, dataset, N)
+    delete_index(extension, dataset, N)
 
 
 def get_extension_hyperparameters(extension, N):
