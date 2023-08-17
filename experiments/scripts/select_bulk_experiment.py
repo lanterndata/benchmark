@@ -1,5 +1,6 @@
 from utils.cli import parse_args
-import select_experiment
+from utils.constants import Metric
+from . import select_experiment
 
 
 def generate_result(extension, dataset, N, K_values, index_params={}):
@@ -12,7 +13,7 @@ def run_hyperparameter_search(extension, dataset, N):
         extension, dataset, N, bulk=True)
 
 
-def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='select bulk (latency ms)'):
+def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxis=Metric.SELECT_BULK_LATENCY):
     select_experiment.plot_hyperparameter_search(
         extensions, dataset, N, xaxis, yaxis)
 
