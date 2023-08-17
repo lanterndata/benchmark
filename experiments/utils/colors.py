@@ -46,3 +46,7 @@ def get_color_from_extension(extension: Extension, index=0):
         return purple_shades[index]
     else:
         return red_shades[index]
+
+
+def get_transparent_color(color: str):
+    return 'rgba' + color[3:-1] + f",0.3)"

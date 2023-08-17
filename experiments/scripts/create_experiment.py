@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from utils.database import get_database_url
 from utils.delete_index import delete_index
 from utils.create_index import get_create_index_query
-from utils.colors import get_color_from_extension
+from utils.colors import get_color_from_extension, get_transparent_color
 from utils.numbers import convert_string_to_number, convert_number_to_string
 from utils.constants import Metric, VALID_EXTENSIONS
 from utils.cli import parse_args
@@ -87,12 +87,29 @@ def plot_results(dataset):
 
     for extension in VALID_EXTENSIONS:
         results = get_experiment_results(
-            Metric.CREATE_LATENCY, extension, dataset)
+            [Metric.CREATE_LATENCY, Metric.CREATE_LATENCY_STDDEV], extension, dataset)
         for index, (index_params, param_results) in enumerate(results):
-            N_values, times = zip(*param_results)
+            N_values, averages, stddevs = zip(*param_results)
+
+            # Standard deviation area (transparent fill)
+            fig.add_trace(go.Scatter(
+                # x values for both the top and bottom bounds
+                x=N_values + N_values[::-1],
+                y=[t + (s or 0) for t, s in zip(averages, stddevs)] + [t - (s or 0) for t, s in zip(
+                    averages, stddevs)][::-1],  # upper bound followed by lower bound
+                fill='toself',
+                fillcolor=get_transparent_color(
+                    get_color_from_extension(extension, index)),
+                # make the line invisible
+                line=dict(color='rgba(255,255,255,0)'),
+                showlegend=False,
+                legendgroup=extension.value.upper(),
+            ))
+
+            # Average line
             fig.add_trace(go.Scatter(
                 x=N_values,
-                y=times,
+                y=averages,
                 marker=dict(color=get_color_from_extension(extension, index)),
                 mode='lines+markers',
                 name=f"{extension.value.upper()} - {index_params}",

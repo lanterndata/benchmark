@@ -3,7 +3,7 @@ from utils.create_index import create_custom_index
 from utils.constants import Extension, Metric
 from utils.cli import parse_args
 from utils.names import get_table_name
-from utils.process import save_result, get_experiment_results, get_distinct_index_params
+from utils.process import save_result, get_experiment_results
 from utils.database import DatabaseConnection, run_pgbench
 from utils.numbers import convert_number_to_string
 from utils.print import print_labels, print_row, get_title
@@ -119,35 +119,11 @@ def print_results(dataset, bulk=False):
     metric_types = get_metric_types(bulk)
 
     for extension in Extension:
-        index_params_list = get_distinct_index_params(
-            metric_types, extension, dataset)
-
-        for index_params in index_params_list:
-            sql = """
-                SELECT
-                    N,
-                    MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END),
-                    MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END)
-                FROM
-                    experiment_results
-                WHERE
-                    metric_type = ANY(%s)
-                    AND extension = %s
-                    AND index_params = %s
-                    AND dataset = %s
-                GROUP BY
-                    N
-                ORDER BY
-                    N
-            """
-            data = (metric_types[0].value, metric_types[1].value,
-                    list(map(lambda m: m.value, metric_types)), extension.value, index_params, dataset.value)
-            with DatabaseConnection() as conn:
-                results = conn.select(sql, data=data)
-
+        results = get_experiment_results(metric_types, extension, dataset)
+        for index_params, param_results in results:
             print(get_title(extension, index_params, dataset))
             print_labels('N', 'TPS', 'latency (s)')
-            for N, tps, latency in results:
+            for N, tps, latency in param_results:
                 print_row(
                     convert_number_to_string(N),
                     "{:.2f}".format(tps),
