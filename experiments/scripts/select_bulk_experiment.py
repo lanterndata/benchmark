@@ -1,5 +1,4 @@
 from utils.cli import parse_args
-from utils.constants import Metric
 from . import select_experiment
 
 

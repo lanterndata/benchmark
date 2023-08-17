@@ -4,7 +4,6 @@ import plotly.graph_objects as go
 from utils.database import get_database_url
 from utils.delete_index import delete_index
 from utils.create_index import get_create_index_query
-from utils.colors import get_color_from_extension, get_transparent_color
 from utils.numbers import convert_string_to_number, convert_number_to_string
 from utils.constants import Metric, VALID_EXTENSIONS
 from utils.cli import parse_args

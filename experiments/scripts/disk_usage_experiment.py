@@ -6,7 +6,6 @@ from utils.cli import parse_args
 from utils.names import get_index_name
 from utils.constants import VALID_EXTENSIONS, Metric
 from utils.process import save_result, get_experiment_results
-from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
 from utils.print import print_labels, print_row, get_title
 from utils.plot import plot_line

@@ -2,7 +2,7 @@ import json
 import plotly.graph_objects as go
 from utils.delete_index import delete_index
 from utils.create_index import create_index
-from utils.constants import Metric, Extension
+from utils.constants import Metric
 from utils.database import DatabaseConnection, run_pgbench
 from utils.process import save_result, get_experiment_results_for_params
 from utils.cli import parse_args

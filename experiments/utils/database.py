@@ -1,7 +1,6 @@
 import os
 import psycopg2
 import logging
-from urllib.parse import urlparse
 import subprocess
 import os
 import re
