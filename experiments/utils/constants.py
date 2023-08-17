@@ -43,16 +43,31 @@ Metric constants
 
 class Metric(Enum):
     SELECT_LATENCY = 'select (latency ms)'
+    SELECT_LATENCY_STDDEV = 'select (latency stddev ms)'
+
     SELECT_BULK_LATENCY = 'select bulk (latency ms)'
+    SELECT_BULK_LATENCY_STDDEV = 'select bulk (latency stddev ms)'
+
     SELECT_TPS = 'select (tps)'
+
     SELECT_BULK_TPS = 'select bulk (tps)'
+
     RECALL = 'recall'
+
     INSERT_LATENCY = 'insert (latency ms)'
+    INSERT_LATENCY_STDDEV = 'insert (latency stddev ms)'
+
     INSERT_BULK_LATENCY = 'insert bulk (latency ms)'
+    INSERT_BULK_LATENCY_STDDEV = 'insert bulk (latency stddev ms)'
+
     INSERT_TPS = 'insert (tps)'
+
     INSERT_BULK_TPS = 'insert bulk (tps)'
+
     DISK_USAGE = 'disk usage (bytes)'
+
     CREATE_LATENCY = 'create (latency ms)'
+    CREATE_LATENCY_STDDEV = 'create (latency stddev ms)'
 
 
 VALID_METRICS = [metric.value for metric in Metric]

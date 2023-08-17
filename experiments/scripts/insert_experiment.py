@@ -3,11 +3,10 @@ from utils.create_index import create_custom_index
 from utils.constants import Extension, Metric
 from utils.cli import parse_args
 from utils.names import get_table_name
-from utils.process import save_result, get_experiment_results, get_distinct_index_params
+from utils.process import save_result, get_experiment_results
 from utils.database import DatabaseConnection, run_pgbench
-from utils.numbers import convert_number_to_string
 from utils.print import print_labels, print_row, get_title
-from utils.colors import get_color_from_extension
+from utils.plot import plot_line_with_stddev, plot_line
 from .setup_tables import create_table
 
 
@@ -42,12 +41,26 @@ def get_latency_metric(bulk):
     return Metric.INSERT_BULK_LATENCY if bulk else Metric.INSERT_LATENCY
 
 
+def get_latency_stddev_metric(bulk):
+    return Metric.INSERT_BULK_LATENCY_STDDEV if bulk else Metric.INSERT_LATENCY_STDDEV
+
+
 def get_tps_metric(bulk):
     return Metric.INSERT_BULK_TPS if bulk else Metric.INSERT_TPS
 
 
-def get_metric_types(bulk):
-    return [get_tps_metric(bulk), get_latency_metric(bulk)]
+def print_insert_title_and_labels(extension, index_params, dataset):
+    print(get_title(extension, index_params, dataset))
+    print_labels('N', 'TPS', 'Avg Latency (ms)', 'Stddev Latency (ms)')
+
+
+def print_insert_row(N, tps, latency_average, latency_stddev):
+    print_row(
+        f"{N} - {N + 1000 - 1}",
+        "{:.2f}".format(tps),
+        "{:.2f}".format(latency_average),
+        "{:.2f}".format(latency_stddev),
+    )
 
 
 def generate_result(extension, dataset, index_params={}, bulk=False):
@@ -69,8 +82,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 
     create_dest_index(extension, dataset, index_params)
 
-    print(get_title(extension, index_params, dataset))
-    print_labels('N', 'TPS', 'latency (ms)')
+    print_insert_title_and_labels(extension, index_params, dataset)
     for N in range(10000, 20001, 1000):
 
         if bulk:
@@ -91,7 +103,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                 {id_query};
         """
 
-        stdout, stderr, tps, latency = run_pgbench(
+        stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
             extension, query, clients=1, transactions=transactions)
 
         save_result_params = {
@@ -102,13 +114,13 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
             'out': stdout,
             'err': stderr,
         }
-        save_result(get_latency_metric(bulk), latency, **save_result_params)
+        save_result(get_latency_metric(bulk),
+                    latency_average, **save_result_params)
+        save_result(get_latency_stddev_metric(bulk),
+                    latency_stddev, **save_result_params)
         save_result(get_tps_metric(bulk), tps, **save_result_params)
-        print_row(
-            f"{N} - {N + 1000 - 1}".ljust(16),
-            "{:.2f}".format(tps).ljust(10),
-            "{:.2f}".format(latency).ljust(15)
-        )
+
+        print_insert_row(N, tps, latency_average, latency_stddev)
 
     print()
 
@@ -116,64 +128,42 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 
 
 def print_results(dataset, bulk=False):
-    metric_types = get_metric_types(bulk)
+    metric_types = [get_tps_metric(bulk), get_latency_metric(
+        bulk), get_latency_stddev_metric(bulk)]
 
     for extension in Extension:
-        index_params_list = get_distinct_index_params(
-            metric_types, extension, dataset)
-
-        for index_params in index_params_list:
-            sql = """
-                SELECT
-                    N,
-                    MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END),
-                    MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END)
-                FROM
-                    experiment_results
-                WHERE
-                    metric_type = ANY(%s)
-                    AND extension = %s
-                    AND index_params = %s
-                    AND dataset = %s
-                GROUP BY
-                    N
-                ORDER BY
-                    N
-            """
-            data = (metric_types[0].value, metric_types[1].value,
-                    list(map(lambda m: m.value, metric_types)), extension.value, index_params, dataset.value)
-            with DatabaseConnection() as conn:
-                results = conn.select(sql, data=data)
-
-            print(get_title(extension, index_params, dataset))
-            print_labels('N', 'TPS', 'latency (s)')
-            for N, tps, latency in results:
-                print_row(
-                    convert_number_to_string(N),
-                    "{:.2f}".format(tps),
-                    "{:.2f}".format(latency)
-                )
+        results = get_experiment_results(metric_types, extension, dataset)
+        for index_params, param_results in results:
+            print_insert_title_and_labels(extension, index_params, dataset)
+            for N, tps, latency_average, latency_stddev in param_results:
+                print_insert_row(N, tps, latency_average, latency_stddev)
             print('\n\n')
 
 
 def plot_results(dataset, bulk=False):
-    metric_types = get_metric_types(bulk)
+    metric_types = [
+        get_tps_metric(bulk),
+        (get_latency_metric(bulk), get_latency_stddev_metric(bulk))
+    ]
     for metric_type in metric_types:
         fig = go.Figure()
         for extension in Extension:
             results = get_experiment_results(metric_type, extension, dataset)
             for index, (index_params, param_results) in enumerate(results):
-                x_values, y_values = zip(*param_results)
-                color = get_color_from_extension(extension, index=index)
-                fig.add_trace(go.Scatter(
-                    x=x_values,
-                    y=y_values,
-                    marker=dict(color=color),
-                    mode='lines+markers',
-                    name=f"{extension.value.upper()} - {index_params}",
-                ))
+                if isinstance(metric_type, tuple):
+                    x_values, y_means, y_stddevs = zip(*param_results)
+                    plot_line_with_stddev(
+                        fig, extension, index_params, x_values, y_means, y_stddevs, index=index)
+                else:
+                    x_values, y_values = zip(*param_results)
+                    plot_line(fig, extension, index_params,
+                              x_values, y_values, index=index)
+        if isinstance(metric_type, tuple):
+            plot_title = f"{dataset.value} - {metric_type[0].value}"
+        else:
+            plot_title = f"{dataset.value} - {metric_type.value}"
         fig.update_layout(
-            title=f"{dataset.value} - {metric_type.value}",
+            title=plot_title,
             xaxis_title=f"latency of inserting 8000 rows",
             yaxis_title='latency (s)',
         )
