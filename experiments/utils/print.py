@@ -1,11 +1,11 @@
 def print_row(*cols):
-    row = ''.join([col.ljust(15) for col in cols])
+    row = ''.join([col.ljust(20) for col in cols])
     print(row)
 
 
 def print_labels(*cols):
     print_row(*cols)
-    print('-' * len(cols) * 15)
+    print('-' * len(cols) * 20)
 
 
 def get_title(extension, index_params, dataset, N=None):

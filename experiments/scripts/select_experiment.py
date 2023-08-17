@@ -7,12 +7,16 @@ from utils.process import save_result
 from utils.cli import parse_args
 from utils.names import get_table_name
 from utils.numbers import convert_string_to_number
-from utils.print import get_title
+from utils.print import get_title, print_labels, print_row
 import math
 
 
 def get_latency_metric(bulk):
     return Metric.SELECT_BULK_LATENCY if bulk else Metric.SELECT_LATENCY
+
+
+def get_latency_stddev_metric(bulk):
+    return Metric.SELECT_BULK_LATENCY_STDDEV if bulk else Metric.SELECT_LATENCY_STDDEV
 
 
 def get_tps_metric(bulk):
@@ -65,7 +69,8 @@ def generate_performance_result(extension, dataset, N, K, bulk):
             )
             LIMIT {K};
         """
-    stdout, stderr, tps, latency_average = run_pgbench(extension, query)
+    stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
+        extension, query)
 
     shared_response = {
         'out': stdout,
@@ -78,13 +83,19 @@ def generate_performance_result(extension, dataset, N, K, bulk):
         'metric_type': get_tps_metric(bulk),
     }
 
-    latency_response = {
+    latency_average_response = {
         **shared_response,
         'metric_value': latency_average,
         'metric_type': get_latency_metric(bulk),
     }
 
-    return tps_response, latency_response
+    latency_stddev_response = {
+        **shared_response,
+        'metric_value': latency_stddev,
+        'metric_type': get_latency_stddev_metric(bulk),
+    }
+
+    return tps_response, latency_average_response, latency_stddev_response
 
 
 def generate_recall_result(extension, dataset, N, K):
@@ -139,8 +150,8 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
     create_index(extension, dataset, N, index_params=index_params)
 
     print(get_title(extension, index_params, dataset, N))
-    print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(15), 'Recall')
-    print('-' * 48)
+    print_labels('K', 'Recall', 'TPS', 'Avg Latency (ms)',
+                 'Stddev Latency (ms)')
 
     for K in K_values:
         save_result_params = {
@@ -151,18 +162,21 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
             'k': K,
         }
 
-        tps_response, latency_response = generate_performance_result(
+        tps_response, latency_average_response, latency_stddev_response = generate_performance_result(
             extension, dataset, N, K, bulk)
         recall_response = generate_recall_result(extension, dataset, N, K)
         save_result(**tps_response, **save_result_params)
-        save_result(**latency_response, **save_result_params)
+        save_result(**latency_average_response, **save_result_params)
+        save_result(**latency_stddev_response, **save_result_params)
         save_result(**recall_response, **save_result_params)
 
-        print(
-            f"{K}".ljust(10),
-            "{:.2f}".format(tps_response['metric_value']).ljust(10),
-            "{:.2f}".format(latency_response['metric_value']).ljust(15),
-            "{:.2f}".format(recall_response['metric_value'])
+        print_row(
+            K,
+            "{:.2f}".format(recall_response['metric_value']),
+            "{:.2f}".format(recall_response['metric_value']),
+            "{:.2f}".format(tps_response['metric_value']),
+            "{:.2f}".format(latency_average_response['metric_value']),
+            "{:.2f}".format(latency_stddev_response['metric_value']),
         )
 
     print()

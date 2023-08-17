@@ -84,9 +84,7 @@ def run_pgbench(extension, query, clients=8, threads=8, transactions=15):
         tmp_file.write(query)
         tmp_file_path = tmp_file.name
 
-    host, port, user, password, database = _extract_connection_params(
-        get_database_url(extension))
-    command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c {clients} -j {threads} -t {transactions} -r'
+    command = f'pgbench { get_database_url(extension)} -f {tmp_file_path} -c {clients} -j {threads} -t {transactions} -P 5 -r'
     stdout, stderr = _run_command(command)
 
     # Extract latency average using regular expression
@@ -96,13 +94,19 @@ def run_pgbench(extension, query, clients=8, threads=8, transactions=15):
     if latency_average_match:
         latency_average = float(latency_average_match.group(1))
 
+    # Extract latency stddev using regular expression
+    latency_stddev = None
+    latency_stddev_match = re.search(r'latency stddev = (\d+\.\d+) ms', stdout)
+    if latency_stddev_match:
+        latency_stddev = float(latency_stddev_match.group(1))
+
     # Extract TPS (Transactions Per Second) using regular expression
     tps = None
     tps_match = re.search(r'tps = (\d+\.\d+)', stdout)
     if tps_match:
         tps = float(tps_match.group(1))
 
-    return stdout, stderr, tps, latency_average
+    return stdout, stderr, tps, latency_average, latency_stddev
 
 
 def _run_command(command):
@@ -110,17 +114,6 @@ def _run_command(command):
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
     return output.decode(), error.decode()
-
-
-def _extract_connection_params(db_url):
-    parsed_url = urlparse(db_url)
-    host = parsed_url.hostname
-    port = parsed_url.port
-    user = parsed_url.username
-    password = parsed_url.password
-    database = parsed_url.path.lstrip("/")
-
-    return host, port, user, password, database
 
 
 def get_database_url(extension):

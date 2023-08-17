@@ -5,7 +5,6 @@ from utils.cli import parse_args
 from utils.names import get_table_name
 from utils.process import save_result, get_experiment_results
 from utils.database import DatabaseConnection, run_pgbench
-from utils.numbers import convert_number_to_string
 from utils.print import print_labels, print_row, get_title
 from utils.colors import get_color_from_extension
 from .setup_tables import create_table
@@ -42,12 +41,30 @@ def get_latency_metric(bulk):
     return Metric.INSERT_BULK_LATENCY if bulk else Metric.INSERT_LATENCY
 
 
+def get_latency_stddev_metric(bulk):
+    return Metric.INSERT_BULK_LATENCY_STDDEV if bulk else Metric.INSERT_LATENCY_STDDEV
+
+
 def get_tps_metric(bulk):
     return Metric.INSERT_BULK_TPS if bulk else Metric.INSERT_TPS
 
 
 def get_metric_types(bulk):
-    return [get_tps_metric(bulk), get_latency_metric(bulk)]
+    return [get_tps_metric(bulk), get_latency_metric(bulk), get_latency_stddev_metric(bulk)]
+
+
+def print_insert_title_and_labels(extension, index_params, dataset):
+    print(get_title(extension, index_params, dataset))
+    print_labels('N', 'TPS', 'Avg Latency (ms)', 'Stddev Latency (ms)')
+
+
+def print_insert_row(N, tps, latency_average, latency_stddev):
+    print_row(
+        f"{N} - {N + 1000 - 1}",
+        "{:.2f}".format(tps),
+        "{:.2f}".format(latency_average),
+        "{:.2f}".format(latency_stddev),
+    )
 
 
 def generate_result(extension, dataset, index_params={}, bulk=False):
@@ -69,8 +86,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 
     create_dest_index(extension, dataset, index_params)
 
-    print(get_title(extension, index_params, dataset))
-    print_labels('N', 'TPS', 'latency (ms)')
+    print_insert_title_and_labels(extension, index_params, dataset)
     for N in range(10000, 20001, 1000):
 
         if bulk:
@@ -91,7 +107,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                 {id_query};
         """
 
-        stdout, stderr, tps, latency = run_pgbench(
+        stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
             extension, query, clients=1, transactions=transactions)
 
         save_result_params = {
@@ -102,13 +118,13 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
             'out': stdout,
             'err': stderr,
         }
-        save_result(get_latency_metric(bulk), latency, **save_result_params)
+        save_result(get_latency_metric(bulk),
+                    latency_average, **save_result_params)
+        save_result(get_latency_stddev_metric(bulk),
+                    latency_stddev, **save_result_params)
         save_result(get_tps_metric(bulk), tps, **save_result_params)
-        print_row(
-            f"{N} - {N + 1000 - 1}".ljust(16),
-            "{:.2f}".format(tps).ljust(10),
-            "{:.2f}".format(latency).ljust(15)
-        )
+
+        print_insert_row(N, tps, latency_average, latency_stddev)
 
     print()
 
@@ -117,18 +133,12 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
 
 def print_results(dataset, bulk=False):
     metric_types = get_metric_types(bulk)
-
     for extension in Extension:
         results = get_experiment_results(metric_types, extension, dataset)
         for index_params, param_results in results:
-            print(get_title(extension, index_params, dataset))
-            print_labels('N', 'TPS', 'latency (s)')
-            for N, tps, latency in param_results:
-                print_row(
-                    convert_number_to_string(N),
-                    "{:.2f}".format(tps),
-                    "{:.2f}".format(latency)
-                )
+            print_insert_title_and_labels(extension, index_params, dataset)
+            for N, tps, latency_average, latency_stddev in param_results:
+                print_insert_row(N, tps, latency_average, latency_stddev)
             print('\n\n')
 
 

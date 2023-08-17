@@ -72,7 +72,7 @@ def print_results(dataset):
             print("\n\n")
         for (index_params, param_results) in results:
             print(get_title(extension, index_params, dataset))
-            print_labels('N', 'Avg time (ms)', print('Stddev time (ms)'))
+            print_labels('N', 'Avg latency (ms)', print('Stddev latency (ms)'))
             for N, average, stddev in param_results:
                 print_row(
                     convert_number_to_string(N),
