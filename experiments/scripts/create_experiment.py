@@ -32,19 +32,33 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
             if line.startswith("Time:"):
                 time = float(line.split(":")[1].strip().split(" ")[0])
                 current_results.append(time)
-                print(f"{c} / {count}: {time} ms")
+                print(f"{c} / {count}: {time:.2f} ms")
                 break
 
-    average_latency = statistics.mean(current_results)
+    latency_average = statistics.mean(current_results)
+    latency_stddev = statistics.stdev(current_results)
+
+    save_result_params = {
+        'extension': extension,
+        'index_params': index_params,
+        'dataset': dataset,
+        'n': convert_string_to_number(N),
+    }
+
     save_result(
         metric_type=Metric.CREATE_LATENCY,
-        metric_value=average_latency,
-        extension=extension,
-        index_params=index_params,
-        dataset=dataset,
-        n=convert_string_to_number(N)
+        metric_value=latency_average,
+        **save_result_params
     )
-    print('average latency:', average_latency, 'ms\n')
+    save_result(
+        metric_type=Metric.CREATE_LATENCY_STDDEV,
+        metric_value=latency_stddev,
+        **save_result_params
+    )
+
+    print('average latency:',  f"{latency_average:.2f} ms")
+    print('stddev latency', f"{latency_stddev:.2f} ms")
+    print()
 
     delete_index(extension, dataset, N)
 
@@ -52,17 +66,18 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
 def print_results(dataset):
     for extension in VALID_EXTENSIONS:
         results = get_experiment_results(
-            Metric.CREATE_LATENCY, extension, dataset)
+            [Metric.CREATE_LATENCY, Metric.CREATE_LATENCY_STDDEV], extension, dataset)
         if len(results) == 0:
             print(f"No results for {extension}")
             print("\n\n")
         for (index_params, param_results) in results:
             print(get_title(extension, index_params, dataset))
-            print_labels('N', 'Time (ms)')
-            for N, latency in param_results:
+            print_labels('N', 'Avg time (ms)', print('Stddev time (ms)'))
+            for N, average, stddev in param_results:
                 print_row(
                     convert_number_to_string(N),
-                    "{:.2f}".format(latency)
+                    "{:.2f}".format(average),
+                    "{:.2f}".format(stddev)
                 )
             print('\n\n')
 
