@@ -8,13 +8,13 @@ services:
       - 8888:8888
     volumes:
       - ./db/data:/var/lib/postgresql/data
-      - ./db/scripts:/app/db/scripts
       - ./data:/app/data
       - ./experiments:/app/experiments
-      - ./requirements.txt:/app/requirements.txt
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
-      - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_PORT=5432
+      - DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
+      - NONE_DATABASE_URL=postgres://postgres:postgres@localhost:5432/none
+      - NEON_DATABASE_URL=postgres://postgres:postgres@localhost:5432/neon
+      - PGVECTOR_DATABASE_URL=postgres://postgres:postgres@localhost:5432/pgvector
+      - LANTERN_DATABASE_URL=postgres://postgres:postgres@localhost:5432/lantern

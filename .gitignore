@@ -1,8 +1,5 @@
-# Private
-id_rsa
-
 # Data / Postgres
-db/data
+*/data
 *.tsv
 *.ivecs
 *.fvecs

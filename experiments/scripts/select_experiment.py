@@ -1,26 +1,27 @@
-import os
-import psycopg2
 import plotly.graph_objects as go
-from scripts.delete_index import delete_index
-from scripts.create_index import create_index
-from scripts.script_utils import run_pgbench, save_result, execute_sql, parse_args, get_table_name
-from scripts.number_utils import convert_string_to_number
+from utils.delete_index import delete_index
+from utils.create_index import create_index
+from utils.constants import Metric, Extension
+from utils.database import DatabaseConnection, run_pgbench
+from utils.process import save_result
+from utils.cli import parse_args
+from utils.names import get_table_name
+from utils.numbers import convert_string_to_number
+from utils.print import get_title
 import math
-
-db_connection_string = os.environ.get('DATABASE_URL')
 
 
 def get_latency_metric(bulk):
-    return 'select bulk (latency ms)' if bulk else 'select (latency ms)'
+    return Metric.SELECT_BULK_LATENCY if bulk else Metric.SELECT_LATENCY
 
 
 def get_tps_metric(bulk):
-    return 'select bulk (tps)' if bulk else 'select (tps)'
+    return Metric.SELECT_BULK_TPS if bulk else Metric.SELECT_TPS
 
 
 def generate_performance_result(extension, dataset, N, K, bulk):
-    base_table_name = get_table_name(extension, dataset, N, type='base')
-    query_table_name = get_table_name(extension, dataset, N, type='query')
+    base_table_name = get_table_name(dataset, N, type='base')
+    query_table_name = get_table_name(dataset, N, type='query')
     N_number = convert_string_to_number(N)
     if bulk:
         query = f"""
@@ -64,7 +65,7 @@ def generate_performance_result(extension, dataset, N, K, bulk):
             )
             LIMIT {K};
         """
-    stdout, stderr, tps, latency_average = run_pgbench(query)
+    stdout, stderr, tps, latency_average = run_pgbench(extension, query)
 
     shared_response = {
         'out': stdout,
@@ -86,73 +87,68 @@ def generate_performance_result(extension, dataset, N, K, bulk):
     return tps_response, latency_response
 
 
-def generate_recall_result(dataset, N, K):
-    base_table_name = get_table_name(extension, dataset, N, type='base')
-    truth_table_name = get_table_name(extension, dataset, N, type='truth')
-    query_table_name = get_table_name(extension, dataset, N, type='query')
+def generate_recall_result(extension, dataset, N, K):
+    base_table_name = get_table_name(dataset, N, type='base')
+    truth_table_name = get_table_name(dataset, N, type='truth')
+    query_table_name = get_table_name(dataset, N, type='query')
 
-    query_ids = execute_sql(
-        f"SELECT id FROM {query_table_name} LIMIT 100", select=True)
+    with DatabaseConnection(extension) as conn:
+        query_ids_sql = f"SELECT id FROM {query_table_name} LIMIT 100"
+        query_ids = conn.select(query_ids_sql)
 
-    recall_at_k_sum = 0
-    for query_id, in query_ids:
-        truth_ids = execute_sql(f"""
-            SELECT
-                indices[1:{K}]
-            FROM
-                {truth_table_name}
-            WHERE
-                id = {query_id}
-        """, select_one=True)
-        base_ids = list(map(lambda x: x[0], execute_sql(f"""
-            SELECT
-                id - 1
-            FROM
-                {base_table_name}
-            ORDER BY
-                v <-> (
-                    SELECT
-                        v
-                    FROM
-                        {query_table_name}
-                    WHERE
-                        id = {query_id} 
-                )
-            LIMIT {K}
-        """, select=True)))
-        recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
+        recall_at_k_sum = 0
+        for query_id, in query_ids:
+            truth_ids = conn.select_one(f"""
+                SELECT
+                    indices[1:{K}]
+                FROM
+                    {truth_table_name}
+                WHERE
+                    id = {query_id}
+            """)[0]
+            base_ids = conn.select(f"""
+                SELECT
+                    id - 1
+                FROM
+                    {base_table_name}
+                ORDER BY
+                    v <-> (
+                        SELECT
+                            v
+                        FROM
+                            {query_table_name}
+                        WHERE
+                            id = {query_id} 
+                    )
+                LIMIT {K}
+            """)
+            base_ids = list(map(lambda x: x[0], base_ids))
+            recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
 
     # Calculate the average recall for this K
     recall_at_k = recall_at_k_sum / len(query_ids) / K
     recall_response = {
-        'metric_type': 'recall',
+        'metric_type': Metric.RECALL,
         'metric_value': recall_at_k,
     }
     return recall_response
 
 
 def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False):
-    conn = psycopg2.connect(db_connection_string)
-    cur = conn.cursor()
+    delete_index(extension, dataset, N)
+    create_index(extension, dataset, N, index_params=index_params)
 
-    delete_index(extension, dataset, N, conn=conn, cur=cur)
-    create_index(extension, dataset, N,
-                 index_params=index_params, conn=conn, cur=cur)
-
-    print(
-        f"dataset = {dataset}, extension = {extension}, N = {N}, index_params = {index_params}")
+    print(get_title(extension, index_params, dataset, N))
     print("K".ljust(10), "TPS".ljust(10), "Latency (ms)".ljust(15), 'Recall')
     print('-' * 48)
 
     for K in K_values:
         save_result_params = {
-            'database': extension,
-            'database_params': index_params,
+            'extension': extension,
+            'index_params': index_params,
             'dataset': dataset,
             'n': convert_string_to_number(N),
             'k': K,
-            'conn': conn,
-            'cur': cur,
         }
 
         tps_response, latency_response = generate_performance_result(
@@ -171,28 +167,27 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
 
     print()
 
-    if extension != 'none':
-        delete_index(extension, dataset, N, conn=conn, cur=cur)
-
-    cur.close()
-    conn.close()
+    if extension != Extension.NONE:
+        delete_index(extension, dataset, N)
 
 
 def get_extension_hyperparameters(extension, N):
     hyperparameters = []
-    if extension == 'pgvector':
+    if extension == Extension.PGVECTOR:
         sqrt_N = int(math.sqrt(convert_string_to_number(N)))
         lists_options = list(
             map(lambda p: int(p * sqrt_N), [0.6, 0.8, 1.0, 1.2, 1.4]))
         probes_options = [1, 2, 4, 8, 16, 32]
         hyperparameters = [{'lists': l, 'probes': p}
                            for l in lists_options for p in probes_options]
-    if extension == 'lantern':
+    if extension == Extension.LANTERN or extension == Extension.NEON:
         m_options = [2, 4, 6, 8, 12, 16, 24, 32, 48, 64]
         ef_construction_options = [16]  # [16, 32, 64, 128, 256]
         ef_options = [10]  # [10, 20, 40, 80, 160]
         hyperparameters = [{'M': m, 'ef_construction': efc, 'ef': ef}
                            for m in m_options for efc in ef_construction_options for ef in ef_options]
+    if extension == Extension.NONE:
+        return [{}]
     return hyperparameters
 
 
@@ -203,21 +198,21 @@ def run_hyperparameter_search(extension, dataset, N, bulk=False):
             extension, dataset, N, [5], index_params=hyperparameter, bulk=bulk)
 
 
-def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='select (latency ms)'):
-    colors = ['blue', 'red', 'green', 'yellow', 'purple']
+def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxis=Metric.SELECT_LATENCY):
+    colors = ['blue', 'red', 'green', 'purple']
 
     fig = go.Figure()
 
     for idx, extension in enumerate(extensions):
         sql = """
             SELECT
-                database_params,
+                index_params,
                 MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END),
                 MAX(CASE WHEN metric_type = %s THEN metric_value ELSE NULL END)
             FROM
                 experiment_results
             WHERE
-                database = %s
+                extension = %s
                 AND dataset = %s
                 AND N = %s
                 AND (
@@ -225,11 +220,12 @@ def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='se
                     OR metric_type = %s
                 )
             GROUP BY
-                database_params
+                index_params
         """
-        data = (xaxis, yaxis, extension, dataset,
-                convert_string_to_number(N), xaxis, yaxis)
-        results = execute_sql(sql, data, select=True)
+        data = (xaxis.value, yaxis.value, extension.value, dataset.value,
+                convert_string_to_number(N), xaxis.value, yaxis.value)
+        with DatabaseConnection() as conn:
+            results = conn.select(sql, data=data)
 
         index_params, xaxis_data, yaxis_data = zip(*results)
 
@@ -244,13 +240,13 @@ def plot_hyperparameter_search(extensions, dataset, N, xaxis='recall', yaxis='se
             ),
             hovertext=index_params,
             hoverinfo="x+y+text",
-            name=extension
+            name=extension.value.upper()
         ))
 
     fig.update_layout(
-        title=f"{yaxis} and {xaxis} for with {dataset} {N}",
-        xaxis=dict(title=xaxis),
-        yaxis=dict(title=yaxis),
+        title=f"{yaxis.value} and {xaxis.value} for with {dataset.value} {N}",
+        xaxis=dict(title=xaxis.value),
+        yaxis=dict(title=yaxis.value),
         margin=dict(l=50, r=50, b=50, t=50),
         hovermode='closest'
     )

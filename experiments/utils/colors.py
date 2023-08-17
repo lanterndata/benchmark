@@ -1,3 +1,5 @@
+from .constants import Extension
+
 green_shades = [
     'rgb(153,255,153)',
     'rgb(102,255,102)',
@@ -25,11 +27,22 @@ blue_shades = [
     'rgb(0,0,153)',
 ]
 
+purple_shades = [
+    'rgb(204,153,255)',
+    'rgb(153,102,255)',
+    'rgb(102,51,255)',
+    'rgb(51,0,255)',
+    'rgb(51,0,204)',
+    'rgb(51,0,153)',
+]
 
-def get_color_from_extension(extension, index=0):
-    if extension == 'lantern':
+
+def get_color_from_extension(extension: Extension, index=0):
+    if extension.value == 'lantern':
         return green_shades[index]
-    elif extension == 'pgvector':
+    elif extension.value == 'pgvector':
         return blue_shades[index]
+    elif extension.value == 'neon':
+        return purple_shades[index]
     else:
         return red_shades[index]

@@ -11,7 +11,7 @@ if [ -d "/lantern" ]; then
   git submodule update
 else
   echo "Installing lantern..."
-  git clone --recursive git@github.com:lanterndata/lanterndb.git /lantern
+  git clone --recursive https://github.com/lanterndata/lanterndb.git /lantern
   cd /lantern
   mkdir build
 fi
