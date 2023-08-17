@@ -16,11 +16,13 @@ def get_table_name(dataset, N, type='base'):
             f"Invalid table type = '{type}'. Valid table types are: {', '.join(VALID_TABLE_TYPES)}")
 
     if type == 'query':
-        dataset_query_sizes = VALID_DATASET_QUERY_SIZES[dataset]
+        dataset_query_sizes = map(
+            convert_string_to_number, VALID_DATASET_QUERY_SIZES[dataset])
         dataset_size = convert_string_to_number(N)
         for dataset_query_size in dataset_query_sizes:
             if dataset_query_size >= dataset_size:
                 N = convert_number_to_string(dataset_query_size)
+                break
     table_name = f"{dataset.value}_{type}{N}"
     return table_name
 

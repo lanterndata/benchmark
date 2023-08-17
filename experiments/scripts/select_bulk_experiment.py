@@ -8,14 +8,9 @@ def generate_result(extension, dataset, N, K_values, index_params={}):
         extension, dataset, N, K_values, index_params=index_params, bulk=True)
 
 
-def run_hyperparameter_search(extension, dataset, N):
-    select_experiment.run_hyperparameter_search(
-        extension, dataset, N, bulk=True)
-
-
-def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxis=Metric.SELECT_BULK_LATENCY):
-    select_experiment.plot_hyperparameter_search(
-        extensions, dataset, N, xaxis, yaxis)
+def generate_plot(configuration, dataset, fixed_param, fixed_param_value, variable_param, metric_type, metric_stddev_type=None):
+    select_experiment.generate_plot(
+        configuration, dataset, fixed_param, fixed_param_value, variable_param, metric_type, metric_stddev_type=metric_stddev_type)
 
 
 if __name__ == '__main__':

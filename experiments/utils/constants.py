@@ -84,19 +84,19 @@ Experiment parameter constants
 """
 
 
-class ExperimentParams(Enum):
+class ExperimentParam(Enum):
     N = 'n'
     K = 'k'
 
 
 EXPERIMENT_PARAMETERS = {
-    Metric.SELECT_LATENCY: [ExperimentParams.N, ExperimentParams.K],
-    Metric.SELECT_TPS: [ExperimentParams.N, ExperimentParams.K],
-    Metric.RECALL: [ExperimentParams.N, ExperimentParams.K],
+    Metric.SELECT_LATENCY: [ExperimentParam.N, ExperimentParam.K],
+    Metric.SELECT_TPS: [ExperimentParam.N, ExperimentParam.K],
+    Metric.RECALL: [ExperimentParam.N, ExperimentParam.K],
     Metric.INSERT_LATENCY: [],
     Metric.INSERT_BULK_LATENCY: [],
-    Metric.DISK_USAGE: [ExperimentParams.N],
-    Metric.CREATE_LATENCY: [ExperimentParams.N],
+    Metric.DISK_USAGE: [ExperimentParam.N],
+    Metric.CREATE_LATENCY: [ExperimentParam.N],
 }
 
 SUGGESTED_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
