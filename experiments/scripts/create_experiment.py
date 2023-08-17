@@ -1,8 +1,8 @@
-import os
 import subprocess
 import statistics
 import plotly.graph_objects as go
-from utils.delete_index import get_drop_index_query, delete_index
+from utils.database import get_database_url
+from utils.delete_index import delete_index
 from utils.create_index import get_create_index_query
 from utils.colors import get_color_from_extension
 from utils.numbers import convert_string_to_number, convert_number_to_string
@@ -11,7 +11,6 @@ from utils.cli import parse_args
 from utils.process import save_result, get_experiment_results
 from utils.print import print_labels, print_row, get_title
 
-PG_USER = os.environ.get('POSTGRES_USER')
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
 
 
@@ -23,13 +22,10 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
     for c in range(count):
         create_index_query = get_create_index_query(
             extension, dataset, N, index_params)
-        result = subprocess.run(["psql", "-U", PG_USER, "-c", SUPPRESS_COMMAND, "-c",
+        result = subprocess.run(["psql", get_database_url(extension), "-c", SUPPRESS_COMMAND, "-c",
                                 "\\timing", "-c", create_index_query], capture_output=True, text=True)
 
-        drop_index_query = get_drop_index_query(extension, dataset, N)
-        with open(os.devnull, "w") as devnull:
-            subprocess.run(["psql", "-U", PG_USER, "-c", SUPPRESS_COMMAND,
-                           "-c", drop_index_query], stdout=devnull)
+        delete_index(extension, dataset, N)
 
         lines = result.stdout.splitlines()
         for line in lines:

@@ -15,7 +15,7 @@ class DatabaseConnection:
         self.autocommit = autocommit
 
     def __enter__(self):
-        self.conn = psycopg2.connect(_get_database_url(self.extension))
+        self.conn = psycopg2.connect(get_database_url(self.extension))
         self.conn.autocommit = self.autocommit
         self.cur = self.conn.cursor()
         return self
@@ -85,7 +85,7 @@ def run_pgbench(extension, query, clients=8, threads=8, transactions=15):
         tmp_file_path = tmp_file.name
 
     host, port, user, password, database = _extract_connection_params(
-        _get_database_url(extension))
+        get_database_url(extension))
     command = f'PGPASSWORD={password} pgbench -d {database} -U {user} -h {host} -p {port} -f {tmp_file_path} -c {clients} -j {threads} -t {transactions} -r'
     stdout, stderr = _run_command(command)
 
@@ -123,7 +123,7 @@ def _extract_connection_params(db_url):
     return host, port, user, password, database
 
 
-def _get_database_url(extension):
+def get_database_url(extension):
     """
     Get the appropriate database URL based on the extension.
     """
