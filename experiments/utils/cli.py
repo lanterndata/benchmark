@@ -1,12 +1,12 @@
 import argparse
-from .constants import EXTENSION_VALUES, VALID_DATASETS, VALID_DATASET_SIZES, VALID_EXTENSIONS, NO_INDEX_METRICS, VALID_INDEX_PARAMS, SUGGESTED_K_VALUES, Extension, Dataset
+from .constants import VALID_DATASETS, VALID_DATASET_SIZES, VALID_EXTENSIONS, VALID_INDEX_PARAMS, SUGGESTED_K_VALUES, Extension, Dataset
 
 
-def parse_args(description, args):
+def parse_args(description, args, allow_no_index=False):
     parser = argparse.ArgumentParser(description=description)
 
     if 'extension' in args:
-        if description in EXTENSION_VALUES and Extension(description) in NO_INDEX_METRICS:
+        if allow_no_index:
             valid_extensions = [e.value for e in Extension]
         else:
             valid_extensions = [e.value for e in VALID_EXTENSIONS]
@@ -50,7 +50,7 @@ def parse_args(description, args):
         K = parsed_args.K or SUGGESTED_K_VALUES
 
     index_params = None
-    if extension is not None:
+    if extension in VALID_INDEX_PARAMS:
         index_params = {
             param: getattr(parsed_args, param)
             for param in VALID_INDEX_PARAMS[extension] if getattr(parsed_args, param) is not None}

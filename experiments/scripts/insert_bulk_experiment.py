@@ -17,5 +17,5 @@ def plot_results(dataset):
 
 if __name__ == '__main__':
     extension, index_params, dataset, _, _ = parse_args(
-        "insert bulk experiment", ['extension'])
+        "insert bulk experiment", ['extension'], allow_no_index=True)
     generate_result(extension, dataset, index_params)

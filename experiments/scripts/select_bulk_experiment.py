@@ -14,5 +14,5 @@ def generate_plot(configuration, dataset, fixed_param, fixed_param_value, variab
 
 if __name__ == '__main__':
     extension, index_params, dataset, _, _ = parse_args(
-        "select bulk experiment", ['extension'])
+        "select bulk experiment", ['extension'], allow_no_index=True)
     generate_result(extension, dataset, index_params)

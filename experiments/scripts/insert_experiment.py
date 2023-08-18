@@ -172,5 +172,5 @@ def plot_results(dataset, bulk=False):
 
 if __name__ == '__main__':
     extension, index_params, dataset, _, _ = parse_args(
-        "insert experiment", ['extension'])
+        "insert experiment", ['extension'], allow_no_index=True)
     generate_result(extension, dataset, index_params)
