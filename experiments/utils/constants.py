@@ -13,6 +13,8 @@ class Extension(Enum):
     NONE = 'none'
 
 
+EXTENSION_VALUES = [extension.value for extension in Extension]
+
 EXTENSION_NAMES = {
     Extension.PGVECTOR: 'vector',
     Extension.LANTERN: 'lanterndb',
