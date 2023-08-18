@@ -32,8 +32,6 @@ def generate_result(extension, dataset, N, index_params={}):
     print(get_title(extension, index_params, dataset, N) +
           " | disk usage: " + disk_usage)
 
-
-def print_results(dataset):
     for extension in VALID_EXTENSIONS:
         results = get_experiment_results(Metric.DISK_USAGE, extension, dataset)
 

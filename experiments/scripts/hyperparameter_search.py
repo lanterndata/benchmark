@@ -10,19 +10,20 @@ HYPERPARAMETER_SEARCH_K = 5
 
 def get_extension_hyperparameters(extension, N):
     hyperparameters = []
-    if extension == Extension.PGVECTOR:
+    if extension == Extension.PGVECTOR_IVFFLAT:
         sqrt_N = int(math.sqrt(convert_string_to_number(N)))
         lists_options = list(
             map(lambda p: int(p * sqrt_N), [0.6, 0.8, 1.0, 1.2, 1.4]))
         probes_options = [1, 2, 4, 8, 16, 32]
         hyperparameters = [{'lists': l, 'probes': p}
                            for l in lists_options for p in probes_options]
-    if extension == Extension.LANTERN or extension == Extension.NEON:
-        m_options = [2, 4, 6, 8, 12, 16, 24, 32, 48, 64]
-        ef_construction_options = [16]  # [16, 32, 64, 128, 256]
-        ef_options = [10]  # [10, 20, 40, 80, 160]
-        hyperparameters = [{'M': m, 'ef_construction': efc, 'ef': ef}
-                           for m in m_options for efc in ef_construction_options for ef in ef_options]
+    if extension in [Extension.LANTERN, Extension.NEON, Extension.PGVECTOR_HNSW]:
+        m_options = [4, 8, 16, 32, 64]
+        ef_construction_options = [32, 64, 128]
+        ef_options = [10, 20, 40]
+        hyperparameters = [{'m': m, 'ef_construction': efc, 'ef': ef}
+                           for m in m_options for efc in ef_construction_options for ef in ef_options
+                           if efc > 2 * m]
     if extension == Extension.NONE:
         return [{}]
     return hyperparameters
@@ -36,7 +37,7 @@ def run_hyperparameter_search(extension, dataset, N, bulk=False):
 
 
 def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxis=Metric.SELECT_LATENCY):
-    colors = ['blue', 'red', 'green', 'purple']
+    colors = ['blue', 'orange', 'green', 'purple', 'red']
 
     fig = go.Figure()
 
@@ -52,13 +53,13 @@ def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxi
                 extension = %s
                 AND dataset = %s
                 AND N = %s
-                AND K = {HYPERPARAMETER_SEARCH_K}
+                AND K = %s
                 AND metric_type = ANY(%s)
             GROUP BY
                 index_params
         """
         data = (xaxis.value, yaxis.value, extension.value, dataset.value,
-                convert_string_to_number(N), [xaxis.value, yaxis.value])
+                convert_string_to_number(N), HYPERPARAMETER_SEARCH_K, [xaxis.value, yaxis.value])
         with DatabaseConnection() as conn:
             results = conn.select(sql, data=data)
 
