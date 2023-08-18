@@ -6,7 +6,7 @@ from utils.cli import parse_args
 from utils.names import get_index_name
 from utils.constants import VALID_EXTENSIONS, Metric
 from utils.process import save_result, get_experiment_results
-from utils.numbers import convert_string_to_number, convert_bytes_to_number, convert_number_to_string
+from utils.numbers import convert_string_to_number, convert_bytes_to_number, convert_number_to_string, convert_number_to_bytes
 from utils.print import print_labels, print_row, get_title
 from utils.plot import plot_line
 
@@ -32,6 +32,8 @@ def generate_result(extension, dataset, N, index_params={}):
     print(get_title(extension, index_params, dataset, N) +
           " | disk usage: " + disk_usage)
 
+
+def print_results(dataset):
     for extension in VALID_EXTENSIONS:
         results = get_experiment_results(Metric.DISK_USAGE, extension, dataset)
 
@@ -43,7 +45,8 @@ def generate_result(extension, dataset, N, index_params={}):
             print(get_title(extension, index_params, dataset))
             print_labels('N', 'Disk Usage (MB)')
             for N, disk_usage in param_results:
-                print_row(convert_number_to_string(N), disk_usage)
+                print_row(convert_number_to_string(N),
+                          convert_number_to_bytes(disk_usage))
             print('\n\n')
 
 

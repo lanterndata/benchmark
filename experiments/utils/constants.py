@@ -32,10 +32,11 @@ VALID_EXTENSIONS = [
 ]
 
 DEFAULT_INDEX_PARAMS = {
-    Extension.PGVECTOR_IVFFLAT: {'lists': 100, 'probes': 1},
-    Extension.PGVECTOR_HNSW: {'m': 2, 'ef_construction': 10, 'ef': 4},
-    Extension.LANTERN: {'m': 2, 'ef_construction': 10, 'ef': 4},
-    Extension.NEON: {'m': 2, 'efconstruction': 10, 'ef': 4},
+    Extension.PGVECTOR_IVFFLAT: {'lists': 100, 'probes': 16},
+    Extension.PGVECTOR_HNSW: {'m': 4, 'ef_construction': 128, 'ef': 10},
+    Extension.LANTERN: {'m': 4, 'ef_construction': 128, 'ef': 10},
+    Extension.NEON: {'m': 4, 'ef_construction': 128, 'ef': 10},
+    Extension.NONE: {},
 }
 
 VALID_INDEX_PARAMS = {
@@ -124,8 +125,8 @@ DATASET_DIMENSIONS = {
 VALID_DATASETS = [dataset.value for dataset in Dataset]
 
 VALID_DATASET_SIZES = {
-    Dataset.SIFT: ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
-    Dataset.GIST: ['100k', '200k', '400k', '600k', '800k', '1m'],
+    Dataset.SIFT: ['10k', '100k'],
+    Dataset.GIST: [],
 }
 
 VALID_DATASET_QUERY_SIZES = {
