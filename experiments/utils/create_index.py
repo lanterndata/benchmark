@@ -5,7 +5,7 @@ from .database import DatabaseConnection
 
 
 def get_index_params(extension, index_params):
-    return {**DEFAULT_INDEX_PARAMS[extension], **index_params}
+    return DEFAULT_INDEX_PARAMS[extension] | index_params
 
 
 def get_create_pgvector_ivfflat_index_query(table, index, index_params):
