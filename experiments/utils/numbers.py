@@ -37,3 +37,12 @@ def convert_bytes_to_number(bytes):
         return float(bytes.replace(' MB', '')) * 1000 * 1000
     else:
         return None
+
+
+def convert_number_to_bytes(num):
+    if num % 10**6 == 0:
+        return str(int(num // 10**6)) + ' MB'
+    elif num % 10**3 == 0:
+        return str(int(num // 10**3)) + ' kB'
+    else:
+        return str(int(num)) + ' B'

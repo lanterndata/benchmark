@@ -49,7 +49,7 @@ def get_create_table_query(extension, table_name):
             );
         """
     vector_size = get_vector_dim(table_name)
-    if extension == Extension.PGVECTOR:
+    if extension in [Extension.PGVECTOR_IVFFLAT, Extension.PGVECTOR_HNSW]:
         return f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
@@ -77,14 +77,14 @@ def insert_table(extension, dest_table, source_csv):
     """Inserts data from a CSV file into the specified table."""
     if 'truth' in dest_table:
         sql = f"COPY {dest_table} (indices) FROM '{source_csv}' WITH csv"
-    elif extension == Extension.PGVECTOR:
+    elif extension == Extension.PGVECTOR_IVFFLAT or extension == Extension.PGVECTOR_HNSW:
         sql = f"COPY {dest_table} (r) FROM '{source_csv}' WITH csv"
     else:
         sql = f"COPY {dest_table} (v) FROM '{source_csv}' WITH csv"
     with DatabaseConnection(extension) as conn:
         with open(source_csv, 'r') as f:
             conn.copy_expert(sql, f)
-        if not 'truth' in dest_table and extension == Extension.PGVECTOR:
+        if not 'truth' in dest_table and extension in [Extension.PGVECTOR_IVFFLAT, Extension.PGVECTOR_HNSW]:
             sql = f"UPDATE {dest_table} SET v = r; ALTER TABLE {dest_table} DROP COLUMN r;"
             conn.execute(sql)
 

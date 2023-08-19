@@ -122,7 +122,8 @@ def get_database_url(extension):
     if extension is None:
         key = "DATABASE_URL"
     elif isinstance(extension, Extension):
-        key = extension.value.upper() + "_DATABASE_URL"
+        prefix = extension.value.split('_')[0].upper()
+        key = prefix + "_DATABASE_URL"
     else:
         raise ValueError("Unknown extension: " + extension.value)
 

@@ -7,7 +7,8 @@ Extension constants
 
 
 class Extension(Enum):
-    PGVECTOR = 'pgvector'
+    PGVECTOR_IVFFLAT = 'pgvector_ivfflat'
+    PGVECTOR_HNSW = 'pgvector_hnsw'
     LANTERN = 'lantern'
     NEON = 'neon'
     NONE = 'none'
@@ -16,22 +17,26 @@ class Extension(Enum):
 EXTENSION_VALUES = [extension.value for extension in Extension]
 
 EXTENSION_NAMES = {
-    Extension.PGVECTOR: 'vector',
+    Extension.PGVECTOR_IVFFLAT: 'vector',
+    Extension.PGVECTOR_HNSW: 'vector',
     Extension.LANTERN: 'lanterndb',
     Extension.NEON: 'embedding',
     Extension.NONE: 'lanterndb',
 }
 
 VALID_EXTENSIONS = [
-    Extension.PGVECTOR,
+    Extension.PGVECTOR_IVFFLAT,
+    Extension.PGVECTOR_HNSW,
     Extension.LANTERN,
     Extension.NEON,
 ]
 
 DEFAULT_INDEX_PARAMS = {
-    Extension.PGVECTOR: {'lists': 100, 'probes': 1},
-    Extension.LANTERN: {'M': 2, 'ef_construction': 10, 'ef': 4},
-    Extension.NEON: {'m': 2, 'efconstruction': 10, 'efsearch': 4},
+    Extension.PGVECTOR_IVFFLAT: {'lists': 100, 'probes': 16},
+    Extension.PGVECTOR_HNSW: {'m': 4, 'ef_construction': 128, 'ef': 10},
+    Extension.LANTERN: {'m': 4, 'ef_construction': 128, 'ef': 10},
+    Extension.NEON: {'m': 4, 'ef_construction': 128, 'ef': 10},
+    Extension.NONE: {},
 }
 
 VALID_INDEX_PARAMS = {
