@@ -10,6 +10,7 @@ from utils.names import get_table_name
 from utils.numbers import convert_string_to_number
 from utils.print import get_title, print_labels, print_row
 from utils.plot import plot_line, plot_line_with_stddev
+import time
 
 
 def get_latency_metric(bulk):
@@ -109,33 +110,34 @@ def generate_recall_result(extension, dataset, N, K):
         query_ids = conn.select(query_ids_sql)
 
         recall_at_k_sum = 0
-        for query_id, in query_ids:
-            truth_ids = conn.select_one(f"""
-                SELECT
-                    indices[1:{K}]
-                FROM
-                    {truth_table_name}
-                WHERE
-                    id = {query_id}
-            """)[0]
-            base_ids = conn.select(f"""
-                SELECT
-                    id - 1
-                FROM
-                    {base_table_name}
-                ORDER BY
-                    v <-> (
-                        SELECT
-                            v
-                        FROM
-                            {query_table_name}
-                        WHERE
-                            id = {query_id} 
-                    )
+        sql = f"""
+            WITH query_samples AS (
+                SELECT id, v
+                FROM {query_table_name}
+                LIMIT 100
+            )
+            SELECT
+                array_agg(base.id - 1) as base_ids,
+                truth.indices[1:{K}] as truth_ids
+            FROM
+                query_samples
+            JOIN LATERAL (
+                SELECT id
+                FROM {base_table_name}
+                ORDER BY {base_table_name}.v <-> query_samples.v
                 LIMIT {K}
-            """)
-            base_ids = list(map(lambda x: x[0], base_ids))
-            recall_at_k_sum += len(set(truth_ids).intersection(base_ids))
+            ) base ON TRUE
+            LEFT JOIN
+                {truth_table_name} truth
+            ON
+                truth.id = query_samples.id
+            GROUP BY
+                query_samples.id,
+                truth.indices
+        """
+        results = conn.select(sql)
+        for base_ids, truth_ids in results:
+            recall_at_k_sum += len(set(base_ids).intersection(truth_ids))
 
     # Calculate the average recall for this K
     recall_at_k = recall_at_k_sum / len(query_ids) / K
