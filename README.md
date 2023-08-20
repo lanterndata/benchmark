@@ -11,7 +11,7 @@ sudo apt install build-essential
 sudo make build
 sudo make up &
 cd experiments
-python3 -m scripts.setup_tables
+python3 -m scripts.setup
 ```
 
 # Overview

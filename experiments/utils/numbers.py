@@ -30,19 +30,10 @@ def convert_number_to_string(num):
         return str(int(num))
 
 
-def convert_bytes_to_number(bytes):
-    if 'kB' in bytes:
-        return float(bytes.replace(' kB', '')) * 1000
-    elif 'MB' in bytes:
-        return float(bytes.replace(' MB', '')) * 1000 * 1000
-    else:
-        return None
-
-
 def convert_number_to_bytes(num):
-    if num % 10**6 == 0:
-        return str(int(num // 10**6)) + ' MB'
-    elif num % 10**3 == 0:
-        return str(int(num // 10**3)) + ' kB'
+    if num > 2**20:
+        f"{(num // 2**20):.2f} MiB"
+    elif num > 2**10:
+        f"{(num // 2**10):.2f} MiB"
     else:
         return str(int(num)) + ' B'
