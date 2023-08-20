@@ -1,4 +1,6 @@
+import re
 import json
+import statistics
 import plotly.graph_objects as go
 from utils.delete_index import delete_index
 from utils.create_index import create_index
@@ -24,7 +26,7 @@ def get_tps_metric(bulk):
     return Metric.SELECT_BULK_TPS if bulk else Metric.SELECT_TPS
 
 
-def get_performance_query(dataset, N, K, bulk):
+def get_performance_query(dataset, N, K, bulk, id=None):
     base_table_name = get_table_name(dataset, N, type='base')
     query_table_name = get_table_name(dataset, N, type='query')
     N_number = convert_string_to_number(N)
@@ -58,8 +60,10 @@ def get_performance_query(dataset, N, K, bulk):
                 q.id
         """
     else:
+        set_id_sql = f"\set id random(1, {N_number})" if id is None else ""
+        query_id_sql = ":id" if id is None else id
         query = f"""
-            \set id random(1, {N_number})
+            {set_id_sql}
 
             SELECT *
             FROM
@@ -69,7 +73,7 @@ def get_performance_query(dataset, N, K, bulk):
                 FROM
                     {query_table_name}
                 WHERE
-                    id = :id
+                    id = {query_id_sql}
             )
             LIMIT {K};
         """
@@ -107,6 +111,62 @@ def generate_performance_result(extension, dataset, N, K, bulk):
     return tps_response, latency_average_response, latency_stddev_response
 
 
+def generate_utilization_result_one(extension, dataset, N, K, bulk, id):
+    query = f"""
+        EXPLAIN (ANALYZE, BUFFERS TRUE)
+        {get_performance_query(dataset, N, K, bulk, id)}
+    """
+    with DatabaseConnection(extension) as conn:
+        response = conn.select(query)
+
+    start_search = False
+    for line, in response:
+        if start_search and 'Buffers' in line:
+            shared_hit_match = re.search(r'shared hit=(\d+)', line)
+            read_match = re.search(r'read=(\d+)', line)
+
+            shared_hit_value, read_value = 0, 0
+
+            if shared_hit_match:
+                shared_hit_value = int(shared_hit_match.group(1))
+            if read_match:
+                read_value = int(read_match.group(1))
+            return shared_hit_value, read_value
+        if ' <-> ' in line:
+            start_search = True
+
+
+def generate_utilization_result(extension, dataset, N, K, bulk):
+    shared_hit_values, read_values = [], []
+    for id in range(1, 10):
+        shared_hit_value, read_value = generate_utilization_result_one(
+            extension, dataset, N, K, bulk, id)
+        shared_hit_values.append(shared_hit_value)
+        read_values.append(read_value)
+
+    shared_hit_response = {
+        'metric_type': Metric.BUFFER_SHARED_HIT_COUNT,
+        'metric_value': statistics.mean(shared_hit_values),
+    }
+
+    shared_hit_stddev_response = {
+        'metric_type': Metric.BUFFER_SHARED_HIT_COUNT_STDDEV,
+        'metric_value': statistics.stdev(shared_hit_values),
+    }
+
+    read_response = {
+        'metric_type': Metric.BUFFER_READ_COUNT,
+        'metric_value': statistics.mean(read_values),
+    }
+
+    read_stddev_response = {
+        'metric_type': Metric.BUFFER_READ_COUNT_STDDEV,
+        'metric_value': statistics.stdev(read_values),
+    }
+
+    return shared_hit_response, shared_hit_stddev_response, read_response, read_stddev_response
+
+
 def generate_recall_result(extension, dataset, N, K):
     base_table_name = get_table_name(dataset, N, type='base')
     truth_table_name = get_table_name(dataset, N, type='truth')
@@ -128,7 +188,7 @@ def generate_recall_result(extension, dataset, N, K):
                     100
             )
             SELECT
-                array_agg(b.id - 1) as base_ids,
+                array_agg(b.id) as base_ids,
                 t.indices[1:{K}] as truth_ids
             FROM q
             JOIN LATERAL (
@@ -144,14 +204,19 @@ def generate_recall_result(extension, dataset, N, K):
             LEFT JOIN
                 {truth_table_name} AS t
             ON
-                truth.id = q.id
+                t.id = q.id
             GROUP BY
                 q.id,
-                truth.indices
+                t.indices
         """
         results = conn.select(sql)
         for base_ids, truth_ids in results:
-            recall_at_k_sum += len(set(base_ids).intersection(truth_ids))
+            truth_id_set = set(truth_ids)
+            # TODO: Fix dataset off by 1 error
+            recall_at_k_result = max(
+                len(truth_id_set.intersection(base_ids)),
+                len(truth_id_set.intersection(map(lambda id: id - 1, base_ids))))
+            recall_at_k_sum += recall_at_k_result
 
     # Calculate the average recall for this K
     recall_at_k = recall_at_k_sum / len(query_ids) / K
@@ -168,24 +233,32 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
 
     print(get_title(extension, index_params, dataset, N))
     print_labels('K', 'Recall', 'TPS', 'Avg Latency (ms)',
-                 'Stddev Latency (ms)')
+                 'Stddev Latency (ms)', 'Buffer Shared Hit', 'Buffer Read')
 
     for K in K_values:
-        save_result_params = {
-            'extension': extension,
-            'index_params': index_params,
-            'dataset': dataset,
-            'n': convert_string_to_number(N),
-            'k': K,
-        }
+        def save_select_result(response):
+            save_result(
+                **response,
+                extension=extension,
+                index_params=index_params,
+                dataset=dataset,
+                n=convert_string_to_number(N),
+                k=K,
+            )
 
         tps_response, latency_average_response, latency_stddev_response = generate_performance_result(
             extension, dataset, N, K, bulk)
         recall_response = generate_recall_result(extension, dataset, N, K)
-        save_result(**tps_response, **save_result_params)
-        save_result(**latency_average_response, **save_result_params)
-        save_result(**latency_stddev_response, **save_result_params)
-        save_result(**recall_response, **save_result_params)
+        shared_hit_response, shared_hit_stddev_response, read_response, read_stddev_response = generate_utilization_result(
+            extension, dataset, N, K, bulk)
+        save_select_result(tps_response)
+        save_select_result(latency_average_response)
+        save_select_result(latency_stddev_response)
+        save_select_result(recall_response)
+        save_select_result(shared_hit_response)
+        save_select_result(shared_hit_stddev_response)
+        save_select_result(read_response)
+        save_select_result(read_stddev_response)
 
         print_row(
             str(K),
@@ -193,6 +266,8 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
             "{:.2f}".format(tps_response['metric_value']),
             "{:.2f}".format(latency_average_response['metric_value']),
             "{:.2f}".format(latency_stddev_response['metric_value']),
+            "{:.2f}".format(shared_hit_response['metric_value']),
+            "{:.2f}".format(read_response['metric_value']),
         )
     print()
 

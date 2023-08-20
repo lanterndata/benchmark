@@ -49,6 +49,7 @@ Metric constants
 
 
 class Metric(Enum):
+    # Select
     SELECT_LATENCY = 'select (latency ms)'
     SELECT_LATENCY_STDDEV = 'select (latency stddev ms)'
 
@@ -61,6 +62,14 @@ class Metric(Enum):
 
     RECALL = 'recall'
 
+    BUFFER_SHARED_HIT_COUNT = 'buffer shared hits'
+    BUFFER_SHARED_HIT_COUNT_STDDEV = 'buffer shared hits (stddev)'
+
+    BUFFER_READ_COUNT = 'buffer disk reads'
+    BUFFER_READ_COUNT_STDDEV = 'buffer disk reads (stddev)'
+
+    # Insert
+
     INSERT_LATENCY = 'insert (latency ms)'
     INSERT_LATENCY_STDDEV = 'insert (latency stddev ms)'
 
@@ -70,6 +79,8 @@ class Metric(Enum):
     INSERT_TPS = 'insert (tps)'
 
     INSERT_BULK_TPS = 'insert bulk (tps)'
+
+    # Create
 
     DISK_USAGE = 'disk usage (bytes)'
     DISK_USAGE_STDDEV = 'disk usage (stddev bytes)'
@@ -105,6 +116,8 @@ EXPERIMENT_PARAMETERS = {
     Metric.INSERT_BULK_LATENCY: [],
     Metric.DISK_USAGE: [ExperimentParam.N],
     Metric.CREATE_LATENCY: [ExperimentParam.N],
+    Metric.BUFFER_READ_COUNT: [ExperimentParam.N, ExperimentParam.K],
+    Metric.BUFFER_SHARED_HIT_COUNT: [ExperimentParam.N, ExperimentParam.K],
 }
 
 SUGGESTED_K_VALUES = [1, 3, 5, 10, 20, 40, 80]
