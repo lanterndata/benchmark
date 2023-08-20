@@ -7,7 +7,7 @@ from utils.process import save_result, get_experiment_results
 from utils.database import DatabaseConnection, run_pgbench
 from utils.print import print_labels, print_row, get_title
 from utils.plot import plot_line_with_stddev, plot_line
-from .setup_tables import create_table
+from .setup import create_table
 
 
 def get_dest_table_name(dataset):
@@ -106,19 +106,21 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
             extension, query, clients=1, transactions=transactions)
 
-        save_result_params = {
-            'extension': extension,
-            'index_params': index_params,
-            'dataset': dataset,
-            'n': N,
-            'out': stdout,
-            'err': stderr,
-        }
-        save_result(get_latency_metric(bulk),
-                    latency_average, **save_result_params)
-        save_result(get_latency_stddev_metric(bulk),
-                    latency_stddev, **save_result_params)
-        save_result(get_tps_metric(bulk), tps, **save_result_params)
+        def save_insert_result(metric_type, metric_value):
+            save_result(
+                metric_type,
+                metric_value,
+                extension=extension,
+                index_params=index_params,
+                dataset=dataset,
+                n=N,
+                out=stdout,
+                err=stderr,
+            )
+
+        save_insert_result(get_latency_metric(bulk), latency_average)
+        save_insert_result(get_latency_stddev_metric(bulk), latency_stddev)
+        save_insert_result(get_tps_metric(bulk), tps)
 
         print_insert_row(N, tps, latency_average, latency_stddev)
 

@@ -24,7 +24,7 @@ def get_tps_metric(bulk):
     return Metric.SELECT_BULK_TPS if bulk else Metric.SELECT_TPS
 
 
-def generate_performance_result(extension, dataset, N, K, bulk):
+def get_performance_query(dataset, N, K, bulk):
     base_table_name = get_table_name(dataset, N, type='base')
     query_table_name = get_table_name(dataset, N, type='query')
     N_number = convert_string_to_number(N)
@@ -62,14 +62,22 @@ def generate_performance_result(extension, dataset, N, K, bulk):
             \set id random(1, {N_number})
 
             SELECT *
-            FROM {base_table_name}
+            FROM
+                {base_table_name}
             ORDER BY v <-> (
                 SELECT v
-                FROM {query_table_name}
-                WHERE id = :id
+                FROM
+                    {query_table_name}
+                WHERE
+                    id = :id
             )
             LIMIT {K};
         """
+    return query
+
+
+def generate_performance_result(extension, dataset, N, K, bulk):
+    query = get_performance_query(dataset, N, K, bulk)
     stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
         extension, query)
 
@@ -156,7 +164,7 @@ def generate_recall_result(extension, dataset, N, K):
 
 def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False):
     delete_index(extension, dataset, N)
-    index_name = create_index(extension, dataset, N, index_params=index_params)
+    create_index(extension, dataset, N, index_params=index_params)
 
     print(get_title(extension, index_params, dataset, N))
     print_labels('K', 'Recall', 'TPS', 'Avg Latency (ms)',
