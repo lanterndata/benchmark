@@ -179,14 +179,15 @@ if __name__ == "__main__":
 
     # Creates the databases if they don't exist
     for extension in Extension:
+        extension_name = extension.value.split('_')[0]
         with DatabaseConnection(autocommit=True) as conn:
             exists = conn.select_one(
-                "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (extension.value,))
+                "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (extension_name,))
             if exists is None:
-                conn.execute(f"CREATE DATABASE {extension.value};")
-                print(f"Created database {extension.value}.")
+                conn.execute(f"CREATE DATABASE {extension_name};")
+                print(f"Created database {extension_name}.")
             else:
-                print(f"Database {extension.value} already exists. Skipping.")
+                print(f"Database {extension_name} already exists. Skipping.")
 
     # Enables the extensions if they are not already enabled
     for extension, name in EXTENSION_NAMES.items():
