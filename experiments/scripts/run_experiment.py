@@ -4,7 +4,6 @@ from utils.constants import ExperimentParam, Metric, Extension, NO_INDEX_METRICS
 from utils.numbers import convert_number_to_string
 from . import select_experiment
 from . import select_bulk_experiment
-from . import disk_usage_experiment
 from . import create_experiment
 from . import insert_experiment
 from . import insert_bulk_experiment

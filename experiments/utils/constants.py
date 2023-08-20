@@ -72,6 +72,7 @@ class Metric(Enum):
     INSERT_BULK_TPS = 'insert bulk (tps)'
 
     DISK_USAGE = 'disk usage (bytes)'
+    DISK_USAGE_STDDEV = 'disk usage (stddev bytes)'
 
     CREATE_LATENCY = 'create (latency ms)'
     CREATE_LATENCY_STDDEV = 'create (latency stddev ms)'
