@@ -10,7 +10,6 @@ from utils.names import get_table_name
 from utils.numbers import convert_string_to_number
 from utils.print import get_title, print_labels, print_row
 from utils.plot import plot_line, plot_line_with_stddev
-import time
 
 
 def get_latency_metric(bulk):
@@ -111,28 +110,35 @@ def generate_recall_result(extension, dataset, N, K):
 
         recall_at_k_sum = 0
         sql = f"""
-            WITH query_samples AS (
-                SELECT id, v
-                FROM {query_table_name}
-                LIMIT 100
+            WITH q AS (
+                SELECT
+                    id,
+                    v
+                FROM
+                    {query_table_name}
+                LIMIT
+                    100
             )
             SELECT
-                array_agg(base.id - 1) as base_ids,
-                truth.indices[1:{K}] as truth_ids
-            FROM
-                query_samples
+                array_agg(b.id - 1) as base_ids,
+                t.indices[1:{K}] as truth_ids
+            FROM q
             JOIN LATERAL (
-                SELECT id
-                FROM {base_table_name}
-                ORDER BY {base_table_name}.v <-> query_samples.v
-                LIMIT {K}
-            ) base ON TRUE
+                SELECT
+                    id
+                FROM
+                    {base_table_name}
+                ORDER BY
+                    {base_table_name}.v <-> q.v
+                LIMIT
+                    {K}
+            ) b ON TRUE
             LEFT JOIN
-                {truth_table_name} truth
+                {truth_table_name} AS t
             ON
-                truth.id = query_samples.id
+                truth.id = q.id
             GROUP BY
-                query_samples.id,
+                q.id,
                 truth.indices
         """
         results = conn.select(sql)
@@ -150,7 +156,7 @@ def generate_recall_result(extension, dataset, N, K):
 
 def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False):
     delete_index(extension, dataset, N)
-    create_index(extension, dataset, N, index_params=index_params)
+    index_name = create_index(extension, dataset, N, index_params=index_params)
 
     print(get_title(extension, index_params, dataset, N))
     print_labels('K', 'Recall', 'TPS', 'Avg Latency (ms)',
