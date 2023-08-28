@@ -1,6 +1,6 @@
 from .cli import parse_args
 from .names import get_index_name
-from .database import DatabaseConnection
+from ..database import DatabaseConnection
 
 
 def get_drop_index_query(dataset, N):

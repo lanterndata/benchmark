@@ -1,10 +1,10 @@
 import plotly.graph_objects as go
-from utils.create_index import create_custom_index
+from core.create_index import create_custom_index
 from utils.constants import Extension, Metric
 from utils.cli import parse_args
 from utils.names import get_table_name
 from utils.process import save_result, get_experiment_results
-from utils.database import DatabaseConnection, run_pgbench
+from core.database import DatabaseConnection, run_pgbench
 from utils.print import print_labels, print_row, get_title
 from utils.plot import plot_line_with_stddev, plot_line
 from .setup import create_table

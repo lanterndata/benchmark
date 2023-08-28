@@ -1,7 +1,7 @@
 import os
 import argparse
 import urllib.request
-from utils.database import DatabaseConnection
+from core.database import DatabaseConnection
 from utils.constants import Extension, EXTENSION_NAMES, get_vector_dim
 
 

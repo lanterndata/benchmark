@@ -1,6 +1,6 @@
-from .cli import parse_args
-from .names import get_table_name, get_index_name
-from .constants import DEFAULT_INDEX_PARAMS, get_vector_dim, Extension
+from .utils.cli import parse_args
+from .utils.names import get_table_name, get_index_name
+from .utils.constants import DEFAULT_INDEX_PARAMS, get_vector_dim, Extension
 from .database import DatabaseConnection
 
 
