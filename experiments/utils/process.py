@@ -1,5 +1,3 @@
-import os
-import csv
 import json
 from .numbers import convert_string_to_number
 from .database import DatabaseConnection
@@ -104,30 +102,6 @@ TABLE_COLUMNS = [
     'extension', 'index_params', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
 
 
-def dump_results_to_csv():
-    sql = f"""
-        SELECT
-            {', '.join(TABLE_COLUMNS[:-2])}
-        FROM
-            experiment_results
-        ORDER BY
-            metric_type,
-            extension,
-            dataset
-    """
-    with DatabaseConnection() as conn:
-        rows = conn.select(sql)
-
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-    output_file = os.path.join(script_directory, "../outputs/results.csv")
-
-    with open(output_file, 'w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile)
-        csv_writer.writerow(TABLE_COLUMNS[:-2])
-        for row in rows:
-            csv_writer.writerow(row)
-
-
 def save_result(metric_type, metric_value, extension, index_params, dataset, n, k=0, out=None, err=None):
     columns = ', '.join(TABLE_COLUMNS)
     placeholders = ', '.join(['%s'] * len(TABLE_COLUMNS))
@@ -150,5 +124,3 @@ def save_result(metric_type, metric_value, extension, index_params, dataset, n, 
 
     with DatabaseConnection() as conn:
         conn.execute(sql, data=data)
-
-    dump_results_to_csv()
