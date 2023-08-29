@@ -169,36 +169,32 @@ def create_or_download_table(datapath, extension, table_name):
             f"Table {table_name} already exists for extension {extension.value}. Skipping.")
 
 
-if __name__ == "__main__":
+def setup_extension(datapath: str, extension: Extension):
+    # Create the database if it doesn't exist
+    extension_name = extension.value.split('_')[0]
+    with DatabaseConnection(autocommit=True) as conn:
+        exists = conn.select_one(
+            "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (extension_name,))
+        if exists is None:
+            conn.execute(f"CREATE DATABASE {extension_name};")
+            print(f"Created database {extension_name}.")
+        else:
+            print(f"Database {extension_name} already exists. Skipping.")
 
-    # Set up an argument parser for command-line arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--datapath", default="/app/data",
-                        help="Path to data directory")
-    args = parser.parse_args()
+    # Enables the extension if it is not already enabled
+    extension_name = EXTENSION_NAMES[extension]    
+    with DatabaseConnection(extension) as conn:
+        conn.execute(f"CREATE EXTENSION IF NOT EXISTS {extension_name};")
+    print(f"Extension {extension_name} is enabled.")
 
-    # Creates the databases if they don't exist
+    # Ensure all tables are created and populated
+    for table_name in TABLES:
+        create_or_download_table(datapath, extension, table_name)
+
+def setup(datapath: str):
+    # Setup the database, tables, and extension
     for extension in Extension:
-        extension_name = extension.value.split('_')[0]
-        with DatabaseConnection(autocommit=True) as conn:
-            exists = conn.select_one(
-                "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (extension_name,))
-            if exists is None:
-                conn.execute(f"CREATE DATABASE {extension_name};")
-                print(f"Created database {extension_name}.")
-            else:
-                print(f"Database {extension_name} already exists. Skipping.")
-
-    # Enables the extensions if they are not already enabled
-    for extension, name in EXTENSION_NAMES.items():
-        with DatabaseConnection(extension) as conn:
-            conn.execute(f"CREATE EXTENSION IF NOT EXISTS {name};")
-        print(f"Extension {name} is enabled.")
-
-    # Loop through each extension and table to ensure they are created and populated
-    for extension in Extension:
-        for table_name in TABLES:
-            create_or_download_table(args.datapath, extension, table_name)
+        setup_extension(datapath, extension)
 
     # Connect to the database and create the experiment_results table if it doesn't exist
     with DatabaseConnection() as conn:
@@ -220,3 +216,12 @@ if __name__ == "__main__":
         conn.execute(sql)
 
     print("Done!")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--datapath", default="/app/data",
+                        help="Path to data directory")
+    args = parser.parse_args()
+
+    setup(args.datapath)
