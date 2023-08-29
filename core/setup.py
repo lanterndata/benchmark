@@ -132,7 +132,7 @@ def create_or_download_tables(datapath: str, extension: Extension, dataset_sizes
         create_or_download_table(datapath, extension, table_name)
 
 
-def setup_extension(datapath: str, extension: Extension):
+def setup_extension(datapath: str, extension: Extension, dataset_sizes: Dict[Dataset, List[str]] = SUGGESTED_DATASET_SIZES):
     # Create the database if it doesn't exist
     extension_name = extension.value.split('_')[0]
     with DatabaseConnection(autocommit=True) as conn:
@@ -151,14 +151,7 @@ def setup_extension(datapath: str, extension: Extension):
     print(f"Extension {extension_name} is enabled.")
 
     # Ensure all tables are created and populated
-    create_or_download_tables(datapath, extension)
-
-
-# Setup the database, tables, and extension
-def setup_extensions(datapath: str, dataset_sizes: Dict[Dataset, List[str]] = SUGGESTED_DATASET_SIZES):
-    for extension in Extension:
-        setup_extension(datapath, extension, dataset_sizes)
-    print("Done!")
+    create_or_download_tables(datapath, extension, dataset_sizes)
 
 
 # Create the experiment_results table if it doesn't exist
@@ -190,4 +183,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     setup_results_table()
-    setup_extensions(args.datapath)
+    for extension in Extension:
+        setup_extension(args.datapath, extension)
+    print('Done!')

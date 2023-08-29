@@ -143,11 +143,11 @@ def print_results(dataset, bulk=False):
 
 
 def plot_results(dataset, bulk=False):
-    metric_types = [
-        get_tps_metric(bulk),
-        (get_latency_metric(bulk), get_latency_stddev_metric(bulk))
+    metric_tuples = [
+        ('transactions per second', get_tps_metric(bulk)),
+        ('latency (ms)', (get_latency_metric(bulk), get_latency_stddev_metric(bulk)))
     ]
-    for metric_type in metric_types:
+    for yaxis_title, metric_type in metric_tuples:
         fig = go.Figure()
         for extension in Extension:
             results = get_experiment_results(metric_type, extension, dataset)
@@ -166,8 +166,8 @@ def plot_results(dataset, bulk=False):
             plot_title = f"{dataset.value} - {metric_type.value}"
         fig.update_layout(
             title=plot_title,
-            xaxis_title=f"latency of inserting 8000 rows",
-            yaxis_title='latency (s)',
+            xaxis_title=f"number of rows inserted",
+            yaxis_title=yaxis_title,
         )
         fig.show()
 
