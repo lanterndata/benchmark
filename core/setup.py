@@ -2,7 +2,8 @@ import os
 import argparse
 import urllib.request
 from .utils.database import DatabaseConnection
-from .utils.constants import Extension, EXTENSION_NAMES, get_vector_dim
+from .utils.constants import Extension, EXTENSION_NAMES, get_vector_dim, VALID_DATASET_SIZES, VALID_DATASET_QUERY_SIZES
+from .utils.names import get_table_name
 
 
 def table_exists(extension, table):
@@ -89,55 +90,6 @@ def insert_table(extension, dest_table, source_csv):
             conn.execute(sql)
 
 
-# List of tables and their corresponding vector sizes
-TABLES = [
-    "sift_base10k",
-    "sift_base100k",
-    "sift_base200k",
-    "sift_base400k",
-    "sift_base600k",
-    "sift_base800k",
-    "sift_base1m",
-    # "sift_base1b",
-
-    "sift_query10k",
-    "sift_query1m",
-    "sift_query1b",
-
-    "sift_truth10k",
-    "sift_truth100k",
-    "sift_truth200k",
-    "sift_truth400k",
-    "sift_truth600k",
-    "sift_truth800k",
-    "sift_truth1m",
-    "sift_truth2m",
-    "sift_truth5m",
-    "sift_truth10m",
-    "sift_truth20m",
-    "sift_truth50m",
-    "sift_truth100m",
-    "sift_truth200m",
-    "sift_truth500m",
-
-    "gist_base100k",
-    "gist_base200k",
-    "gist_base400k",
-    "gist_base600k",
-    "gist_base800k",
-    "gist_base1m",
-
-    "gist_query1m",
-
-    "gist_truth100k",
-    "gist_truth200k",
-    "gist_truth400k",
-    "gist_truth600k",
-    "gist_truth800k",
-    "gist_truth1m",
-]
-
-
 def create_or_download_table(datapath, extension, table_name):
     """
     Creates a table if it does not exist, and downloads and inserts data if the table 
@@ -146,8 +98,11 @@ def create_or_download_table(datapath, extension, table_name):
 
     create_table(extension, table_name)
 
-    if not has_rows(extension, table_name):
+    if has_rows(extension, table_name):
+        print(
+            f"Table {table_name} exists for extension {extension.value} and has data. Skipping.")
 
+    else:
         # Download data if it doesn't exist
         source_file = os.path.join(datapath, f"{table_name}.csv")
         if not os.path.exists(source_file):
@@ -164,9 +119,16 @@ def create_or_download_table(datapath, extension, table_name):
         print(
             f"Inserted data into table {table_name} for extension {extension.value}")
 
-    else:
-        print(
-            f"Table {table_name} already exists for extension {extension.value}. Skipping.")
+
+def create_or_download_tables(datapath: str, extension: Extension):
+    table_names = set()
+    for dataset, N_values in VALID_DATASET_SIZES.items():
+        for N in N_values:
+            table_names.add(get_table_name(dataset, N, type='base'))
+            table_names.add(get_table_name(dataset, N, type='truth'))
+            table_names.add(get_table_name(dataset, N, type='query'))
+    for table_name in table_names:
+        create_or_download_table(datapath, extension, table_name)
 
 
 def setup_extension(datapath: str, extension: Extension):
@@ -182,14 +144,14 @@ def setup_extension(datapath: str, extension: Extension):
             print(f"Database {extension_name} already exists. Skipping.")
 
     # Enables the extension if it is not already enabled
-    extension_name = EXTENSION_NAMES[extension]    
+    extension_name = EXTENSION_NAMES[extension]
     with DatabaseConnection(extension) as conn:
         conn.execute(f"CREATE EXTENSION IF NOT EXISTS {extension_name};")
     print(f"Extension {extension_name} is enabled.")
 
     # Ensure all tables are created and populated
-    for table_name in TABLES:
-        create_or_download_table(datapath, extension, table_name)
+    create_or_download_tables(datapath, extension)
+
 
 def setup(datapath: str):
     # Setup the database, tables, and extension

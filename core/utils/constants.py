@@ -151,7 +151,7 @@ DATASET_DIMENSIONS = {
 VALID_DATASETS = [dataset.value for dataset in Dataset]
 
 VALID_DATASET_SIZES = {
-    Dataset.SIFT: ['10k', '100k', '200k', '400k', '600k', '800k', '1m'],
+    Dataset.SIFT: ['10k', '100k', '200k', '400k', '600k', '800k', '1m', '2m', '5m', '10m', '20m', '50m', '100m', '200m', '500m', '1b'],
     Dataset.GIST: ['100k', '200k', '400k', '600k', '800k', '1m'],
 }
 
