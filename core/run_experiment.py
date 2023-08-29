@@ -1,7 +1,7 @@
 import json
-from core.database import DatabaseConnection
-from utils.constants import ExperimentParam, Metric, Extension, NO_INDEX_METRICS, EXPERIMENT_PARAMETERS, VALID_DATASET_SIZES, SUGGESTED_K_VALUES, Dataset
-from utils.numbers import convert_number_to_string
+from .utils.database import DatabaseConnection
+from .utils.constants import ExperimentParam, Metric, Extension, NO_INDEX_METRICS, EXPERIMENT_PARAMETERS, VALID_DATASET_SIZES, SUGGESTED_K_VALUES, Dataset
+from .utils.numbers import convert_number_to_string
 from . import select_experiment
 from . import select_bulk_experiment
 from . import create_experiment

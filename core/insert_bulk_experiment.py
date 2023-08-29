@@ -1,4 +1,4 @@
-from utils.cli import parse_args
+from .utils.cli import parse_args
 from . import insert_experiment
 
 

@@ -5,7 +5,7 @@ import subprocess
 import os
 import re
 from tempfile import NamedTemporaryFile
-from .utils.constants import Extension
+from .constants import Extension
 
 
 class DatabaseConnection:

@@ -1,6 +1,5 @@
-from .cli import parse_args
 from .names import get_index_name
-from ..database import DatabaseConnection
+from .database import DatabaseConnection
 
 
 def get_drop_index_query(dataset, N):
@@ -20,10 +19,3 @@ def delete_index(extension, dataset, N):
     sql = '\n'.join(commands)
     with DatabaseConnection(extension) as conn:
         conn.execute(sql)
-
-
-if __name__ == '__main__':
-    extension, _, dataset, N_values, _ = parse_args(
-        "delete index", args=['extension', 'N'])
-    for N in N_values:
-        delete_index(extension, dataset, N)

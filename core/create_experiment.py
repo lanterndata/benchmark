@@ -1,15 +1,15 @@
 import subprocess
 import statistics
 import plotly.graph_objects as go
-from core.database import DatabaseConnection, get_database_url
-from utils.delete_index import delete_index
-from core.create_index import get_create_index_query, get_index_name
-from utils.numbers import convert_string_to_number, convert_number_to_string, convert_number_to_bytes
-from utils.constants import Metric, VALID_EXTENSIONS
-from utils.cli import parse_args
-from utils.process import save_result, get_experiment_results
-from utils.print import print_labels, print_row, get_title
-from utils.plot import plot_line_with_stddev
+from .utils.database import DatabaseConnection, get_database_url
+from .utils.delete_index import delete_index
+from .utils.create_index import get_create_index_query, get_index_name
+from .utils.numbers import convert_string_to_number, convert_number_to_string, convert_number_to_bytes
+from .utils.constants import Metric, VALID_EXTENSIONS
+from .utils.cli import parse_args
+from .utils.process import save_result, get_experiment_results
+from .utils.print import print_labels, print_row, get_title
+from .utils.plot import plot_line_with_stddev
 
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
 

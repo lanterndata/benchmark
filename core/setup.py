@@ -1,8 +1,8 @@
 import os
 import argparse
 import urllib.request
-from core.database import DatabaseConnection
-from utils.constants import Extension, EXTENSION_NAMES, get_vector_dim
+from .utils.database import DatabaseConnection
+from .utils.constants import Extension, EXTENSION_NAMES, get_vector_dim
 
 
 def table_exists(extension, table):

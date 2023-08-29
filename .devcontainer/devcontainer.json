@@ -4,7 +4,7 @@
     "context": "..",
     "runArgs": [
         "--env-file",
-        ".env"
+        ".env",
     ],
     "mounts": [
         "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
@@ -21,5 +21,8 @@
                 "terminal.integrated.shell.linux": "/bin/bash"
             }
         }
+    },
+    "containerEnv": {
+        "PYTHONPATH": "/workspaces/benchmark"
     }
 }

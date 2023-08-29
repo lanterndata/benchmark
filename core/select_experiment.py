@@ -2,16 +2,16 @@ import re
 import json
 import statistics
 import plotly.graph_objects as go
-from utils.delete_index import delete_index
-from core.create_index import create_index
-from utils.constants import Metric
-from core.database import DatabaseConnection, run_pgbench
-from utils.process import save_result, get_experiment_results_for_params
-from utils.cli import parse_args
-from utils.names import get_table_name
-from utils.numbers import convert_string_to_number
-from utils.print import get_title, print_labels, print_row
-from utils.plot import plot_line, plot_line_with_stddev
+from .utils.delete_index import delete_index
+from .utils.create_index import create_index
+from .utils.constants import Metric
+from .utils.database import DatabaseConnection, run_pgbench
+from .utils.process import save_result, get_experiment_results_for_params
+from .utils.cli import parse_args
+from .utils.names import get_table_name
+from .utils.numbers import convert_string_to_number
+from .utils.print import get_title, print_labels, print_row
+from .utils.plot import plot_line, plot_line_with_stddev
 
 
 def get_latency_metric(bulk):

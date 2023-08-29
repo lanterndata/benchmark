@@ -1,6 +1,5 @@
-from .utils.cli import parse_args
-from .utils.names import get_table_name, get_index_name
-from .utils.constants import DEFAULT_INDEX_PARAMS, get_vector_dim, Extension
+from .names import get_table_name, get_index_name
+from .constants import DEFAULT_INDEX_PARAMS, get_vector_dim, Extension
 from .database import DatabaseConnection
 
 
@@ -100,10 +99,3 @@ def create_index(extension, dataset, N, index_params={}):
     if sql is not None:
         with DatabaseConnection(extension) as conn:
             conn.execute(sql)
-
-
-if __name__ == '__main__':
-    extension, index_params, dataset, N_values, _ = parse_args(
-        "create index", args=['extension', 'N'])
-    for N in N_values:
-        create_index(extension, dataset, N, index_params)

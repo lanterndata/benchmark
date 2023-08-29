@@ -1,6 +1,6 @@
 import json
 from .numbers import convert_string_to_number
-from ..database import DatabaseConnection
+from .database import DatabaseConnection
 
 
 def get_metric_sql_and_value(metric_type):
