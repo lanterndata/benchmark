@@ -77,19 +77,16 @@ def group_parameter_sets_with_k(parameter_sets):
 
 
 def get_generate_result(metric_type):
-    if metric_type == Metric.SELECT_LATENCY or metric_type == Metric.SELECT_TPS:
+    if metric_type in [Metric.SELECT_LATENCY, Metric.SELECT_TPS, Metric.BUFFER_READ_COUNT, Metric.BUFFER_SHARED_HIT_COUNT]:
         return select_experiment.generate_result
-    if metric_type == Metric.SELECT_BULK_LATENCY or metric_type == Metric.SELECT_BULK_TPS:
+    if metric_type in [Metric.SELECT_BULK_LATENCY, Metric.SELECT_BULK_TPS, Metric.BUFFER_BULK_READ_COUNT, Metric.BUFFER_BULK_SHARED_HIT_COUNT]:
         return select_bulk_experiment.generate_result
-    if metric_type == Metric.DISK_USAGE:
-        return disk_usage_experiment.generate_result
-    if metric_type == Metric.CREATE_LATENCY:
+    if metric_type in [Metric.CREATE_LATENCY, Metric.DISK_USAGE]:
         return create_experiment.generate_result
     if metric_type == Metric.INSERT_LATENCY or metric_type == Metric.INSERT_TPS:
         return insert_experiment.generate_result
     if metric_type == Metric.INSERT_BULK_LATENCY or metric_type == Metric.INSERT_BULK_TPS:
         return insert_bulk_experiment.generate_result
-
 
 def generate_extension_results(extension, index_params, metric_type, missing_only=False):
     assert isinstance(metric_type, Metric)

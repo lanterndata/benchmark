@@ -14,18 +14,6 @@ from .utils.print import get_title, print_labels, print_row
 from .utils.plot import plot_line, plot_line_with_stddev
 
 
-def get_latency_metric(bulk):
-    return Metric.SELECT_BULK_LATENCY if bulk else Metric.SELECT_LATENCY
-
-
-def get_latency_stddev_metric(bulk):
-    return Metric.SELECT_BULK_LATENCY_STDDEV if bulk else Metric.SELECT_LATENCY_STDDEV
-
-
-def get_tps_metric(bulk):
-    return Metric.SELECT_BULK_TPS if bulk else Metric.SELECT_TPS
-
-
 def get_performance_query(dataset, N, K, bulk, id=None):
     base_table_name = get_table_name(dataset, N, type='base')
     query_table_name = get_table_name(dataset, N, type='query')
@@ -93,19 +81,19 @@ def generate_performance_result(extension, dataset, N, K, bulk):
     tps_response = {
         **shared_response,
         'metric_value': tps,
-        'metric_type': get_tps_metric(bulk),
+        'metric_type': Metric.SELECT_BULK_TPS if bulk else Metric.SELECT_TPS,
     }
 
     latency_average_response = {
         **shared_response,
         'metric_value': latency_average,
-        'metric_type': get_latency_metric(bulk),
+        'metric_type': Metric.SELECT_BULK_LATENCY if bulk else Metric.SELECT_LATENCY,
     }
 
     latency_stddev_response = {
         **shared_response,
         'metric_value': latency_stddev,
-        'metric_type': get_latency_stddev_metric(bulk),
+        'metric_type': Metric.SELECT_BULK_LATENCY_STDDEV if bulk else Metric.SELECT_LATENCY_STDDEV,
     }
 
     return tps_response, latency_average_response, latency_stddev_response
@@ -145,22 +133,22 @@ def generate_utilization_result(extension, dataset, N, K, bulk):
         read_values.append(read_value)
 
     shared_hit_response = {
-        'metric_type': Metric.BUFFER_SHARED_HIT_COUNT,
+        'metric_type': Metric.BUFFER_BULK_SHARED_HIT_COUNT if bulk else Metric.BUFFER_SHARED_HIT_COUNT,
         'metric_value': statistics.mean(shared_hit_values),
     }
 
     shared_hit_stddev_response = {
-        'metric_type': Metric.BUFFER_SHARED_HIT_COUNT_STDDEV,
+        'metric_type': Metric.BUFFER_BULK_SHARED_HIT_COUNT_STDDEV if bulk else Metric.BUFFER_SHARED_HIT_COUNT_STDDEV,
         'metric_value': statistics.stdev(shared_hit_values),
     }
 
     read_response = {
-        'metric_type': Metric.BUFFER_READ_COUNT,
+        'metric_type': Metric.BUFFER_BULK_READ_COUNT if bulk else Metric.BUFFER_READ_COUNT,
         'metric_value': statistics.mean(read_values),
     }
 
     read_stddev_response = {
-        'metric_type': Metric.BUFFER_READ_COUNT_STDDEV,
+        'metric_type': Metric.BUFFER_BULK_READ_COUNT_STDDEV if bulk else Metric.BUFFER_READ_COUNT_STDDEV,
         'metric_value': statistics.stdev(read_values),
     }
 

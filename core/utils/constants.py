@@ -49,16 +49,13 @@ Metric constants
 
 
 class Metric(Enum):
+
     # Select
+
     SELECT_LATENCY = 'select (latency ms)'
     SELECT_LATENCY_STDDEV = 'select (latency stddev ms)'
 
-    SELECT_BULK_LATENCY = 'select bulk (latency ms)'
-    SELECT_BULK_LATENCY_STDDEV = 'select bulk (latency stddev ms)'
-
     SELECT_TPS = 'select (tps)'
-
-    SELECT_BULK_TPS = 'select bulk (tps)'
 
     RECALL = 'recall'
 
@@ -68,15 +65,30 @@ class Metric(Enum):
     BUFFER_READ_COUNT = 'buffer disk reads'
     BUFFER_READ_COUNT_STDDEV = 'buffer disk reads (stddev)'
 
+    # Select bulk
+
+    SELECT_BULK_LATENCY = 'select bulk (latency ms)'
+    SELECT_BULK_LATENCY_STDDEV = 'select bulk (latency stddev ms)'
+
+    SELECT_BULK_TPS = 'select bulk (tps)'
+
+    BUFFER_BULK_SHARED_HIT_COUNT = 'bulk buffer shared hits'
+    BUFFER_BULK_SHARED_HIT_COUNT_STDDEV = 'bulk buffer shared hits (stddev)'
+
+    BUFFER_BULK_READ_COUNT = 'bulk buffer disk reads'
+    BUFFER_BULK_READ_COUNT_STDDEV = 'bulk buffer disk reads (stddev)'
+
     # Insert
 
     INSERT_LATENCY = 'insert (latency ms)'
     INSERT_LATENCY_STDDEV = 'insert (latency stddev ms)'
 
+    INSERT_TPS = 'insert (tps)'
+
+    # Insert bulk
+
     INSERT_BULK_LATENCY = 'insert bulk (latency ms)'
     INSERT_BULK_LATENCY_STDDEV = 'insert bulk (latency stddev ms)'
-
-    INSERT_TPS = 'insert (tps)'
 
     INSERT_BULK_TPS = 'insert bulk (tps)'
 
