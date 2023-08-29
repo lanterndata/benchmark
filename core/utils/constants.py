@@ -160,6 +160,10 @@ VALID_DATASET_QUERY_SIZES = {
     Dataset.GIST: ['1m'],
 }
 
+SUGGESTED_DATASET_SIZES = {
+    Dataset.SIFT: ['10k', '100k', '200k', '400k', '600k', '800k', '1m']
+}
+
 
 def get_vector_dim(x):
     if isinstance(x, str):

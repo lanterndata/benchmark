@@ -1,8 +1,9 @@
 import os
 import argparse
 import urllib.request
+from typing import Dict, List
 from .utils.database import DatabaseConnection
-from .utils.constants import Extension, EXTENSION_NAMES, get_vector_dim, VALID_DATASET_SIZES, VALID_DATASET_QUERY_SIZES
+from .utils.constants import Extension, EXTENSION_NAMES, get_vector_dim, SUGGESTED_DATASET_SIZES, Dataset
 from .utils.names import get_table_name
 
 
@@ -120,9 +121,9 @@ def create_or_download_table(datapath, extension, table_name):
             f"Inserted data into table {table_name} for extension {extension.value}")
 
 
-def create_or_download_tables(datapath: str, extension: Extension):
+def create_or_download_tables(datapath: str, extension: Extension, dataset_sizes: Dict[Dataset, List[str]]):
     table_names = set()
-    for dataset, N_values in VALID_DATASET_SIZES.items():
+    for dataset, N_values in dataset_sizes.items():
         for N in N_values:
             table_names.add(get_table_name(dataset, N, type='base'))
             table_names.add(get_table_name(dataset, N, type='truth'))
@@ -153,12 +154,16 @@ def setup_extension(datapath: str, extension: Extension):
     create_or_download_tables(datapath, extension)
 
 
-def setup(datapath: str):
-    # Setup the database, tables, and extension
+# Setup the database, tables, and extension
+def setup_extensions(datapath: str, dataset_sizes: Dict[Dataset, List[str]] = SUGGESTED_DATASET_SIZES):
     for extension in Extension:
-        setup_extension(datapath, extension)
+        setup_extension(datapath, extension, dataset_sizes)
+    print("Done!")
 
-    # Connect to the database and create the experiment_results table if it doesn't exist
+
+# Create the experiment_results table if it doesn't exist
+# Useful for notebook experiments
+def setup_results_table():
     with DatabaseConnection() as conn:
         sql = """
             CREATE TABLE IF NOT EXISTS experiment_results (
@@ -177,8 +182,6 @@ def setup(datapath: str):
         """
         conn.execute(sql)
 
-    print("Done!")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -186,4 +189,5 @@ if __name__ == "__main__":
                         help="Path to data directory")
     args = parser.parse_args()
 
-    setup(args.datapath)
+    setup_results_table()
+    setup_extensions(args.datapath)
