@@ -21,7 +21,7 @@ EXTENSION_NAMES = {
     Extension.PGVECTOR_HNSW: 'vector',
     Extension.LANTERN: 'lanterndb',
     Extension.NEON: 'embedding',
-    Extension.NONE: 'lanterndb',
+    Extension.NONE: 'vector',
 }
 
 VALID_EXTENSIONS = [
@@ -30,6 +30,8 @@ VALID_EXTENSIONS = [
     Extension.LANTERN,
     Extension.NEON,
 ]
+
+EXTENSIONS_USING_VECTOR = [Extension.PGVECTOR_IVFFLAT, Extension.PGVECTOR_HNSW, Extension.NONE]
 
 DEFAULT_INDEX_PARAMS = {
     Extension.PGVECTOR_IVFFLAT: {'lists': 100, 'probes': 16},

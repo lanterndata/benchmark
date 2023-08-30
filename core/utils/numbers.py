@@ -32,8 +32,8 @@ def convert_number_to_string(num):
 
 def convert_number_to_bytes(num):
     if num > 2**20:
-        f"{(num // 2**20):.2f} MiB"
+        return f"{(num // 2**20):.2f} MiB"
     elif num > 2**10:
-        f"{(num // 2**10):.2f} MiB"
+        return f"{(num // 2**10):.2f} MiB"
     else:
         return str(int(num)) + ' B'
