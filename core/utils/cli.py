@@ -14,10 +14,12 @@ def parse_args(description, args, allow_no_index=False):
             '--extension',
             type=str, choices=valid_extensions, required=True, help='Extension type')
 
+        params = set()
         for index, valid_index_params in VALID_INDEX_PARAMS.items():
             for param in valid_index_params:
-                parser.add_argument(
-                    f"--{param}", type=int, help=f"parameter for {index}")
+                params.add(param)
+        for param in params:
+            parser.add_argument(f"--{param}", type=int, help=f"parameter for {index}")
 
     parser.add_argument(
         "--dataset",
