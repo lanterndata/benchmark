@@ -1,8 +1,8 @@
 import sys
 from typing import List, Tuple
 from core.utils.constants import Metric
-from .utils.get_benchmarks import get_benchmarks
-from .utils import cli
+from external.utils.get_benchmarks import get_benchmarks
+from external.utils import cli
 
 
 def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
@@ -10,9 +10,8 @@ def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
     errors = []
 
     for metric, old_value, new_value in benchmarks:
-        metric,        
         if metric == Metric.RECALL:
-            recall_difference = new_value - old_value
+            recall_difference = new_value - (old_value or 0)
             if recall_difference < -0.05:
                 errors.append(f"Recall decreased by {recall_difference:2f}")
             elif recall_difference < 0:
@@ -29,6 +28,8 @@ def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
 
 
 if __name__ == "__main__":
-    extension, index_params, dataset, N, K = cli.get_args("validate benchmark results for tests or CI/CD")
-    benchmarks = get_benchmarks(extension, index_params, dataset, N, K, return_old=True)
+    extension, index_params, dataset, N, K = cli.get_args(
+        "validate benchmark results for tests or CI/CD")
+    benchmarks = get_benchmarks(
+        extension, index_params, dataset, N, K, return_old=True)
     validate_benchmarks(benchmarks)
