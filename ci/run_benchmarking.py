@@ -6,7 +6,6 @@ from core.utils.constants import Extension, Metric, Dataset
 from core.utils.process import get_experiment_result
 from core.utils import cli
 
-
 def run_benchmarks(extension, index_params, dataset, N, K):
     benchmark_create.generate_result(extension, dataset, N, index_params)
     benchmark_insert.generate_result(extension, dataset, N, index_params)
@@ -44,7 +43,7 @@ def main(extension, index_params, dataset, N, K):
 
     # Recall
     new_recall = get_experiment_result(Metric.RECALL, extension, index_params, dataset, N, K)
-    old_recall = 2.0  # TODO
+    old_recall = 2.0 # TODO
     metrics_to_print.append((Metric.RECALL.value, old_recall, new_recall))
     recall_difference = new_recall - old_recall
     if recall_difference < -0.05:
@@ -60,8 +59,7 @@ def main(extension, index_params, dataset, N, K):
 
 if __name__ == "__main__":
     # Set up parser
-    parser = argparse.ArgumentParser(
-        description="run benchmarking for tests or CI/CD")
+    parser = argparse.ArgumentParser(description="run benchmarking for tests or CI/CD")
     cli.add_extension(parser)
     cli.add_index_params(parser)
     cli.add_dataset(parser)
