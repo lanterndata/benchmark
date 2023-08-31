@@ -1,6 +1,5 @@
-import argparse
 from typing import Dict
-from .constants import VALID_DATASETS, VALID_DATASET_SIZES, VALID_INDEX_PARAMS, SUGGESTED_K_VALUES, Extension, Dataset
+from .constants import VALID_DATASETS, VALID_DATASET_SIZES, VALID_INDEX_PARAMS, Extension
 
 
 def add_dataset(parser):

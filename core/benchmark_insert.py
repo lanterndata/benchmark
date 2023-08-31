@@ -8,6 +8,7 @@ from .utils.process import save_result, get_experiment_results
 from .utils.database import DatabaseConnection, run_pgbench
 from .utils.print import print_labels, print_row, get_title
 from .utils.plot import plot_line_with_stddev, plot_line
+from .utils.numbers import convert_string_to_number
 from .setup import create_table
 
 
@@ -63,13 +64,31 @@ def print_insert_row(N, tps, latency_average, latency_stddev):
         "{:.2f}".format(latency_stddev),
     )
 
+def create_sequence(extension, bulk, start_N):
+    sequence_name = "benchmark_insert_sequence"
+    drop_sql = f"DROP SEQUENCE IF EXISTS {sequence_name};"
+    if bulk:
+        create_sql = f"CREATE SEQUENCE {sequence_name} START {start_N} INCREMENT BY 100;"
+    else:
+        create_sql = f"CREATE SEQUENCE {sequence_name} START {start_N};"
+    with DatabaseConnection(extension) as conn:
+        conn.execute(drop_sql)
+        conn.execute(create_sql)
+    return sequence_name
 
-# TODO: Support using 10k dataset instead of 1m, maybe somehow make some of this adjustable
-def generate_result(extension, dataset, index_params={}, bulk=False):
-    source_table = get_table_name(dataset, '1m')
+
+def generate_result(extension, dataset, N_string, index_params={}, bulk=False):
+    # Create benchmark table
+    source_table = get_table_name(dataset, N_string)
     delete_dest_table(extension, dataset)
     dest_table = create_dest_table(extension, dataset)
 
+    # Initialize benchmarking sequence
+    N = convert_string_to_number(N_string)
+    start_N = int(N / 10)
+    sequence_name = create_sequence(extension, bulk, start_N)
+
+    # Initialize benchmarking table and index
     query = f"""
         INSERT INTO
             {dest_table} (v)
@@ -77,32 +96,31 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         FROM
             {source_table}
         WHERE
-            id < 10000
+            id < {start_N};
     """
     with DatabaseConnection(extension) as conn:
         conn.execute(query)
-
     create_dest_index(extension, dataset, index_params)
 
     print_insert_title_and_labels(extension, index_params, dataset)
-    for N in range(10000, 20001, 1000):
-
+    for iter_N in range(start_N, N, 1000):
         if bulk:
-            id_query = "id >= :id AND id < :id + 100"
+            id_query = f"id >= next_id AND id < next_id + 100"
             transactions = 10
         else:
-            id_query = "id = :id"
+            id_query = f"id = next_id"
             transactions = 1000
         query = f"""
-            \set id random(1, 1000000)
-
+            WITH next_id_table AS (
+                SELECT nextval('{sequence_name}') AS next_id
+            )
             INSERT INTO
                 {dest_table} (v)
             SELECT v
             FROM
-                {source_table}
+                {source_table}, next_id_table
             WHERE
-                {id_query};
+                {id_query}
         """
 
         stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
@@ -115,7 +133,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
                 extension=extension,
                 index_params=index_params,
                 dataset=dataset,
-                n=N,
+                n=iter_N + 1000,
                 out=stdout,
                 err=stderr,
             )
@@ -124,7 +142,7 @@ def generate_result(extension, dataset, index_params={}, bulk=False):
         save_insert_result(get_latency_stddev_metric(bulk), latency_stddev)
         save_insert_result(get_tps_metric(bulk), tps)
 
-        print_insert_row(N, tps, latency_average, latency_stddev)
+        print_insert_row(iter_N, tps, latency_average, latency_stddev)
 
     print()
 
