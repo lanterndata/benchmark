@@ -10,12 +10,13 @@ def add_dataset(parser):
 
 
 def add_N(parser):
-    parser.add_argument("--N", nargs='+', type=str,
-                        required=True, help="dataset size")
+    parser.add_argument("--N",
+                        type=str, required=True, help="dataset size")
 
 
 def add_N_values(parser):
-    parser.add_argument("--N", type=str, required=True, help="dataset size")
+    parser.add_argument("--N",
+                        nargs='+', type=str, required=True, help="dataset size")
 
 
 def add_K(parser):

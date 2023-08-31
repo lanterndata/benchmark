@@ -173,6 +173,7 @@ def plot_results(dataset, bulk=False):
         fig.show()
 
 
+# TODO: Make this accept N as a parameter
 if __name__ == '__main__':
     extension, index_params, dataset, _, _ = parse_args(
         "benchmark insert", ['extension'], allow_no_index=True)
