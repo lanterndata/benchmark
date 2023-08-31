@@ -1,7 +1,8 @@
+import argparse
 import plotly.graph_objects as go
 from .utils.create_index import create_custom_index
-from .utils.constants import Extension, Metric
-from .utils.cli import parse_args
+from .utils.constants import Extension, Metric, Dataset
+from .utils import cli
 from .utils.names import get_table_name
 from .utils.process import save_result, get_experiment_results
 from .utils.database import DatabaseConnection, run_pgbench
@@ -173,8 +174,20 @@ def plot_results(dataset, bulk=False):
         fig.show()
 
 
-# TODO: Make this accept N as a parameter
 if __name__ == '__main__':
-    extension, index_params, dataset, _, _ = parse_args(
-        "benchmark insert", ['extension'], allow_no_index=True)
-    generate_result(extension, dataset, index_params)
+    # Set up parser
+    parser = argparse.ArgumentParser(description="benchmark insert")
+    cli.add_extension(parser, allow_no_index=True)
+    cli.add_index_params(parser)
+    cli.add_dataset(parser)
+    cli.add_N(parser)
+
+    # Parse arguments
+    parsed_args = parser.parse_args()
+    dataset = Dataset(parsed_args.dataset)
+    extension = Extension(parsed_args.extension)
+    index_params = cli.parse_index_params(extension, parsed_args)
+    N = parsed_args.N or '10k'
+
+    # Generate result
+    generate_result(extension, dataset, N, index_params)

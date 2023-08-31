@@ -1,13 +1,14 @@
 import re
 import json
+import argparse
 import statistics
 import plotly.graph_objects as go
 from .utils.delete_index import delete_index
 from .utils.create_index import create_index
-from .utils.constants import Metric
+from .utils.constants import Metric, Dataset, Extension, SUGGESTED_K_VALUES
 from .utils.database import DatabaseConnection, run_pgbench
 from .utils.process import save_result, get_experiment_results_for_params
-from .utils.cli import parse_args
+from .utils import cli
 from .utils.names import get_table_name
 from .utils.numbers import convert_string_to_number
 from .utils.print import get_title, print_labels, print_row
@@ -287,7 +288,21 @@ def generate_plot(configuration, dataset, fixed_param, fixed_param_value, variab
 
 
 if __name__ == '__main__':
-    extension, index_params, dataset, N_values, K_values = parse_args(
-        "benchmark select", ['extension', 'N', 'K'], allow_no_index=True)
-    for N in N_values:
-        generate_result(extension, dataset, N, K_values, index_params)
+   # Set up parser
+    parser = argparse.ArgumentParser(description="benchmark select")
+    cli.add_extension(parser)
+    cli.add_index_params(parser)
+    cli.add_dataset(parser)
+    cli.add_N(parser)
+    cli.add_K_values(parser)
+
+    # Parse arguments
+    parsed_args = parser.parse_args()
+    dataset = Dataset(parsed_args.dataset)
+    extension = Extension(parsed_args.extension)
+    index_params = cli.parse_index_params(extension, parsed_args)
+    N = parsed_args.N or '10k'
+    K_values = parsed_args.K or SUGGESTED_K_VALUES
+
+    # Generate result
+    generate_result(extension, dataset, N, K_values, index_params)

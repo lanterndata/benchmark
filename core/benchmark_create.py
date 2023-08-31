@@ -1,3 +1,4 @@
+import argparse
 import subprocess
 import statistics
 import plotly.graph_objects as go
@@ -5,8 +6,8 @@ from .utils.database import DatabaseConnection, get_database_url
 from .utils.delete_index import delete_index
 from .utils.create_index import get_create_index_query, get_index_name
 from .utils.numbers import convert_string_to_number, convert_number_to_string, convert_number_to_bytes
-from .utils.constants import Metric, Extension
-from .utils.cli import parse_args
+from .utils.constants import Metric, Extension, Dataset
+from .utils import cli
 from .utils.process import save_result, get_experiment_results
 from .utils.print import print_labels, print_row, get_title
 from .utils.plot import plot_line_with_stddev
@@ -149,7 +150,19 @@ def plot_disk_usage_results(dataset):
 
 
 if __name__ == '__main__':
-    extension, index_params, dataset, N_values, _ = parse_args(
-        "benchmark create", ['extension', 'N'])
-    for N in N_values:
-        generate_result(extension, dataset, N, index_params)
+   # Set up parser
+    parser = argparse.ArgumentParser(description="benchmark create")
+    cli.add_extension(parser)
+    cli.add_index_params(parser)
+    cli.add_dataset(parser)
+    cli.add_N(parser)
+
+    # Parse arguments
+    parsed_args = parser.parse_args()
+    dataset = Dataset(parsed_args.dataset)
+    extension = Extension(parsed_args.extension)
+    index_params = cli.parse_index_params(extension, parsed_args)
+    N = parsed_args.N or '10k'
+
+    # Generate result
+    generate_result(extension, dataset, N, index_params)

@@ -14,11 +14,6 @@ def add_N(parser):
                         type=str, required=True, help="dataset size")
 
 
-def add_N_values(parser):
-    parser.add_argument("--N",
-                        nargs='+', type=str, required=True, help="dataset size")
-
-
 def add_K(parser):
     parser.add_argument("--K", type=int, help="K values (e.g., 5)")
 
@@ -56,6 +51,10 @@ def validate_N_values(parser, dataset, N_values):
         )
 
 
+def validate_N(parser, dataset, N):
+    validate_N_values(parser, dataset, [N])
+
+
 def parse_index_params(extension: Extension, parsed_args: Dict[str, int]):
     index_params = {}
     if extension in VALID_INDEX_PARAMS:
@@ -63,35 +62,3 @@ def parse_index_params(extension: Extension, parsed_args: Dict[str, int]):
             param: getattr(parsed_args, param)
             for param in VALID_INDEX_PARAMS[extension] if getattr(parsed_args, param) is not None}
     return index_params
-
-
-def parse_args(description, args, allow_no_index=False):
-    parser = argparse.ArgumentParser(description=description)
-
-    if 'extension' in args:
-        add_extension(parser, allow_no_index=allow_no_index)
-        add_index_params(parser)
-
-    add_dataset(parser)
-
-    if 'N' in args:
-        add_N_values(parser)
-    if 'K' in args:
-        add_K_values(parser)
-
-    parsed_args = parser.parse_args()
-
-    extension, N_values, K = None, None, None
-
-    dataset = Dataset(parsed_args.dataset)
-    if 'extension' in args:
-        extension = Extension(parsed_args.extension)
-    if 'N' in parsed_args:
-        N_values = parsed_args.N or VALID_DATASET_SIZES[dataset]
-        validate_N_values(parser, dataset, N_values)
-    if 'K' in parsed_args:
-        K = parsed_args.K or SUGGESTED_K_VALUES
-
-    index_params = parse_index_params(extension, parsed_args)
-
-    return extension, index_params, dataset, N_values, K
