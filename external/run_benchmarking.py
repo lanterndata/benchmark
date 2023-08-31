@@ -36,8 +36,9 @@ def print_errors_and_warnings(messages: List[str]):
         sys.exit(1)
 
 
-def main(extension, index_params, dataset, N, K):
-    run_benchmarks(extension, index_params, dataset, N, K)
+def main(extension, index_params, dataset, N, K, print_only=False):
+    if not print_only:
+        run_benchmarks(extension, index_params, dataset, N, K)
 
     metrics_to_print = []
     errors_and_warnings = []
@@ -67,6 +68,7 @@ if __name__ == "__main__":
     cli.add_dataset(parser)
     cli.add_N(parser)
     cli.add_K(parser)
+    parser.add_argument('--print-only', action='store_true', default=False,  help='Enable print only mode')
 
     # Parse arguments
     parsed_args = parser.parse_args()
@@ -76,6 +78,7 @@ if __name__ == "__main__":
     N = parsed_args.N
     cli.validate_N(parser, dataset, N)
     K = parsed_args.K
+    print_only = parsed_args.print_only
 
     # Run benchmarks
-    main(extension, index_params, dataset, N, K)
+    main(extension, index_params, dataset, N, K, print_only=print_only)
