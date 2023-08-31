@@ -1,5 +1,6 @@
 # Data / Postgres
-*/data
+data/
+db/
 *.tsv
 *.ivecs
 *.fvecs

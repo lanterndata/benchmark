@@ -1,23 +1,7 @@
-DOCKER_EXEC = docker exec -it benchmark
-PSQL_EXEC = $(DOCKER_EXEC) psql -U postgres
-
-build:
-	docker compose build
-
-up:
-	docker compose up
-
-down:
-	docker compose down
-
-destroy:
-	docker system prune --volumes -f
+PSQL_EXEC = psql -U postgres
 
 jupyter:
-	$(DOCKER_EXEC) jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
-
-bash:
-	$(DOCKER_EXEC) bash
+	jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 
 psql:
 	$(PSQL_EXEC)

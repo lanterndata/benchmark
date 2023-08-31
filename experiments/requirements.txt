@@ -1,7 +1,0 @@
-psycopg2
-numpy
-matplotlib
-jupyterlab
-requests
-pgvector
-plotly

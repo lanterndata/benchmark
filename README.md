@@ -1,21 +1,11 @@
 # Setup
-1. Install CMake
-```
-sudo apt update
-sudo apt install build-essential
-```
-2. Install Docker: https://docs.docker.com/engine/install/debian/
 
-3. Setup tables
+This setup assumes that you are using VSCode and Docker.
+1. Use the `Dev Containers` extension to open the workspace in a container
+
+2. Setup tables
 ```
-sudo make build
-sudo make up &
-cd experiments
-python3 -m scripts.setup
+python3 -m core.setup
 ```
 
-# Scripts you can run
-- experiments/recall_experiment.py
-- experiments/create_experiment.py
-- experiments/select_experiment.py
-- experiments/disk_usage_experiment.py
+3. Now you can use notebooks or the CLI to run experiments
