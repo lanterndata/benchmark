@@ -5,11 +5,13 @@ from .constants import VALID_DATASETS, VALID_DATASET_SIZES, VALID_INDEX_PARAMS, 
 
 def add_dataset(parser):
     choices = [d for d in VALID_DATASETS]
-    parser.add_argument("--dataset", type=str, choices=choices, required=True, help="Dataset name")
+    parser.add_argument("--dataset", type=str, choices=choices,
+                        required=True, help="Dataset name")
 
 
 def add_N(parser):
-    parser.add_argument("--N", nargs='+', type=str, required=True, help="dataset size")
+    parser.add_argument("--N", nargs='+', type=str,
+                        required=True, help="dataset size")
 
 
 def add_N_values(parser):
@@ -24,10 +26,14 @@ def add_K_values(parser):
     parser.add_argument("--K", nargs='+', type=int, help="K values (e.g., 5)")
 
 
-def add_extension(parser):
+def add_extension(parser, allow_no_index=False):
+    if allow_no_index:
+        choices = [e.value for e in Extension]
+    else:
+        choices = [e.value for e in Extension if e != Extension.NONE]
     parser.add_argument(
         '--extension',
-        type=str, choices=[e.value for e in Extension], required=True, help='Extension type')
+        type=str, choices=choices, required=True, help='Extension type')
 
 
 def add_index_params(parser):
