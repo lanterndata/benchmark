@@ -1,5 +1,4 @@
 import argparse
-import plotly.graph_objects as go
 from .utils.create_index import create_custom_index
 from .utils.constants import Extension, Metric, Dataset
 from .utils import cli
@@ -7,7 +6,6 @@ from .utils.names import get_table_name
 from .utils.process import save_result, get_experiment_results
 from .utils.database import DatabaseConnection, run_pgbench
 from .utils.print import print_labels, print_row, get_title
-from .utils.plot import plot_line_with_stddev, plot_line
 from .utils.numbers import convert_string_to_number
 from .setup import create_table
 
@@ -160,36 +158,6 @@ def print_results(dataset, bulk=False):
             for N, tps, latency_average, latency_stddev in param_results:
                 print_insert_row(N, tps, latency_average, latency_stddev)
             print('\n\n')
-
-
-def plot_results(dataset, bulk=False):
-    metric_tuples = [
-        ('transactions per second', get_tps_metric(bulk)),
-        ('latency (ms)', (get_latency_metric(bulk), get_latency_stddev_metric(bulk)))
-    ]
-    for yaxis_title, metric_type in metric_tuples:
-        fig = go.Figure()
-        for extension in Extension:
-            results = get_experiment_results(metric_type, extension, dataset)
-            for index, (index_params, param_results) in enumerate(results):
-                if isinstance(metric_type, tuple):
-                    x_values, y_means, y_stddevs = zip(*param_results)
-                    plot_line_with_stddev(
-                        fig, extension, index_params, x_values, y_means, y_stddevs, index=index)
-                else:
-                    x_values, y_values = zip(*param_results)
-                    plot_line(fig, extension, index_params,
-                              x_values, y_values, index=index)
-        if isinstance(metric_type, tuple):
-            plot_title = f"{dataset.value} - {metric_type[0].value}"
-        else:
-            plot_title = f"{dataset.value} - {metric_type.value}"
-        fig.update_layout(
-            title=plot_title,
-            xaxis_title=f"number of rows inserted",
-            yaxis_title=yaxis_title,
-        )
-        fig.show()
 
 
 if __name__ == '__main__':

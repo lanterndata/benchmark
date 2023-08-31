@@ -1,7 +1,6 @@
 import argparse
 import subprocess
 import statistics
-import plotly.graph_objects as go
 from .utils.database import DatabaseConnection, get_database_url
 from .utils.delete_index import delete_index
 from .utils.create_index import get_create_index_query, get_index_name
@@ -10,7 +9,6 @@ from .utils.constants import Metric, Extension, Dataset
 from .utils import cli
 from .utils.process import save_result, get_experiment_results
 from .utils.print import print_labels, print_row, get_title
-from .utils.plot import plot_line_with_stddev
 
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
 
@@ -113,40 +111,6 @@ def print_results(dataset):
                     convert_number_to_bytes(stddev_disk_usage),
                 )
         print('\n\n')
-
-
-def plot_latency_results(dataset):
-    fig = go.Figure()
-    metric_types = [Metric.CREATE_LATENCY, Metric.CREATE_LATENCY_STDDEV]
-    for extension in VALID_EXTENSIONS:
-        results = get_experiment_results(metric_types, extension, dataset)
-        for index, (index_params, param_results) in enumerate(results):
-            N_values, averages, stddevs = zip(*param_results)
-            plot_line_with_stddev(
-                fig, extension, index_params, N_values, averages, stddevs, index=index)
-    fig.update_layout(
-        title=f"Create Index Latency over Number of Rows for {dataset.value}",
-        xaxis=dict(title='Number of rows'),
-        yaxis=dict(title='Latency (ms)'),
-    )
-    fig.show()
-
-
-def plot_disk_usage_results(dataset):
-    fig = go.Figure()
-    metric_types = [Metric.DISK_USAGE, Metric.DISK_USAGE_STDDEV]
-    for extension in VALID_EXTENSIONS:
-        results = get_experiment_results(metric_types, extension, dataset)
-        for index, (index_params, param_results) in enumerate(results):
-            N_values, averages, stddevs = zip(*param_results)
-            plot_line_with_stddev(
-                fig, extension, index_params, N_values, averages, stddevs, index=index)
-    fig.update_layout(
-        title=f"Disk Usage over Number of Rows for {dataset.value}",
-        xaxis=dict(title='Number of rows'),
-        yaxis=dict(title='Disk Usage (bytes)'),
-    )
-    fig.show()
 
 
 if __name__ == '__main__':

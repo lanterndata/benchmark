@@ -1,7 +1,7 @@
 from typing import List, Tuple
 from core.utils.constants import Metric
-from . import cli
-from .get_benchmarks import get_benchmarks
+from .utils import cli
+from .utils.get_benchmarks import get_benchmarks
 
 
 def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):

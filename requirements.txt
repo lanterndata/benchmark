@@ -1,6 +1,0 @@
-psycopg2
-numpy
-jupyterlab
-requests
-pgvector
-plotly

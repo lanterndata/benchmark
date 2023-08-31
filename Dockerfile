@@ -11,8 +11,10 @@ RUN apt-get update && apt-get install -y python3.11 python3-pip procps cmake wge
 RUN apt-get update && apt-get install -y git build-essential postgresql-server-dev-all
 
 # Copy over the Python dependencies and install them
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt --break-system-packages
+COPY core/requirements.txt /app/core/requirements.txt
+COPY notebooks/requirements.txt /app/notebooks/requirements.txt
+RUN pip install --no-cache-dir -r /app/core/requirements.txt --break-system-packages
+RUN pip install --no-cache-dir -r /app/notebooks/requirements.txt --break-system-packages
 
 # Copy over the scripts to install Postgres extensions, and install them
 COPY extensions/ /app/extensions/

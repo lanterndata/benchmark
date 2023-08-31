@@ -1,8 +1,8 @@
 import sys
 from typing import List, Tuple
 from core.utils.constants import Metric
-from .get_benchmarks import get_benchmarks
-from . import cli
+from .utils.get_benchmarks import get_benchmarks
+from .utils import cli
 
 
 def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
