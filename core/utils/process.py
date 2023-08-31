@@ -112,7 +112,7 @@ def get_experiment_result(metric_type, extension, index_params, dataset, N, K):
             AND N = %s
             AND K = %s
     """
-    data = (metric_type, extension.value, index_params, dataset.value, N, K or 0)
+    data = (metric_type.value, extension.value, json.dumps(index_params), dataset.value, convert_string_to_number(N), K or 0)
     with DatabaseConnection() as conn:
         result = conn.select_one(sql, data=data)[0]
     return result

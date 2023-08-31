@@ -1,4 +1,4 @@
-from .utils.constants import Extension, Metric
+from .utils.constants import Extension, Metric, Dataset
 from .utils import cli
 from .utils.process import get_experiment_result
 import argparse
@@ -11,14 +11,14 @@ if __name__ == '__main__':
     cli.add_dataset(parser)
     cli.add_N(parser)
     cli.add_K(parser)
-    metric_choices = [m.key for m in Metric]
+    metric_choices = [m.name for m in Metric]
     parser.add_argument("--metric", choices=metric_choices, required=True, help="metric to retrieve")
 
     # Parse arguments
     parsed_args = parser.parse_args()
     extension = Extension(parsed_args.extension)
     index_params = cli.parse_index_params(extension, parsed_args)
-    dataset = parsed_args.dataset
+    dataset = Dataset(parsed_args.dataset)
     N = parsed_args.N
     cli.validate_N(parser, dataset, N)
     K = parsed_args.K
