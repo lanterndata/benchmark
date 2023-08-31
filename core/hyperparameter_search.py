@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 from .utils.constants import Metric, Extension
 from .utils.database import DatabaseConnection
 from .utils.numbers import convert_string_to_number
-from .select_experiment import generate_result
+from .benchmark_select import generate_result
 import math
 
 HYPERPARAMETER_SEARCH_K = 5

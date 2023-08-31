@@ -5,7 +5,7 @@ FROM postgres:15
 WORKDIR /app
 
 # Install Python and pip
-RUN apt-get update && apt-get install -y python3.11 python3-pip python3-venv procps cmake wget
+RUN apt-get update && apt-get install -y python3.11 python3-pip procps cmake wget
 
 # Install dependencies (both PostgreSQL server and client)
 RUN apt-get update && apt-get install -y git build-essential postgresql-server-dev-all

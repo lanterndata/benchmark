@@ -24,13 +24,6 @@ EXTENSION_NAMES = {
     Extension.NONE: 'vector',
 }
 
-VALID_EXTENSIONS = [
-    Extension.PGVECTOR_IVFFLAT,
-    Extension.PGVECTOR_HNSW,
-    Extension.LANTERN,
-    Extension.NEON,
-]
-
 EXTENSIONS_USING_VECTOR = [Extension.PGVECTOR_IVFFLAT, Extension.PGVECTOR_HNSW, Extension.NONE]
 
 DEFAULT_INDEX_PARAMS = {

@@ -98,11 +98,39 @@ def get_experiment_results(metric_type, extension, dataset, N=None):
     return values
 
 
-TABLE_COLUMNS = [
-    'extension', 'index_params', 'dataset', 'n', 'k', 'metric_type', 'metric_value', 'out', 'err']
+def get_experiment_result(metric_type, extension, index_params, dataset, N, K):
+    sql = f"""
+        SELECT
+            metric_value
+        FROM
+            experiment_results
+        WHERE
+            metric_type = %s
+            AND extension = %s
+            AND index_params = %s
+            AND dataset = %s
+            AND N = %s
+            AND K = %s
+    """
+    data = (metric_type, extension.value, index_params, dataset.value, N, K or 0)
+    with DatabaseConnection() as conn:
+        result = conn.select_one(sql, data=data)[0]
+    return result
 
 
 def save_result(metric_type, metric_value, extension, index_params, dataset, n, k=0, out=None, err=None):
+    TABLE_COLUMNS = [
+       'extension',
+       'index_params',
+       'dataset',
+       'n',
+       'k',
+       'metric_type',
+       'metric_value',
+       'out',
+       'err',
+    ]
+
     columns = ', '.join(TABLE_COLUMNS)
     placeholders = ', '.join(['%s'] * len(TABLE_COLUMNS))
     updates = ', '.join(

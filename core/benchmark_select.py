@@ -288,6 +288,6 @@ def generate_plot(configuration, dataset, fixed_param, fixed_param_value, variab
 
 if __name__ == '__main__':
     extension, index_params, dataset, N_values, K_values = parse_args(
-        "select experiment", ['extension', 'N', 'K'], allow_no_index=True)
+        "benchmark select", ['extension', 'N', 'K'], allow_no_index=True)
     for N in N_values:
         generate_result(extension, dataset, N, K_values, index_params)

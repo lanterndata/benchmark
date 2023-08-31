@@ -3,7 +3,7 @@ import argparse
 import urllib.request
 from typing import Dict, List
 from .utils.database import DatabaseConnection
-from .utils.constants import Extension, EXTENSION_NAMES, EXTENSIONS_USING_VECTOR, get_vector_dim, SUGGESTED_DATASET_SIZES, Dataset
+from .utils.constants import Extension, EXTENSION_NAMES, EXTENSIONS_USING_VECTOR, get_vector_dim, SUGGESTED_DATASET_SIZES, Dataset, VALID_DATASETS
 from .utils.names import get_table_name
 
 
@@ -177,12 +177,28 @@ def setup_results_table():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--datapath", default="/app/data",
-                        help="Path to data directory")
+    parser = argparse.ArgumentParser(
+        description='Setup the database for benchmarking')
+    parser.add_argument("--datapath",
+                        default="/app/data", help="Path to save data used for benchmarking")
+    parser.add_argument("--extension",
+                        nargs='+', help="Extensions to setup benchmarking for")
+    parser.add_argument("--dataset",
+                        choices=[d for d in VALID_DATASETS], help="Dataset name")
+    parser.add_argument("--N",
+                        nargs='+', help="Dataset sizes")
     args = parser.parse_args()
 
     setup_results_table()
-    for extension in Extension:
-        setup_extension(args.datapath, extension)
+
+    dataset_sizes = SUGGESTED_DATASET_SIZES
+    if args.dataset is not None and args.N is not None:
+        dataset_sizes = {Dataset(args.dataset): args.N}
+
+    if args.extension is None:
+        for extension in Extension:
+            setup_extension(args.datapath, extension, dataset_sizes)
+    else:
+        for extension in args.extension:
+            setup_extension(args.datapath, Extension(extension), dataset_sizes)
     print('Done!')

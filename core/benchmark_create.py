@@ -5,13 +5,19 @@ from .utils.database import DatabaseConnection, get_database_url
 from .utils.delete_index import delete_index
 from .utils.create_index import get_create_index_query, get_index_name
 from .utils.numbers import convert_string_to_number, convert_number_to_string, convert_number_to_bytes
-from .utils.constants import Metric, VALID_EXTENSIONS
+from .utils.constants import Metric, Extension
 from .utils.cli import parse_args
 from .utils.process import save_result, get_experiment_results
 from .utils.print import print_labels, print_row, get_title
 from .utils.plot import plot_line_with_stddev
 
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
+
+VALID_EXTENSIONS = [e for e in Extension if e != Extension.NONE]
+
+
+def validate_extension(extension):
+    assert extension != Extension.NONE
 
 
 def generate_disk_usage_result(extension, dataset, N):
@@ -35,6 +41,8 @@ def generate_performance_result(extension, dataset, N, index_params):
 
 
 def generate_result(extension, dataset, N, index_params={}, count=10):
+    validate_extension(extension)
+
     delete_index(extension, dataset, N)
 
     print(get_title(extension, index_params, dataset, N))
@@ -142,6 +150,6 @@ def plot_disk_usage_results(dataset):
 
 if __name__ == '__main__':
     extension, index_params, dataset, N_values, _ = parse_args(
-        "create experiment", ['extension', 'N'])
+        "benchmark create", ['extension', 'N'])
     for N in N_values:
         generate_result(extension, dataset, N, index_params)

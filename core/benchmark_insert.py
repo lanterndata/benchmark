@@ -63,6 +63,7 @@ def print_insert_row(N, tps, latency_average, latency_stddev):
     )
 
 
+# TODO: Support using 10k dataset instead of 1m, maybe somehow make some of this adjustable
 def generate_result(extension, dataset, index_params={}, bulk=False):
     source_table = get_table_name(dataset, '1m')
     delete_dest_table(extension, dataset)
@@ -174,5 +175,5 @@ def plot_results(dataset, bulk=False):
 
 if __name__ == '__main__':
     extension, index_params, dataset, _, _ = parse_args(
-        "insert experiment", ['extension'], allow_no_index=True)
+        "benchmark insert", ['extension'], allow_no_index=True)
     generate_result(extension, dataset, index_params)
