@@ -44,7 +44,7 @@ def main(extension, index_params, dataset, N, K):
 
     # Recall
     new_recall = get_experiment_result(Metric.RECALL, extension, index_params, dataset, N, K)
-    old_recall = 2.0  # TODO
+    old_recall = 0.0  # TODO
     metrics_to_print.append((Metric.RECALL.value, old_recall, new_recall))
     recall_difference = new_recall - old_recall
     if recall_difference < -0.05:
