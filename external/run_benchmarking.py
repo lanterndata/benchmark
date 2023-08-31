@@ -37,7 +37,7 @@ def print_errors_and_warnings(messages: List[str]):
 
 
 def main(extension, index_params, dataset, N, K):
-    # run_benchmarks(extension, index_params, dataset, N, K)
+    run_benchmarks(extension, index_params, dataset, N, K)
 
     metrics_to_print = []
     errors_and_warnings = []
