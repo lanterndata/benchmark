@@ -120,6 +120,8 @@ if __name__ == '__main__':
     cli.add_index_params(parser)
     cli.add_dataset(parser)
     cli.add_N(parser)
+    parser.add_argument(
+        '--count', type=int, default=10, help='number of iterations')
 
     # Parse arguments
     parsed_args = parser.parse_args()
@@ -127,6 +129,7 @@ if __name__ == '__main__':
     extension = Extension(parsed_args.extension)
     index_params = cli.parse_index_params(extension, parsed_args)
     N = parsed_args.N or '10k'
+    count = parsed_args.count
 
     # Generate result
-    generate_result(extension, dataset, N, index_params)
+    generate_result(extension, dataset, N, index_params, count=count)

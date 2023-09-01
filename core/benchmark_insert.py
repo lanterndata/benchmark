@@ -62,6 +62,7 @@ def print_insert_row(N, tps, latency_average, latency_stddev):
         "{:.2f}".format(latency_stddev),
     )
 
+
 def create_sequence(extension, bulk, start_N):
     sequence_name = "benchmark_insert_sequence"
     drop_sql = f"DROP SEQUENCE IF EXISTS {sequence_name};"
