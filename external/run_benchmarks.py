@@ -28,11 +28,11 @@ if __name__ == "__main__":
     disk_usage = benchmark_create.generate_disk_usage_result(
         extension, dataset, N)
     tps_response, latency_average_response, latency_stddev_response = benchmark_select.generate_performance_result(
-        extension, dataset, N, K, bulk=False)
+        extension, dataset, N, K, bulk=True)
     recall_response = benchmark_select.generate_recall_result(
         extension, dataset, N, K)
     shared_hit_response, shared_hit_stddev_response, read_response, read_stddev_response = benchmark_select.generate_utilization_result(
-        extension, dataset, N, K, bulk=False)
+        extension, dataset, N, K, bulk=True)
     delete_index(extension, dataset, N)
 
     save_result(Metric.CREATE_LATENCY, latency_create, **create_kwargs)
@@ -46,4 +46,5 @@ if __name__ == "__main__":
     save_result(**read_response, **select_kwargs)
     save_result(**read_stddev_response, **select_kwargs)
 
-    benchmark_insert.generate_result(extension, dataset, N, index_params)
+    benchmark_insert.generate_result(
+        extension, dataset, N, index_params, bulk=True)
