@@ -11,11 +11,11 @@ def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
 
     for metric, old_value, new_value in benchmarks:
         if metric == Metric.RECALL:
-            recall_difference = new_value - (old_value or 0)
-            if recall_difference < -0.05:
-                errors.append(f"Recall decreased by {recall_difference:2f}")
-            elif recall_difference < 0:
-                warnings.append(f"Recall decreased by {recall_difference:2f}")
+            diff = new_value - (old_value or 0)
+            if diff < -0.05:
+                errors.append(f"Recall decreased by {diff:2f}")
+            elif diff < 0:
+                warnings.append(f"Recall decreased by {diff:2f}")
             elif new_value >= 1.0:
                 errors.append(f"Recall is 1.0")
 

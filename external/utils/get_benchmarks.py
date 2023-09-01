@@ -38,9 +38,17 @@ def get_old_benchmarks():
 def get_benchmarks(extension, index_params, dataset, N, K, return_old=False):
     benchmarks = []
 
-    new_recall = get_experiment_result(
-        Metric.RECALL, extension, index_params, dataset, N, K)
-    benchmarks.append((Metric.RECALL, new_recall))
+    def add_metric(metric_type, use_K=False):
+        new_metric = get_experiment_result(
+            metric_type, extension, index_params, dataset, N, K=K if use_K else 0)
+        benchmarks.append((metric_type, new_metric))
+
+    add_metric(Metric.RECALL, use_K=True)
+    add_metric(Metric.SELECT_TPS, use_K=True)
+    add_metric(Metric.SELECT_LATENCY, use_K=True)
+    add_metric(Metric.CREATE_LATENCY)
+    add_metric(Metric.INSERT_LATENCY)
+    add_metric(Metric.INSERT_TPS)
 
     if return_old:
         old_benchmarks = get_old_benchmarks()
