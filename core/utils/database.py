@@ -119,12 +119,12 @@ def get_database_url(extension):
     """
     Get the appropriate database URL based on the extension.
     """
+    base_url = os.environ["DATABASE_URL"]
     if extension is None:
-        key = "DATABASE_URL"
+        return base_url
     elif isinstance(extension, Extension):
-        prefix = extension.value.split('_')[0].upper()
-        key = prefix + "_DATABASE_URL"
+        prefix = '/'.join(base_url.split('/')[:-1])
+        database = extension.value.split('_')[0].lower()
+        return prefix + '/' + database
     else:
         raise ValueError("Unknown extension: " + extension.value)
-
-    return os.environ[key]
