@@ -203,7 +203,6 @@ def generate_recall_result(extension, dataset, N, K):
                 len(truth_id_set.intersection(base_ids)),
                 len(truth_id_set.intersection(map(lambda id: id - 1, base_ids))))
             recall_at_k_sum += recall_at_k_result
-            print(truth_ids, base_ids, recall_at_k_result)
 
     # Calculate the average recall for this K
     recall_at_k = recall_at_k_sum / len(query_ids) / K
