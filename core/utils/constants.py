@@ -24,7 +24,8 @@ EXTENSION_NAMES = {
     Extension.NONE: 'vector',
 }
 
-EXTENSIONS_USING_VECTOR = [Extension.PGVECTOR_IVFFLAT, Extension.PGVECTOR_HNSW, Extension.NONE]
+EXTENSIONS_USING_VECTOR = [Extension.PGVECTOR_IVFFLAT,
+                           Extension.PGVECTOR_HNSW, Extension.NONE]
 
 DEFAULT_INDEX_PARAMS = {
     Extension.PGVECTOR_IVFFLAT: {'lists': 100, 'probes': 16},
@@ -103,6 +104,19 @@ NO_INDEX_METRICS = [
     Metric.SELECT_TPS,
     Metric.INSERT_LATENCY,
     Metric.INSERT_BULK_LATENCY,
+]
+
+METRICS_THAT_SHOULD_DECREASE = [
+    Metric.SELECT_LATENCY,
+    Metric.INSERT_LATENCY,
+    Metric.DISK_USAGE,
+    Metric.CREATE_LATENCY,
+]
+
+METRICS_THAT_SHOULD_INCREASE = [
+    Metric.SELECT_TPS,
+    Metric.INSERT_TPS,
+    Metric.RECALL,
 ]
 
 """

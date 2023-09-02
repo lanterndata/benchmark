@@ -49,6 +49,7 @@ def get_benchmarks(extension, index_params, dataset, N, K, return_old=False):
     add_metric(Metric.CREATE_LATENCY)
     add_metric(Metric.INSERT_LATENCY)
     add_metric(Metric.INSERT_TPS)
+    add_metric(Metric.DISK_USAGE)
 
     if return_old:
         old_benchmarks = get_old_benchmarks()
