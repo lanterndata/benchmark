@@ -5,7 +5,7 @@ from core.utils.numbers import convert_string_to_number
 from core.hyperparameter_search import HYPERPARAMETER_SEARCH_K
 
 
-def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL, yaxis=Metric.SELECT_LATENCY):
+def plot_hyperparameter_search(extensions, dataset, N, xaxis=Metric.RECALL_AFTER_CREATE, yaxis=Metric.SELECT_LATENCY):
     colors = ['blue', 'orange', 'green', 'purple', 'red']
 
     fig = go.Figure()

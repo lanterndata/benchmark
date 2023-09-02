@@ -153,8 +153,9 @@ def generate_utilization_result(extension, dataset, N, K, bulk):
     return shared_hit_response, shared_hit_stddev_response, read_response, read_stddev_response
 
 
-def generate_recall_result(extension, dataset, N, K):
-    base_table_name = get_table_name(dataset, N, type='base')
+def generate_recall(extension, dataset, N, K, base_table_name_input=None):
+    base_table_name = (base_table_name_input if base_table_name_input is not None else
+                       get_table_name(dataset, N, type='base'))
     truth_table_name = get_table_name(dataset, N, type='truth')
     query_table_name = get_table_name(dataset, N, type='query')
 
@@ -206,11 +207,7 @@ def generate_recall_result(extension, dataset, N, K):
 
     # Calculate the average recall for this K
     recall_at_k = recall_at_k_sum / len(query_ids) / K
-    recall_response = {
-        'metric_type': Metric.RECALL,
-        'metric_value': recall_at_k,
-    }
-    return recall_response
+    return recall_at_k
 
 
 def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False):
@@ -234,13 +231,14 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
 
         tps_response, latency_average_response, latency_stddev_response = generate_performance_result(
             extension, dataset, N, K, bulk)
-        recall_response = generate_recall_result(extension, dataset, N, K)
+        recall = generate_recall(extension, dataset, N, K)
         shared_hit_response, shared_hit_stddev_response, read_response, read_stddev_response = generate_utilization_result(
             extension, dataset, N, K, bulk)
         save_select_result(tps_response)
         save_select_result(latency_average_response)
         save_select_result(latency_stddev_response)
-        save_select_result(recall_response)
+        save_select_result(
+            {'metric_type': Metric.RECALL_AFTER_CREATE, 'metric_value': recall})
         save_select_result(shared_hit_response)
         save_select_result(shared_hit_stddev_response)
         save_select_result(read_response)
@@ -248,7 +246,7 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
 
         print_row(
             str(K),
-            "{:.2f}".format(recall_response['metric_value']),
+            "{:.2f}".format(recall),
             "{:.2f}".format(tps_response['metric_value']),
             "{:.2f}".format(latency_average_response['metric_value']),
             "{:.2f}".format(latency_stddev_response['metric_value']),

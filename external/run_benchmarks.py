@@ -29,7 +29,7 @@ if __name__ == "__main__":
         extension, dataset, N)
     tps_response, latency_average_response, latency_stddev_response = benchmark_select.generate_performance_result(
         extension, dataset, N, K, bulk=False)
-    recall_response = benchmark_select.generate_recall_result(
+    recall_after_create = benchmark_select.generate_recall(
         extension, dataset, N, K)
     shared_hit_response, shared_hit_stddev_response, read_response, read_stddev_response = benchmark_select.generate_utilization_result(
         extension, dataset, N, K, bulk=False)
@@ -40,11 +40,12 @@ if __name__ == "__main__":
     save_result(**tps_response, **select_kwargs)
     save_result(**latency_average_response, **select_kwargs)
     save_result(**latency_stddev_response, **select_kwargs)
-    save_result(**recall_response, **select_kwargs)
+    save_result(Metric.RECALL_AFTER_CREATE,
+                recall_after_create, **select_kwargs)
     save_result(**shared_hit_response, **select_kwargs)
     save_result(**shared_hit_stddev_response, **select_kwargs)
     save_result(**read_response, **select_kwargs)
     save_result(**read_stddev_response, **select_kwargs)
 
     benchmark_insert.generate_result(
-        extension, dataset, N, index_params, bulk=False)
+        extension, dataset, N, index_params, K=K, bulk=False)

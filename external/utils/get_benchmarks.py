@@ -43,7 +43,8 @@ def get_benchmarks(extension, index_params, dataset, N, K, return_old=False):
             metric_type, extension, index_params, dataset, N, K=K if use_K else 0)
         benchmarks.append((metric_type, new_metric))
 
-    add_metric(Metric.RECALL, use_K=True)
+    add_metric(Metric.RECALL_AFTER_CREATE, use_K=True)
+    add_metric(Metric.RECALL_AFTER_INSERT, use_K=True)
     add_metric(Metric.SELECT_TPS, use_K=True)
     add_metric(Metric.SELECT_LATENCY, use_K=True)
     add_metric(Metric.CREATE_LATENCY)

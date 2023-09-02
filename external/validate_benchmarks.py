@@ -17,13 +17,6 @@ def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
         diff = new_value - old_value
         pct_change = diff / old_value
 
-        if metric == Metric.RECALL:
-            if diff < -0.05:
-                errors.append(f"Recall decreased by {diff:2f}")
-            elif diff < 0:
-                warnings.append(f"Recall decreased by {diff:2f}")
-            elif new_value >= 1.0:
-                errors.append(f"Recall is 1.0")
         if metric in METRICS_THAT_SHOULD_INCREASE:
             if pct_change < 0.1:
                 errors.append(

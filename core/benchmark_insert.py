@@ -8,6 +8,7 @@ from .utils.database import DatabaseConnection, run_pgbench
 from .utils.print import print_labels, print_row, get_title
 from .utils.numbers import convert_string_to_number
 from .setup import create_table
+from . import benchmark_select
 
 
 def get_dest_table_name(dataset):
@@ -76,7 +77,7 @@ def create_sequence(extension, bulk, start_N):
     return sequence_name
 
 
-def generate_result(extension, dataset, N_string, index_params={}, bulk=False):
+def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K=None):
     # Create benchmark table
     source_table = get_table_name(dataset, N_string)
     delete_dest_table(extension, dataset)
@@ -144,6 +145,12 @@ def generate_result(extension, dataset, N_string, index_params={}, bulk=False):
         print_insert_row(iter_N, tps, latency_average, latency_stddev)
 
     print()
+
+    if K is not None:
+        recall_after_insert = benchmark_select.generate_recall(
+            extension, dataset, N_string, K, base_table_name_input=dest_table)
+        save_result(Metric.RECALL_AFTER_INSERT, recall_after_insert,
+                    extension=extension, index_params=index_params, dataset=dataset, n=N, k=K)
 
     delete_dest_table(extension, dataset)
 

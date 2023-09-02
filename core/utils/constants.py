@@ -48,12 +48,13 @@ class Metric(Enum):
 
     # Select
 
-    SELECT_LATENCY = 'select (latency ms)'
-    SELECT_LATENCY_STDDEV = 'select (latency stddev ms)'
+    SELECT_LATENCY = 'select latency (ms)'
+    SELECT_LATENCY_STDDEV = 'select latency (stddev ms)'
 
-    SELECT_TPS = 'select (tps)'
+    SELECT_TPS = 'select tps'
 
-    RECALL = 'recall'
+    RECALL_AFTER_INSERT = 'recall (after insert)'
+    RECALL_AFTER_CREATE = 'recall (after create)'
 
     BUFFER_SHARED_HIT_COUNT = 'buffer shared hits'
     BUFFER_SHARED_HIT_COUNT_STDDEV = 'buffer shared hits (stddev)'
@@ -63,10 +64,10 @@ class Metric(Enum):
 
     # Select bulk
 
-    SELECT_BULK_LATENCY = 'select bulk (latency ms)'
-    SELECT_BULK_LATENCY_STDDEV = 'select bulk (latency stddev ms)'
+    SELECT_BULK_LATENCY = 'select bulk latency (ms)'
+    SELECT_BULK_LATENCY_STDDEV = 'select bulk latency (stddev ms)'
 
-    SELECT_BULK_TPS = 'select bulk (tps)'
+    SELECT_BULK_TPS = 'select bulk tps'
 
     BUFFER_BULK_SHARED_HIT_COUNT = 'bulk buffer shared hits'
     BUFFER_BULK_SHARED_HIT_COUNT_STDDEV = 'bulk buffer shared hits (stddev)'
@@ -76,25 +77,25 @@ class Metric(Enum):
 
     # Insert
 
-    INSERT_LATENCY = 'insert (latency ms)'
-    INSERT_LATENCY_STDDEV = 'insert (latency stddev ms)'
+    INSERT_LATENCY = 'insert latency (ms)'
+    INSERT_LATENCY_STDDEV = 'insert latency (stddev ms)'
 
-    INSERT_TPS = 'insert (tps)'
+    INSERT_TPS = 'insert tps'
 
     # Insert bulk
 
-    INSERT_BULK_LATENCY = 'insert bulk (latency ms)'
-    INSERT_BULK_LATENCY_STDDEV = 'insert bulk (latency stddev ms)'
+    INSERT_BULK_LATENCY = 'insert bulk latency (ms)'
+    INSERT_BULK_LATENCY_STDDEV = 'insert bulk latency (stddev ms)'
 
-    INSERT_BULK_TPS = 'insert bulk (tps)'
+    INSERT_BULK_TPS = 'insert bulk tps'
 
     # Create
 
     DISK_USAGE = 'disk usage (bytes)'
     DISK_USAGE_STDDEV = 'disk usage (stddev bytes)'
 
-    CREATE_LATENCY = 'create (latency ms)'
-    CREATE_LATENCY_STDDEV = 'create (latency stddev ms)'
+    CREATE_LATENCY = 'create latency (ms)'
+    CREATE_LATENCY_STDDEV = 'create latency (stddev ms)'
 
 
 VALID_METRICS = [metric.value for metric in Metric]
@@ -116,7 +117,8 @@ METRICS_THAT_SHOULD_DECREASE = [
 METRICS_THAT_SHOULD_INCREASE = [
     Metric.SELECT_TPS,
     Metric.INSERT_TPS,
-    Metric.RECALL,
+    Metric.RECALL_AFTER_CREATE,
+    Metric.RECALL_AFTER_INSERT,
 ]
 
 """
@@ -132,7 +134,8 @@ class ExperimentParam(Enum):
 EXPERIMENT_PARAMETERS = {
     Metric.SELECT_LATENCY: [ExperimentParam.N, ExperimentParam.K],
     Metric.SELECT_TPS: [ExperimentParam.N, ExperimentParam.K],
-    Metric.RECALL: [ExperimentParam.N, ExperimentParam.K],
+    Metric.RECALL_AFTER_CREATE: [ExperimentParam.N, ExperimentParam.K],
+    Metric.RECALL_AFTER_INSERT: [ExperimentParam.N, ExperimentParam.K],
     Metric.INSERT_LATENCY: [],
     Metric.INSERT_BULK_LATENCY: [],
     Metric.DISK_USAGE: [ExperimentParam.N],
