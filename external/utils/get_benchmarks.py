@@ -1,6 +1,7 @@
 import ast
 import os
 import json
+import logging
 from github import Github
 import urllib3
 from core.utils.constants import Metric
@@ -33,32 +34,33 @@ def is_json_string(s):
 def get_old_benchmarks():
     try:
         if not GITHUB_TOKEN:
-            print("GITHUB_TOKEN not set, skipping old benchmarks")
+            logging.info("GITHUB_TOKEN not set, skipping old benchmarks")
             return {}
         if not BASE_REF:
-            print("BASE_REF not set, skipping old benchmarks")
+            logging.info("BASE_REF not set, skipping old benchmarks")
             return {}
 
-        print(f"Fetching old benchmarks from {BASE_REF}")
+        logging.info(f"Fetching old benchmarks from {BASE_REF}")
         g = Github(GITHUB_TOKEN)
         repo = g.get_repo(REPO_NAME)
         artifact = None
         workflows = repo.get_workflow_runs(branch=BASE_REF)
 
         for workflow in workflows:
-            print(f"Checking artifacts for workflow run ID: {workflow.id}...")
+            logging.info(
+                f"Checking artifacts for workflow run ID: {workflow.id}...")
             artifacts = workflow.get_artifacts()
             for artifact_ in artifacts:
                 if artifact_.name == "benchmark-results":
                     artifact = artifact_
-                    print(f"Found benchmark-results artifact")
+                    logging.info(f"Found benchmark-results artifact")
                     break
             if artifact:
                 break
 
         if artifact:
             artifact_file_name = "/tmp/benchmark-results-artifact.zip"
-            print(f"Downloading artifact to {artifact_file_name}...")
+            logging.info(f"Downloading artifact to {artifact_file_name}...")
 
             url = artifact.archive_download_url
             headers = {
@@ -69,11 +71,12 @@ def get_old_benchmarks():
             with open(artifact_file_name, "wb") as f:
                 f.write(r.data)
 
-            print(f"Extracting {artifact_file_name}...")
+            logging.info(f"Extracting {artifact_file_name}...")
             with zipfile.ZipFile(artifact_file_name, 'r') as zip_ref:
                 zip_ref.extractall("/tmp")
 
-            print("Loading benchmark results from extracted JSON file...")
+            logging.info(
+                "Loading benchmark results from extracted JSON file...")
             with open("/tmp/benchmarks-out.json", "r") as f:
                 contents = f.read()
                 if is_json_string(contents):
@@ -81,10 +84,11 @@ def get_old_benchmarks():
                 elif can_literal_eval(contents):
                     return ast.literal_eval(contents)
                 else:
+                    logging.error("Could not parse benchmark results")
                     return {}
 
     except Exception as e:
-        print(f"Error fetching old benchmarks: {e}")
+        logging.error(f"Error fetching old benchmarks: {e}")
 
     return {}
 

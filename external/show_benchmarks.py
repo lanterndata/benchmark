@@ -1,4 +1,5 @@
 import argparse
+import logging
 from typing import List, Tuple
 from core.utils.constants import Metric
 from external.utils import cli
@@ -6,11 +7,9 @@ from external.utils.get_benchmarks import get_benchmarks
 
 
 def add_arguments(parser: argparse.ArgumentParser) -> None:
-    """
-    Add specific arguments for the show_benchmarks script.
-    """
     parser.add_argument('--markdown', action='store_true',
                         help='Print benchmarks in markdown format')
+    parser.add_argument('--loginfo', action='store_true', help='Print logs')
 
 
 def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
@@ -42,8 +41,10 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
 
 
 if __name__ == "__main__":
-    extension, index_params, dataset, N, K, markdown = cli.get_args(
-        "show benchmark results for tests or CI/CD", add_arguments, ['markdown'])
+    extension, index_params, dataset, N, K, markdown, loginfo = cli.get_args(
+        "show benchmark results for tests or CI/CD", add_arguments, ['markdown', 'loginfo'])
+    if loginfo:
+        logging.basicConfig(level=logging.INFO)
     benchmarks = get_benchmarks(
         extension, index_params, dataset, N, K, return_old=True)
     print_benchmarks(benchmarks, markdown=markdown)

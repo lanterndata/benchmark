@@ -1,5 +1,5 @@
 import sys
-import math
+import logging
 from typing import List, Tuple
 from core.utils.constants import Metric, METRICS_THAT_SHOULD_DECREASE, METRICS_THAT_SHOULD_INCREASE
 from external.utils.get_benchmarks import get_benchmarks
@@ -33,9 +33,9 @@ def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
                     f"{metric.value} increased by {pct_change * 100:.2f}%")
 
     for warning in warnings:
-        print('WARNING:', warning)
+        logging.warning(warning)
     for error in errors:
-        print('ERROR:', error)
+        logging.error(error)
     if len(errors) > 0:
         sys.exit(1)
 

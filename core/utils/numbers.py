@@ -1,3 +1,6 @@
+import logging
+
+
 def convert_string_to_number(s):
     s = s.strip().lower()  # remove spaces and convert to lowercase
 
@@ -15,7 +18,7 @@ def convert_string_to_number(s):
     try:
         return int(float(s) * multiplier)
     except ValueError:
-        print(f"Could not convert {s} to a number.")
+        logging.error(f"Could not convert {s} to a number.")
         return None
 
 

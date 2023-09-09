@@ -1,5 +1,6 @@
 import os
 import argparse
+import logging
 import urllib.request
 from typing import Dict, List
 from .utils.database import DatabaseConnection
@@ -23,21 +24,21 @@ def table_exists(extension, table):
             exists = conn.select_one(sql, (table,))[0]
             return exists
     except Exception as e:
-        print(f"Error checking if table {table} exists: {e}")
+        logging.error(f"Error checking if table {table} exists: {e}")
         return False
 
 
 def has_rows(extension, table):
     """Check if the table has non-zero rows."""
     if not table_exists(extension, table):
-        print(f"Table {table} does not exist.")
+        logging.info(f"Table {table} does not exist.")
         return False
     try:
         with DatabaseConnection(extension) as conn:
             count = conn.select_one(f"SELECT COUNT(*) FROM {table};")[0]
             return count > 0
     except Exception as e:
-        print(f"Error checking row count for table {table}: {e}")
+        logging.error(f"Error checking row count for table {table}: {e}")
         return False
 
 
@@ -100,24 +101,25 @@ def create_or_download_table(datapath, extension, table_name):
     create_table(extension, table_name)
 
     if has_rows(extension, table_name):
-        print(
+        logging.info(
             f"Table {table_name} exists for extension {extension.value} and has data. Skipping.")
 
     else:
         # Download data if it doesn't exist
         source_file = os.path.join(datapath, f"{table_name}.csv")
         if not os.path.exists(source_file):
-            print(f"Source file {source_file} does not exist. Downloading...")
+            logging.info(
+                f"Source file {source_file} does not exist. Downloading...")
             if not os.path.exists(datapath):
                 os.makedirs(datapath)
             urllib.request.urlretrieve(
                 f"https://storage.googleapis.com/lanterndata/datasets/{table_name}.csv", source_file)
-            print("Download complete.")
+            logging.info("Download complete.")
 
         # Insert data into the table
         insert_table(extension, table_name, source_file)
 
-        print(
+        logging.info(
             f"Inserted data into table {table_name} for extension {extension.value}")
 
 
@@ -140,15 +142,16 @@ def setup_extension(datapath: str, extension: Extension, dataset_sizes: Dict[Dat
             "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (extension_name,))
         if exists is None:
             conn.execute(f"CREATE DATABASE {extension_name};")
-            print(f"Created database {extension_name}.")
+            logging.info(f"Created database {extension_name}.")
         else:
-            print(f"Database {extension_name} already exists. Skipping.")
+            logging.info(
+                f"Database {extension_name} already exists. Skipping.")
 
     # Enables the extension if it is not already enabled
     extension_name = EXTENSION_NAMES[extension]
     with DatabaseConnection(extension) as conn:
         conn.execute(f"CREATE EXTENSION IF NOT EXISTS {extension_name};")
-    print(f"Extension {extension_name} is enabled.")
+    logging.info(f"Extension {extension_name} is enabled.")
 
     # Ensure all tables are created and populated
     create_or_download_tables(datapath, extension, dataset_sizes)
@@ -201,4 +204,4 @@ if __name__ == "__main__":
     else:
         for extension in args.extension:
             setup_extension(args.datapath, Extension(extension), dataset_sizes)
-    print('Done!')
+    logging.info('Done!')
