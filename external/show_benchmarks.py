@@ -5,17 +5,26 @@ from external.utils.get_benchmarks import get_benchmarks
 
 
 def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
-    divider_length = 73
+    divider_length = 80
     divider_line = "-" * divider_length
 
     print(divider_line)
-    print("| %-21s | %21s | %21s |" % ("metric", "old", "new"))
+    print("| %-21s | %18s | %18s | %10s |" %
+          ("metric", "old", "new", "pct_change"))
     print(divider_line)
 
     for metric, old_value, new_value in benchmarks:
-        display_old_value = old_value if old_value is not None else "-"
-        data = (metric.value, display_old_value, new_value)
-        print("| %-21s | %21s | %21s |" % data)
+        display_old_value = "-" if old_value is None else \
+            "%.3f" % float(old_value)
+        display_new_value = "-" if new_value is None else \
+            "%.3f" % float(new_value)
+        pct_change = "-" if new_value is None or old_value is None else \
+            (float(new_value) - float(old_value)) / float(old_value) * 100
+        display_pct_change = "%.2f%%" % pct_change
+        data = (metric.value, display_old_value,
+                display_new_value, display_pct_change)
+        print("| %-21s | %21s | %21s | %21s |" % data)
+
     print(divider_line)
 
 
