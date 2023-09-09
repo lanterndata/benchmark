@@ -22,7 +22,7 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
         print(divider_line)
     print("| %-21s | %18s | %18s | %10s |" %
           ("metric", "old", "new", "pct change"))
-    print(divider_line)
+    print(f"|{23 * '-'}|{20 * '-'}|{20 * '-'}|{12 * '-'}|")
 
     for metric, old_value, new_value in benchmarks:
         display_old_value = "-" if old_value is None else \
