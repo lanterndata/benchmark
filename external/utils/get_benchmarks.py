@@ -6,7 +6,7 @@ from core.utils.process import get_experiment_result
 import zipfile
 
 REPO_NAME = 'lanterndata/lanterndb'
-BASE_REF = os.environ.get('GITHUB_BASE_REF', 'main')
+BASE_REF = os.environ.get('BASE_REF', 'main')
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
 
 
