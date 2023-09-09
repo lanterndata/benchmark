@@ -1,7 +1,7 @@
 import os
 import json
 from github import Github
-import requests
+import urllib3
 from core.utils.constants import Metric
 from core.utils.process import get_experiment_result
 import zipfile
@@ -9,6 +9,8 @@ import zipfile
 REPO_NAME = 'lanterndata/lanterndb'
 BASE_REF = os.environ.get('BASE_REF', 'main')
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
+
+http = urllib3.PoolManager()
 
 
 def get_old_benchmarks():
@@ -38,12 +40,16 @@ def get_old_benchmarks():
 
     if artifact:
         artifact_file_name = "/tmp/benchmark-results-artifact.zip"
-
         print(f"Downloading artifact to {artifact_file_name}...")
 
-        r = requests.get(artifact.archive_download_url)
-        with open(artifact_file_name, 'wb') as f:
-            f.write(r.content)
+        url = artifact.archive_download_url
+        headers = {
+            "Authorization": f"token {GITHUB_TOKEN}",
+            "User-Agent": "Python",
+        }
+        r = http.request("GET", url, headers=headers)
+        with open(artifact_file_name, "wb") as f:
+            f.write(r.data)
 
         print(f"Extracting {artifact_file_name}...")
         with zipfile.ZipFile(artifact_file_name, 'r') as zip_ref:
@@ -52,6 +58,7 @@ def get_old_benchmarks():
         print("Loading benchmark results from extracted JSON file...")
         with open("/tmp/benchmarks-out.json", "r") as f:
             data = json.load(f)
+        return data
 
     return {}
 
