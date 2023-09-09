@@ -12,26 +12,42 @@ GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
 
 def get_old_benchmarks():
     if not GITHUB_TOKEN:
+        print("GITHUB_TOKEN not set, skipping old benchmarks")
         return {}
+    if not BASE_REF:
+        print("BASE_REF not set, skipping old benchmarks")
+        return {}
+
+    print(f"Fetching old benchmarks from {BASE_REF}")
     g = Github(GITHUB_TOKEN)
     repo = g.get_repo(REPO_NAME)
     artifact = None
     workflows = repo.get_workflow_runs(branch=BASE_REF)
+
     for workflow in workflows:
+        print(f"Checking artifacts for workflow run ID: {workflow.id}...")
         for artifact_ in workflow.artifacts():
             if artifact_.name == "benchmark-results":
                 artifact = artifact_
+                print(f"Found benchmark-results artifact")
                 break
         if artifact:
             break
+
     if artifact:
         artifact_file_name = "/tmp/benchmark-results-artifact.zip"
+        print(f"Downloading artifact to {artifact_file_name}...")
         artifact.download_as_zip(artifact_file_name)
+
+        print(f"Extracting {artifact_file_name}...")
         with zipfile.ZipFile(artifact_file_name, 'r') as zip_ref:
             zip_ref.extractall("/tmp")
+
+        print("Loading benchmark results from extracted JSON file...")
         with open("/tmp/benchmarks-out.json", "r") as f:
             data = json.load(f)
         return data
+
     return {}
 
 
