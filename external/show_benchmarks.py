@@ -10,7 +10,7 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
 
     print(divider_line)
     print("| %-21s | %18s | %18s | %10s |" %
-          ("metric", "old", "new", "pct_change"))
+          ("metric", "old", "new", "pct change"))
     print(divider_line)
 
     for metric, old_value, new_value in benchmarks:
