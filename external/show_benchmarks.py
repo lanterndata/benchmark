@@ -31,7 +31,7 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
         display_new_value = "-" if new_value is None else \
             "%.3f" % float(new_value)
         display_pct_change = "-" if new_value is None or old_value is None else \
-            "%.2f%%" % (float(new_value) - float(old_value) /
+            "%.2f%%" % ((float(new_value) - float(old_value)) /
                         float(old_value) * 100)
         data = (metric.value, display_old_value,
                 display_new_value, display_pct_change)
