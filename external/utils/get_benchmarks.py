@@ -1,3 +1,4 @@
+import ast
 import os
 import json
 from github import Github
@@ -13,52 +14,77 @@ GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
 http = urllib3.PoolManager()
 
 
+def can_literal_eval(s):
+    try:
+        ast.literal_eval(s)
+        return True
+    except (ValueError, SyntaxError):
+        return False
+
+
+def is_json_string(s):
+    try:
+        json.loads(s)
+        return True
+    except json.JSONDecodeError:
+        return False
+
+
 def get_old_benchmarks():
-    if not GITHUB_TOKEN:
-        print("GITHUB_TOKEN not set, skipping old benchmarks")
-        return {}
-    if not BASE_REF:
-        print("BASE_REF not set, skipping old benchmarks")
-        return {}
+    try:
+        if not GITHUB_TOKEN:
+            print("GITHUB_TOKEN not set, skipping old benchmarks")
+            return {}
+        if not BASE_REF:
+            print("BASE_REF not set, skipping old benchmarks")
+            return {}
 
-    print(f"Fetching old benchmarks from {BASE_REF}")
-    g = Github(GITHUB_TOKEN)
-    repo = g.get_repo(REPO_NAME)
-    artifact = None
-    workflows = repo.get_workflow_runs(branch=BASE_REF)
+        print(f"Fetching old benchmarks from {BASE_REF}")
+        g = Github(GITHUB_TOKEN)
+        repo = g.get_repo(REPO_NAME)
+        artifact = None
+        workflows = repo.get_workflow_runs(branch=BASE_REF)
 
-    for workflow in workflows:
-        print(f"Checking artifacts for workflow run ID: {workflow.id}...")
-        artifacts = workflow.get_artifacts()
-        for artifact_ in artifacts:
-            if artifact_.name == "benchmark-results":
-                artifact = artifact_
-                print(f"Found benchmark-results artifact")
+        for workflow in workflows:
+            print(f"Checking artifacts for workflow run ID: {workflow.id}...")
+            artifacts = workflow.get_artifacts()
+            for artifact_ in artifacts:
+                if artifact_.name == "benchmark-results":
+                    artifact = artifact_
+                    print(f"Found benchmark-results artifact")
+                    break
+            if artifact:
                 break
+
         if artifact:
-            break
+            artifact_file_name = "/tmp/benchmark-results-artifact.zip"
+            print(f"Downloading artifact to {artifact_file_name}...")
 
-    if artifact:
-        artifact_file_name = "/tmp/benchmark-results-artifact.zip"
-        print(f"Downloading artifact to {artifact_file_name}...")
+            url = artifact.archive_download_url
+            headers = {
+                "Authorization": f"token {GITHUB_TOKEN}",
+                "User-Agent": "Python",
+            }
+            r = http.request("GET", url, headers=headers)
+            with open(artifact_file_name, "wb") as f:
+                f.write(r.data)
 
-        url = artifact.archive_download_url
-        headers = {
-            "Authorization": f"token {GITHUB_TOKEN}",
-            "User-Agent": "Python",
-        }
-        r = http.request("GET", url, headers=headers)
-        with open(artifact_file_name, "wb") as f:
-            f.write(r.data)
+            print(f"Extracting {artifact_file_name}...")
+            with zipfile.ZipFile(artifact_file_name, 'r') as zip_ref:
+                zip_ref.extractall("/tmp")
 
-        print(f"Extracting {artifact_file_name}...")
-        with zipfile.ZipFile(artifact_file_name, 'r') as zip_ref:
-            zip_ref.extractall("/tmp")
+            print("Loading benchmark results from extracted JSON file...")
+            with open("/tmp/benchmarks-out.json", "r") as f:
+                contents = f.read()
+                if is_json_string(contents):
+                    return json.load(f)
+                elif can_literal_eval(contents):
+                    return ast.literal_eval(contents)
+                else:
+                    return {}
 
-        print("Loading benchmark results from extracted JSON file...")
-        with open("/tmp/benchmarks-out.json", "r") as f:
-            data = json.load(f)
-        return data
+    except Exception as e:
+        print(f"Error fetching old benchmarks: {e}")
 
     return {}
 

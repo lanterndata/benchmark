@@ -1,3 +1,4 @@
+import json
 from external.utils.get_benchmarks import get_benchmarks
 from external.utils import cli
 
@@ -9,4 +10,4 @@ if __name__ == "__main__":
     benchmarks_json = {}
     for metric, value, in benchmarks:
         benchmarks_json[metric.value] = value
-    print(benchmarks_json)
+    print(json.dumps(benchmarks_json))
