@@ -26,7 +26,8 @@ def get_old_benchmarks():
 
     for workflow in workflows:
         print(f"Checking artifacts for workflow run ID: {workflow.id}...")
-        for artifact_ in workflow.artifacts():
+        artifacts = workflow.get_artifacts()
+        for artifact_ in artifacts:
             if artifact_.name == "benchmark-results":
                 artifact = artifact_
                 print(f"Found benchmark-results artifact")
