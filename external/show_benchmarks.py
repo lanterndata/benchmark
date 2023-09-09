@@ -23,7 +23,7 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
         display_pct_change = "%.2f%%" % pct_change
         data = (metric.value, display_old_value,
                 display_new_value, display_pct_change)
-        print("| %-21s | %21s | %21s | %21s |" % data)
+        print("| %-21s | %18s | %18s | %10s |" % data)
 
     print(divider_line)
 
