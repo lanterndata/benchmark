@@ -80,7 +80,7 @@ def get_old_benchmarks():
             with open("/tmp/benchmarks-out.json", "r") as f:
                 contents = f.read()
                 if is_json_string(contents):
-                    return json.load(contents)
+                    return json.loads(contents)
                 elif can_literal_eval(contents):
                     return ast.literal_eval(contents)
                 else:
