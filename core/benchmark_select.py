@@ -210,9 +210,10 @@ def generate_recall(extension, dataset, N, K, base_table_name_input=None):
     return recall_at_k
 
 
-def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False):
-    delete_index(extension, dataset, N)
-    create_index(extension, dataset, N, index_params=index_params)
+def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False, skip_index=False):
+    if not skip_index:
+        delete_index(extension, dataset, N)
+        create_index(extension, dataset, N, index_params=index_params)
 
     print(get_title(extension, index_params, dataset, N))
     print_labels('K', 'Recall', 'TPS', 'Avg Latency (ms)',
@@ -255,7 +256,8 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
         )
     print()
 
-    delete_index(extension, dataset, N)
+    if not skip_index:
+        delete_index(extension, dataset, N)
 
 
 if __name__ == '__main__':

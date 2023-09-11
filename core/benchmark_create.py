@@ -39,7 +39,7 @@ def generate_performance_result(extension, dataset, N, index_params):
             return time
 
 
-def generate_result(extension, dataset, N, index_params={}, count=10):
+def generate_result(extension, dataset, N, index_params={}, count=10, skip_cleanup=False):
     validate_extension(extension)
 
     delete_index(extension, dataset, N)
@@ -60,7 +60,8 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
         print_row(str(iteration), "{:.2f}".format(time),
                   convert_number_to_bytes(disk_usage))
 
-        delete_index(extension, dataset, N)
+        if not (skip_cleanup and iteration == count - 1):
+            delete_index(extension, dataset, N)
 
     latency_average = statistics.mean(times)
     latency_stddev = statistics.stdev(times)
@@ -87,8 +88,6 @@ def generate_result(extension, dataset, N, index_params={}, count=10):
     print('average disk usage:', convert_number_to_bytes(disk_usage_average))
     print('stddev disk usage:', convert_number_to_bytes(disk_usage_stddev))
     print()
-
-    delete_index(extension, dataset, N)
 
 
 def print_results(dataset):

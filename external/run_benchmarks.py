@@ -27,25 +27,10 @@ if __name__ == "__main__":
         extension, dataset, N, index_params)
     disk_usage = benchmark_create.generate_disk_usage_result(
         extension, dataset, N)
-    tps_response, latency_average_response, latency_stddev_response = benchmark_select.generate_performance_result(
-        extension, dataset, N, K, bulk=False)
-    recall_after_create = benchmark_select.generate_recall(
-        extension, dataset, N, K)
-    shared_hit_response, shared_hit_stddev_response, read_response, read_stddev_response = benchmark_select.generate_utilization_result(
-        extension, dataset, N, K, bulk=False)
+    benchmark_select.generate_result(
+        extension, dataset, N, [K], index_params, bulk=False, skip_index=True)
     delete_index(extension, dataset, N)
-
     save_result(Metric.CREATE_LATENCY, latency_create, **create_kwargs)
     save_result(Metric.DISK_USAGE, disk_usage, **create_kwargs)
-    save_result(**tps_response, **select_kwargs)
-    save_result(**latency_average_response, **select_kwargs)
-    save_result(**latency_stddev_response, **select_kwargs)
-    save_result(Metric.RECALL_AFTER_CREATE,
-                recall_after_create, **select_kwargs)
-    save_result(**shared_hit_response, **select_kwargs)
-    save_result(**shared_hit_stddev_response, **select_kwargs)
-    save_result(**read_response, **select_kwargs)
-    save_result(**read_stddev_response, **select_kwargs)
-
     benchmark_insert.generate_result(
         extension, dataset, N, index_params, K=K, bulk=False)

@@ -35,6 +35,11 @@ DEFAULT_INDEX_PARAMS = {
     Extension.NONE: {},
 }
 
+
+def coalesce_index_params(extension, index_params):
+    return DEFAULT_INDEX_PARAMS[extension] | index_params
+
+
 VALID_INDEX_PARAMS = {
     index: list(default_params.keys()) for index, default_params in DEFAULT_INDEX_PARAMS.items()
 }

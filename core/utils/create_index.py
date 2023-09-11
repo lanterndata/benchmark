@@ -1,14 +1,11 @@
 from .names import get_table_name, get_index_name
-from .constants import DEFAULT_INDEX_PARAMS, get_vector_dim, Extension
+from .constants import coalesce_index_params, get_vector_dim, Extension
 from .database import DatabaseConnection
-
-
-def get_index_params(extension, index_params):
-    return DEFAULT_INDEX_PARAMS[extension] | index_params
+from .create_external_index import create_external_index
 
 
 def get_create_pgvector_ivfflat_index_query(table, index, index_params):
-    params = get_index_params(Extension.PGVECTOR_IVFFLAT, index_params)
+    params = coalesce_index_params(Extension.PGVECTOR_IVFFLAT, index_params)
     sql = f"""
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
@@ -22,7 +19,7 @@ def get_create_pgvector_ivfflat_index_query(table, index, index_params):
 
 
 def get_create_pgvector_hnsw_index_query(table, index, index_params):
-    params = get_index_params(Extension.PGVECTOR_HNSW, index_params)
+    params = coalesce_index_params(Extension.PGVECTOR_HNSW, index_params)
     sql = f"""
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
@@ -37,7 +34,7 @@ def get_create_pgvector_hnsw_index_query(table, index, index_params):
 
 
 def get_create_lantern_index_query(table, index, index_params):
-    params = get_index_params(Extension.LANTERN, index_params)
+    params = coalesce_index_params(Extension.LANTERN, index_params)
     vector_dim = get_vector_dim(table)
     sql = f"""
         SET maintenance_work_mem = '2GB';
@@ -54,7 +51,7 @@ def get_create_lantern_index_query(table, index, index_params):
 
 
 def get_create_neon_index_query(table, index, index_params):
-    params = get_index_params(Extension.NEON, index_params)
+    params = coalesce_index_params(Extension.NEON, index_params)
     vector_dim = get_vector_dim(table)
     sql = f"""
         SET maintenance_work_mem = '2GB';
@@ -95,6 +92,9 @@ def create_custom_index(extension, table, index, index_params={}):
 
 
 def create_index(extension, dataset, N, index_params={}):
+    if 'external' in index_params:
+        create_external_index(extension, dataset, N, index_params)
+        return
     sql = get_create_index_query(extension, dataset, N, index_params)
     if sql is not None:
         with DatabaseConnection(extension) as conn:
