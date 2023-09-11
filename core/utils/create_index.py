@@ -43,7 +43,7 @@ def get_create_lantern_index_query(table, index, index_params):
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
         hnsw (v) WITH (
-            dims={vector_dim},
+            dim={vector_dim},
             M={params['m']},
             ef_construction={params['ef_construction']},
             ef={params['ef']}
