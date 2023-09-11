@@ -173,6 +173,7 @@ def setup_results_table():
                 err TEXT,
                 metric_type TEXT NOT NULL,
                 metric_value DOUBLE PRECISION NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 CONSTRAINT unique_result UNIQUE (metric_type, extension, index_params, dataset, n, k)
             );
         """
