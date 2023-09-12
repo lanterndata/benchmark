@@ -13,7 +13,6 @@ class Extension(Enum):
     NEON = 'neon'
     NONE = 'none'
 
-
 EXTENSION_VALUES = [extension.value for extension in Extension]
 
 EXTENSION_NAMES = {
@@ -35,14 +34,22 @@ DEFAULT_INDEX_PARAMS = {
     Extension.NONE: {},
 }
 
-
 def coalesce_index_params(extension, index_params):
     return DEFAULT_INDEX_PARAMS[extension] | index_params
 
+SUGGESTED_INDEX_PARAMS = {
+    Extension.PGVECTOR_IVFFLAT: [{'lists': 100, 'probes': 16}],
+    Extension.PGVECTOR_HNSW: [{'m': 4, 'ef_construction': 128, 'ef': 10}],
+    Extension.LANTERN: [{'m': 4, 'ef_construction': 128, 'ef': 10}, {'m': 4, 'ef_construction': 128, 'ef': 10, 'external': True}],
+    Extension.NEON: [{'m': 4, 'ef_construction': 128, 'ef': 10}],
+    Extension.NONE: [{}],
+}
 
 VALID_INDEX_PARAMS = {
-    index: list(default_params.keys()) for index, default_params in DEFAULT_INDEX_PARAMS.items()
+    index: list(set().union(*(param_set.keys() for param_set in default_params)))
+    for index, default_params in SUGGESTED_INDEX_PARAMS.items()
 }
+
 
 """
 Metric constants

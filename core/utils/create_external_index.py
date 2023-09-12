@@ -1,8 +1,7 @@
-import os
 from .constants import Extension, Dataset
 from .names import get_table_name, get_index_name
 from .constants import coalesce_index_params, get_vector_dim, Extension
-from .database import DatabaseConnection, get_database_url
+from .database import DatabaseConnection, get_database_url, run_command
 
 
 def create_external_index(extension: Extension, dataset: Dataset, N: str, index_params={}):
@@ -20,7 +19,7 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
     # Create external index and save to file
     database_url = get_database_url(extension)
     command = ' '.join([
-        'ldb-create_index',
+        'ldb-create-index',
         '-u',
         f'"{database_url}"',
         '-t',
@@ -28,19 +27,19 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         '-c',
         '"v"',
         '-m',
-        params['m'],
+        str(params['m']),
         '--ef',
-        params['ef'],
+        str(params['ef']),
         '--efc',
-        params['ef_construction'],
+        str(params['ef_construction']),
         '-d',
-        get_vector_dim(dataset),
+        str(get_vector_dim(dataset)),
         '--metric-kind',
-        'cos',
+        'l2sq',
         '--out',
         file
     ])
-    os.system(command)
+    print(run_command(command))
 
     # Create index from file
     sql = f"""
