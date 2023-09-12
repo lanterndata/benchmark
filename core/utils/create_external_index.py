@@ -50,4 +50,3 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
     """
     with DatabaseConnection(extension) as conn:
         conn.execute(sql)
-    return
