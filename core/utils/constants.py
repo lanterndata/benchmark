@@ -20,7 +20,7 @@ EXTENSION_VALUES = [extension.value for extension in Extension]
 EXTENSION_NAMES = {
     Extension.PGVECTOR_IVFFLAT: 'vector',
     Extension.PGVECTOR_HNSW: 'vector',
-    Extension.LANTERN: 'lanterndb',
+    Extension.LANTERN: 'lantern',
     Extension.NEON: 'embedding',
     Extension.NONE: 'vector',
 }
