@@ -84,7 +84,7 @@ def run_pgbench(extension, query, clients=8, threads=8, transactions=15):
         tmp_file_path = tmp_file.name
 
     command = f'pgbench { get_database_url(extension)} -f {tmp_file_path} -c {clients} -j {threads} -t {transactions} -P 5 -r'
-    stdout, stderr = _run_command(command)
+    stdout, stderr = run_command(command)
 
     # Extract latency average using regular expression
     latency_average = None
@@ -108,7 +108,7 @@ def run_pgbench(extension, query, clients=8, threads=8, transactions=15):
     return stdout, stderr, tps, latency_average, latency_stddev
 
 
-def _run_command(command):
+def run_command(command):
     process = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()

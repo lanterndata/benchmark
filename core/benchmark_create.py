@@ -1,9 +1,11 @@
+import time
 import argparse
 import subprocess
 import statistics
 from .utils.database import DatabaseConnection, get_database_url
 from .utils.delete_index import delete_index
 from .utils.create_index import get_create_index_query, get_index_name
+from .utils.create_external_index import create_external_index
 from .utils.numbers import convert_string_to_number, convert_number_to_string, convert_number_to_bytes
 from .utils.constants import Metric, Extension, Dataset
 from .utils import cli
@@ -27,7 +29,16 @@ def generate_disk_usage_result(extension, dataset, N):
     return disk_usage
 
 
+def generate_external_performance_result(extension, dataset, N, index_params):
+    t1 = time.time()
+    create_external_index(extension, dataset, N, index_params)
+    t2 = time.time()
+    return (t2 - t1) * 1000
+
+
 def generate_performance_result(extension, dataset, N, index_params):
+    if 'external' in index_params:
+        return generate_external_performance_result(extension, dataset, N, index_params)
     create_index_query = get_create_index_query(
         extension, dataset, N, index_params)
     result = subprocess.run(["psql", get_database_url(extension), "-c", SUPPRESS_COMMAND, "-c",
@@ -39,7 +50,7 @@ def generate_performance_result(extension, dataset, N, index_params):
             return time
 
 
-def generate_result(extension, dataset, N, index_params={}, count=10, skip_cleanup=False):
+def generate_result(extension, dataset, N, index_params={}, count=10):
     validate_extension(extension)
 
     delete_index(extension, dataset, N)
@@ -60,13 +71,13 @@ def generate_result(extension, dataset, N, index_params={}, count=10, skip_clean
         print_row(str(iteration), "{:.2f}".format(time),
                   convert_number_to_bytes(disk_usage))
 
-        if not (skip_cleanup and iteration == count - 1):
-            delete_index(extension, dataset, N)
+        delete_index(extension, dataset, N)
 
     latency_average = statistics.mean(times)
-    latency_stddev = statistics.stdev(times)
     disk_usage_average = statistics.mean(disk_usages)
-    disk_usage_stddev = statistics.stdev(disk_usages)
+    if count > 1:
+        latency_stddev = statistics.stdev(times)
+        disk_usage_stddev = statistics.stdev(disk_usages)
 
     def save_create_result(metric_type, metric_value):
         save_result(
@@ -79,14 +90,17 @@ def generate_result(extension, dataset, N, index_params={}, count=10, skip_clean
         )
 
     save_create_result(Metric.CREATE_LATENCY, latency_average)
-    save_create_result(Metric.CREATE_LATENCY_STDDEV, latency_stddev)
     save_create_result(Metric.DISK_USAGE, disk_usage_average)
-    save_create_result(Metric.DISK_USAGE_STDDEV, disk_usage_stddev)
+    if count > 1:        
+        save_create_result(Metric.CREATE_LATENCY_STDDEV, latency_stddev)
+        save_create_result(Metric.DISK_USAGE_STDDEV, disk_usage_stddev)
 
     print('average latency:',  f"{latency_average:.2f} ms")
-    print('stddev latency', f"{latency_stddev:.2f} ms")
+    if count > 1:
+        print('stddev latency', f"{latency_stddev:.2f} ms")
     print('average disk usage:', convert_number_to_bytes(disk_usage_average))
-    print('stddev disk usage:', convert_number_to_bytes(disk_usage_stddev))
+    if count > 1:
+        print('stddev disk usage:', convert_number_to_bytes(disk_usage_stddev))
     print()
 
 

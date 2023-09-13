@@ -6,11 +6,11 @@ export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 if [ -d "/neon" ]; then
   echo "Updating neon..."
   cd /neon
-  git fetch origin
+  git fetch origin 0.3.6
   git pull
 else
   echo "Installing neon..."
-  git clone https://github.com/neondatabase/pg_embedding /neon
+  git clone --branch 0.3.6 https://github.com/neondatabase/pg_embedding /neon
   cd /neon
 fi
 

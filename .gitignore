@@ -18,3 +18,4 @@ __pycache__/
 
 # LanternDB Extras
 lanterndb_extras/
+.cargo
