@@ -1,11 +1,12 @@
 import plotly.graph_objects as go
 from .constants import Extension
 from .colors import get_transparent_color, get_color_from_extension
+from .numbers import convert_number_to_string
 
 
 def plot_bar(fig: go.Figure, extension: Extension, index_params, x_values, y_values, index=0):
     fig.add_trace(go.Bar(
-        x=x_values,
+        x=list(map(convert_number_to_string, x_values)),
         y=y_values,
         marker=dict(color=get_color_from_extension(extension, index)),
         name=f"{extension.value.upper()} - {index_params}",

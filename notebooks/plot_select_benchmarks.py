@@ -28,9 +28,13 @@ def generate_plot(configuration, dataset, fixed_param, fixed_param_value, variab
                 plot_trace = plot_line if plot_type == 'line' else plot_bar
                 plot_trace(fig, extension, index_params,
                         param_values, metric_values, index=index)
+    
+    variable_param_value = variable_param.value
+    if variable_param_value == 'n':
+        variable_param_value = 'number of rows'
     fig.update_layout(
-        title=f"{metric_type.value} vs. {variable_param.value} ({dataset.value}, {fixed_param.value.upper()}={fixed_param_value})",
-        xaxis_title=variable_param.value,
+        title=f"{metric_type.value} vs. {variable_param_value} ({dataset.value}, {fixed_param.value.upper()}={fixed_param_value})",
+        xaxis_title=variable_param_value,
         yaxis_title=metric_type.value,
     )
     fig.show()
