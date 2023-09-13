@@ -8,7 +8,7 @@ from core.utils.constants import Metric
 from core.utils.process import get_experiment_result
 import zipfile
 
-REPO_NAME = 'lanterndata/lanterndb'
+REPO_NAME = 'lanterndata/lantern'
 BASE_REF = os.environ.get('BASE_REF', 'main')
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
 
