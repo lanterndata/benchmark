@@ -39,7 +39,7 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         '--out',
         file
     ])
-    print(run_command(command))
+    run_command(command)
 
     # Create index from file
     sql = f"""
@@ -48,5 +48,6 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         USING hnsw (v)
         WITH (_experimental_index_path='{file}');
     """
+
     with DatabaseConnection(extension) as conn:
         conn.execute(sql)
