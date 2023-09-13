@@ -13,6 +13,8 @@ def generate_plot(configuration, dataset, fixed_param, fixed_param_value, variab
                 metric_type, metric_stddev_type] if metric_stddev_type is not None else [metric_type]
             results = get_experiment_results_for_params(
                 metric_types, extension, json.dumps(index_params), dataset, **{(fixed_param.value.upper()): fixed_param_value})
+            if len(results) == 0:
+                continue
             if metric_stddev_type is not None:
                 param_values, metric_values, metric_stddev_values = zip(*results)
                 if plot_type == 'bar':

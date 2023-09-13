@@ -50,7 +50,7 @@ def generate_performance_result(extension, dataset, N, index_params):
             return time
 
 
-def generate_result(extension, dataset, N, index_params={}, count=10, skip_cleanup=False):
+def generate_result(extension, dataset, N, index_params={}, count=10):
     validate_extension(extension)
 
     delete_index(extension, dataset, N)
@@ -71,13 +71,12 @@ def generate_result(extension, dataset, N, index_params={}, count=10, skip_clean
         print_row(str(iteration), "{:.2f}".format(time),
                   convert_number_to_bytes(disk_usage))
 
-        if not (skip_cleanup and iteration == count - 1):
-            delete_index(extension, dataset, N)
+        delete_index(extension, dataset, N)
 
     latency_average = statistics.mean(times)
-    latency_stddev = statistics.stdev(times)
+    disk_usage_average = statistics.mean(disk_usages)
     if count > 1:
-        disk_usage_average = statistics.mean(disk_usages)
+        latency_stddev = statistics.stdev(times)
         disk_usage_stddev = statistics.stdev(disk_usages)
 
     def save_create_result(metric_type, metric_value):
@@ -91,15 +90,16 @@ def generate_result(extension, dataset, N, index_params={}, count=10, skip_clean
         )
 
     save_create_result(Metric.CREATE_LATENCY, latency_average)
-    save_create_result(Metric.CREATE_LATENCY_STDDEV, latency_stddev)
-    if count > 1:
-        save_create_result(Metric.DISK_USAGE, disk_usage_average)
+    save_create_result(Metric.DISK_USAGE, disk_usage_average)
+    if count > 1:        
+        save_create_result(Metric.CREATE_LATENCY_STDDEV, latency_stddev)
         save_create_result(Metric.DISK_USAGE_STDDEV, disk_usage_stddev)
 
     print('average latency:',  f"{latency_average:.2f} ms")
-    print('stddev latency', f"{latency_stddev:.2f} ms")
     if count > 1:
-        print('average disk usage:', convert_number_to_bytes(disk_usage_average))
+        print('stddev latency', f"{latency_stddev:.2f} ms")
+    print('average disk usage:', convert_number_to_bytes(disk_usage_average))
+    if count > 1:
         print('stddev disk usage:', convert_number_to_bytes(disk_usage_stddev))
     print()
 

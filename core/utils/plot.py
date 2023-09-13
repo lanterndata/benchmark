@@ -12,12 +12,14 @@ def plot_bar(fig: go.Figure, extension: Extension, index_params, x_values, y_val
     ))
 
 def plot_line(fig: go.Figure, extension: Extension, index_params, x_values, y_values, index=0):
+    name = f"{extension.value.upper()} - {index_params}"
     fig.add_trace(go.Scatter(
         x=x_values,
         y=y_values,
         marker=dict(color=get_color_from_extension(extension, index)),
         mode='lines+markers',
-        name=f"{extension.value.upper()} - {index_params}",
+        name=name,
+        legendgroup=name,
     ))
 
 
@@ -37,4 +39,5 @@ def plot_line_with_stddev(fig: go.Figure, extension: Extension, index_params, x_
         # make the line invisible
         line=dict(color='rgba(255,255,255,0)'),
         showlegend=False,
+        legendgroup=f"{extension.value.upper()} - {index_params}",
     ))
