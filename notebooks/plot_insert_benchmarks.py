@@ -6,7 +6,7 @@ from core.utils.plot import plot_line_with_stddev, plot_line, plot_bar
 
 
 
-def plot_results(dataset, plot_type='bar', bulk=False):
+def plot_results(dataset, plot_type='line', bulk=False):
     metric_tuples = [
         ('transactions per second', get_tps_metric(bulk)),
         ('latency (ms)', (get_latency_metric(bulk), get_latency_stddev_metric(bulk)))
