@@ -13,7 +13,32 @@ COPY notebooks/requirements.txt /app/notebooks/requirements.txt
 RUN pip install --no-cache-dir -r /app/core/requirements.txt --break-system-packages && \
     pip install --no-cache-dir -r /app/notebooks/requirements.txt --break-system-packages
 
-# TODO: Add external index support
+# Add external index support
+RUN \
+    # Install ONNX Runtime
+    mkdir -p /usr/local/lib && \
+    cd /usr/local/lib && \
+    wget https://github.com/microsoft/onnxruntime/releases/download/v1.15.1/onnxruntime-linux-x64-1.15.1.tgz && \
+    tar xzf ./onnx*.tgz && \
+    rm -rf ./onnx*.tgz && \
+    mv ./onnx* ./onnxruntime && \
+    apt install -y --no-install-recommends lsb-release wget build-essential ca-certificates zlib1g-dev pkg-config libreadline-dev clang curl gnupg libssl-dev jq && \
+    # Install Rust
+    curl -k -o /tmp/rustup.sh https://sh.rustup.rs && \
+    chmod +x /tmp/rustup.sh && \
+    /tmp/rustup.sh -y && \
+    . "$HOME/.cargo/env" && \
+    # Setup cargo deps
+    cd /app && \
+    mkdir .cargo && \
+    echo "[target.$(rustc -vV | sed -n 's|host: ||p')]" >> .cargo/config && \
+    echo 'rustflags = ["-C", "link-args=-Wl,-rpath,/usr/local/lib/onnxruntime/lib"]' >> .cargo/config && \
+    cargo install cargo-pgrx --version 0.9.7 && \
+    cargo pgrx init --pg15 /usr/bin/pg_config && \
+    # Install package
+    git clone https://github.com/lanterndata/lanterndb_extras.git && \
+    cd lanterndb_extras && \
+    cargo build -p lanterndb_create_index && cargo install --path lanterndb_create_index
 
 # Install Postgres extensions
 COPY extensions/ /app/extensions/
