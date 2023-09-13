@@ -10,8 +10,6 @@ def plot_line(fig: go.Figure, extension: Extension, index_params, x_values, y_va
         marker=dict(color=get_color_from_extension(extension, index)),
         mode='lines+markers',
         name=f"{extension.value.upper()} - {index_params}",
-        legendgroup=extension.value.upper(),
-        legendgrouptitle={'text': extension.value.upper()}
     ))
 
 
@@ -31,5 +29,4 @@ def plot_line_with_stddev(fig: go.Figure, extension: Extension, index_params, x_
         # make the line invisible
         line=dict(color='rgba(255,255,255,0)'),
         showlegend=False,
-        legendgroup=extension.value.upper(),
     ))
