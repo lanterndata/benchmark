@@ -4,9 +4,6 @@ from .constants import coalesce_index_params, get_vector_dim, Extension
 from .database import DatabaseConnection, get_database_url, run_command
 
 
-INDEX_FILE = '/app/external_indexes/external-index.usearch'
-
-
 def create_external_index(extension: Extension, dataset: Dataset, N: str, index_params={}):
     # Only Lantern is supported for now. Throw error if not Lantern
     if extension != Extension.LANTERN:
@@ -22,6 +19,7 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
     table = get_table_name(dataset, N)
     index = get_index_name(dataset, N)
     params = coalesce_index_params(extension, index_params)
+    index_file = f"/app/external_indexes/{index}.usearch"
 
     # Create external index and save to file
     database_url = get_database_url(extension)
@@ -36,7 +34,7 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         f"--efc {params['ef_construction']}",
         f"-d {get_vector_dim(dataset)}",
         '--metric-kind l2sq',
-        f"--out {INDEX_FILE}",
+        f"--out {index_file}",
     ])
     out, err = run_command(command)
     if err:
@@ -47,7 +45,7 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         CREATE INDEX {index}
         ON {table}
         USING hnsw (v)
-        WITH (_experimental_index_path='{INDEX_FILE}');
+        WITH (_experimental_index_path='{index_file}');
     """
 
     with DatabaseConnection(extension) as conn:
