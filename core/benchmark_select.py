@@ -1,4 +1,5 @@
 import re
+import logging
 import argparse
 import statistics
 from .utils.delete_index import delete_index
@@ -268,6 +269,7 @@ if __name__ == '__main__':
     cli.add_dataset(parser)
     cli.add_N(parser)
     cli.add_K_values(parser)
+    cli.add_logging(parser)
 
     # Parse arguments
     parsed_args = parser.parse_args()
@@ -276,6 +278,7 @@ if __name__ == '__main__':
     index_params = cli.parse_index_params(extension, parsed_args)
     N = parsed_args.N or '10k'
     K_values = parsed_args.K or SUGGESTED_K_VALUES
+    logging.basicConfig(level=getattr(logging, parsed_args.log.upper()))
 
     # Generate result
     generate_result(extension, dataset, N, K_values, index_params)

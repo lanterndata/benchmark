@@ -6,6 +6,7 @@ from typing import Dict, List
 from .utils.database import DatabaseConnection
 from .utils.constants import Extension, EXTENSION_NAMES, EXTENSIONS_USING_VECTOR, get_vector_dim, SUGGESTED_DATASET_SIZES, Dataset, VALID_DATASETS
 from .utils.names import get_table_name
+from .utils import cli
 
 
 def table_exists(extension, table):
@@ -135,20 +136,9 @@ def create_or_download_tables(datapath: str, extension: Extension, dataset_sizes
 
 
 def setup_extension(datapath: str, extension: Extension, dataset_sizes: Dict[Dataset, List[str]] = SUGGESTED_DATASET_SIZES):
-    # Create the database if it doesn't exist
-    extension_name = extension.value.split('_')[0]
-    with DatabaseConnection(autocommit=True) as conn:
-        exists = conn.select_one(
-            "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s", (extension_name,))
-        if exists is None:
-            conn.execute(f"CREATE DATABASE {extension_name};")
-            logging.info(f"Created database {extension_name}.")
-        else:
-            logging.info(
-                f"Database {extension_name} already exists. Skipping.")
-
     # Enables the extension if it is not already enabled
     extension_name = EXTENSION_NAMES[extension]
+    logging.info(f"Enabling extension {extension_name}...")
     with DatabaseConnection(extension) as conn:
         conn.execute(f"CREATE EXTENSION IF NOT EXISTS {extension_name};")
     logging.info(f"Extension {extension_name} is enabled.")
@@ -191,9 +181,12 @@ if __name__ == "__main__":
                         choices=[d for d in VALID_DATASETS], help="Dataset name")
     parser.add_argument("--N",
                         nargs='+', help="Dataset sizes")
+    cli.add_logging(parser)
     args = parser.parse_args()
 
     setup_results_table()
+
+    logging.basicConfig(level=getattr(logging, args.log.upper()))
 
     dataset_sizes = SUGGESTED_DATASET_SIZES
     if args.dataset is not None and args.N is not None:

@@ -1,4 +1,5 @@
 import argparse
+import logging
 from .utils.create_index import create_custom_index
 from .utils.constants import Extension, Metric, Dataset
 from .utils import cli
@@ -175,6 +176,7 @@ if __name__ == '__main__':
     cli.add_index_params(parser)
     cli.add_dataset(parser)
     cli.add_N(parser)
+    cli.add_logging(parser)
 
     # Parse arguments
     parsed_args = parser.parse_args()
@@ -182,6 +184,7 @@ if __name__ == '__main__':
     extension = Extension(parsed_args.extension)
     index_params = cli.parse_index_params(extension, parsed_args)
     N = parsed_args.N or '10k'
+    logging.basicConfig(level=getattr(logging, parsed_args.log.upper()))
 
     # Generate result
     generate_result(extension, dataset, N, index_params)

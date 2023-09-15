@@ -1,0 +1,14 @@
+# Starting from the PostgreSQL 15 image
+FROM postgres:15
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+RUN apt-get update && apt-get install -y procps cmake git build-essential postgresql-server-dev-15
+
+COPY extensions/install_pgvector.sh /app/extensions/install_pgvector.sh
+RUN /app/extensions/install_pgvector.sh
+
+# Expose ports
+EXPOSE 5432

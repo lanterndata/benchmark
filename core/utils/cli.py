@@ -1,5 +1,9 @@
+import logging
 from typing import Dict
 from .constants import VALID_DATASETS, VALID_DATASET_SIZES, VALID_INDEX_PARAMS, Extension
+
+def add_logging(parser):
+    parser.add_argument("--log", default="WARNING", help="Logging level", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
 
 
 def add_dataset(parser):

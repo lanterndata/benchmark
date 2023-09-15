@@ -4,12 +4,12 @@ jupyter:
 	jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 
 psql:
-	$(PSQL_EXEC)
+	psql "$(DATABASE_URL)"
 psql-none:
-	$(PSQL_EXEC) -d none
+	psql "$(NONE_DATABASE_URL)"
 psql-pgvector:
-	$(PSQL_EXEC) -d pgvector
+	psql "$(PGVECTOR_DATABASE_URL)"
 psql-lantern:
-	$(PSQL_EXEC) -d lantern
+	psql "$(LANTERN_DATABASE_URL)"
 psql-neon:
-	$(PSQL_EXEC) -d neon
+	psql "$(NEON_DATABASE_URL)"

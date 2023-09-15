@@ -1,16 +1,8 @@
 {
-    "name": "Lantern Benchmarking",
-    "dockerFile": "../Dockerfile",
-    "context": "..",
-    "runArgs": [
-        "--env-file",
-        ".env",
-    ],
-    "mounts": [
-        "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
-        "source=${localWorkspaceFolder}/db,target=/var/lib/postgresql/data,type=bind,consistency=cached"
-    ],
-    "overrideCommand": false,
+    "name": "Existing Docker Compose (Extend)",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "notebooks",
+    "workspaceFolder": "/app",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -21,8 +13,5 @@
                 "terminal.integrated.shell.linux": "/bin/bash"
             }
         }
-    },
-    "containerEnv": {
-        "PYTHONPATH": "/workspaces/benchmark"
     }
 }

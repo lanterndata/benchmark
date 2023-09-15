@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+  notebooks:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@notebooks:5432/postgres
+      - NONE_DATABASE_URL=postgresql://postgres:postgres@none:5432/postgres
+      - NEON_DATABASE_URL=postgresql://postgres:postgres@neon:5432/postgres
+      - LANTERN_DATABASE_URL=postgresql://postgres:postgres@lantern:5432/postgres
+      - PGVECTOR_DATABASE_URL=postgresql://postgres:postgres@pgvector:5432/postgres
+      - PYTHONPATH=/app
+    ports:
+      - "8888:8888"
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - .:/app
+      - ./db/notebooks:/var/lib/postgresql/data:cached
+
+  none:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.none
+    env_file: .env
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT_NONE}
+    ports:
+      - "${POSTGRES_PORT_NONE}:5432"
+    volumes:
+      - .:/app
+      - ./db/none:/var/lib/postgresql/data:cached
+
+  pgvector:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pgvector
+    env_file: .env
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT_PGVECTOR}
+    ports:
+      - "${POSTGRES_PORT_PGVECTOR}:5432"
+    volumes:
+      - .:/app
+      - ./db/pgvector:/var/lib/postgresql/data:cached
+
+  lantern:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.lantern
+    env_file: .env
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT_LANTERN}
+    ports:
+      - "${POSTGRES_PORT_LANTERN}:5432"
+      - "${SSH_PORT_LANTERN}:22"
+    volumes:
+      - .:/app
+      - ./db/lantern:/var/lib/postgresql/data:cached
+
+  neon:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.neon
+    env_file: .env
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT_NEON}
+    ports:
+      - "${POSTGRES_PORT_NEON}:5432"
+    volumes:
+      - .:/app
+      - ./db/neon:/var/lib/postgresql/data:cached

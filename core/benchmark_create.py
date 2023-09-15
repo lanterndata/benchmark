@@ -1,5 +1,6 @@
 import time
 import argparse
+import logging
 import subprocess
 import statistics
 from .utils.database import DatabaseConnection, get_database_url
@@ -37,7 +38,7 @@ def generate_external_performance_result(extension, dataset, N, index_params):
 
 
 def generate_performance_result(extension, dataset, N, index_params):
-    if 'external' in index_params:
+    if 'external' in index_params and index_params['external']:
         return generate_external_performance_result(extension, dataset, N, index_params)
     create_index_query = get_create_index_query(
         extension, dataset, N, index_params)
@@ -133,6 +134,7 @@ if __name__ == '__main__':
     cli.add_index_params(parser)
     cli.add_dataset(parser)
     cli.add_N(parser)
+    cli.add_logging(parser)
     parser.add_argument(
         '--count', type=int, default=10, help='number of iterations')
 
@@ -143,6 +145,7 @@ if __name__ == '__main__':
     index_params = cli.parse_index_params(extension, parsed_args)
     N = parsed_args.N or '10k'
     count = parsed_args.count
+    logging.basicConfig(level=getattr(logging, parsed_args.log.upper()))
 
     # Generate result
     generate_result(extension, dataset, N, index_params, count=count)
