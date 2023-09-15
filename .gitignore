@@ -16,6 +16,9 @@ __pycache__/
 .ipynb_checkpoints/
 *.ipynb_checkpoints/
 
-# LanternDB Extras
-lanterndb_extras/
+# Lantern
+external_indexes/
+
+# Lantern Extras
+lantern_extras/
 .cargo

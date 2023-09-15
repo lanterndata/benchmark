@@ -4,7 +4,7 @@ from .constants import coalesce_index_params, get_vector_dim, Extension
 from .database import DatabaseConnection, get_database_url, run_command
 
 
-INDEX_FILE = '/app/external-index.usearch'
+INDEX_FILE = '/app/external_indexes/external-index.usearch'
 
 
 def create_external_index(extension: Extension, dataset: Dataset, N: str, index_params={}):
