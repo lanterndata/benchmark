@@ -1,0 +1,51 @@
+# Starting from the PostgreSQL 15 image
+FROM postgres:15
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+RUN apt-get update && apt-get install -y procps cmake wget git build-essential postgresql-server-dev-15 curl openssh-server
+
+# Install SSH server
+RUN apt-get update && apt-get install -y openssh-server && \
+    mkdir /var/run/sshd && \
+    echo 'root:root' | chpasswd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Add external index support
+RUN \
+    # Install ONNX Runtime
+    mkdir -p /usr/local/lib && \
+    cd /usr/local/lib && \
+    wget https://github.com/microsoft/onnxruntime/releases/download/v1.15.1/onnxruntime-linux-x64-1.15.1.tgz && \
+    tar xzf ./onnx*.tgz && \
+    rm -rf ./onnx*.tgz && \
+    mv ./onnx* ./onnxruntime && \
+    apt install -y --no-install-recommends lsb-release wget build-essential ca-certificates zlib1g-dev pkg-config libreadline-dev clang curl gnupg libssl-dev jq && \
+    # Install Rust
+    curl -k -o /tmp/rustup.sh https://sh.rustup.rs && \
+    chmod +x /tmp/rustup.sh && \
+    /tmp/rustup.sh -y && \
+    . "$HOME/.cargo/env" && \
+    # Setup cargo deps
+    cd /app && \
+    mkdir .cargo && \
+    echo "[target.$(rustc -vV | sed -n 's|host: ||p')]" >> .cargo/config && \
+    echo 'rustflags = ["-C", "link-args=-Wl,-rpath,/usr/local/lib/onnxruntime/lib"]' >> .cargo/config && \
+    cargo install cargo-pgrx --version 0.9.7 && \
+    cargo pgrx init --pg15 /usr/bin/pg_config && \
+    # Install package
+    git clone https://github.com/lanterndata/lantern_extras.git && \
+    cd lantern_extras && \
+    cargo build -p lantern_create_index && cargo install --path lantern_create_index
+
+# Install Postgres extension
+COPY extensions/install_lantern.sh /app/extensions/install_lantern.sh
+RUN /app/extensions/install_lantern.sh
+
+# Expose ports
+EXPOSE 5432
+EXPOSE 22
+
+CMD service ssh start && docker-entrypoint.sh postgres

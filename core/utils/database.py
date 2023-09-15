@@ -119,12 +119,15 @@ def get_database_url(extension):
     """
     Get the appropriate database URL based on the extension.
     """
-    base_url = os.environ["DATABASE_URL"]
     if extension is None:
-        return base_url
-    elif isinstance(extension, Extension):
-        prefix = '/'.join(base_url.split('/')[:-1])
-        database = extension.value.split('_')[0].lower()
-        return prefix + '/' + database
+        return os.environ["DATABASE_URL"]
+    if extension == Extension.NONE:
+        return os.environ["NONE_DATABASE_URL"]
+    if extension == Extension.LANTERN:
+        return os.environ["LANTERN_DATABASE_URL"]
+    if extension == Extension.NEON:
+        return os.environ["NEON_DATABASE_URL"]
+    if extension == Extension.PGVECTOR_HNSW or extension == Extension.PGVECTOR_IVFFLAT:
+        return os.environ["PGVECTOR_DATABASE_URL"]
     else:
         raise ValueError("Unknown extension: " + extension.value)
