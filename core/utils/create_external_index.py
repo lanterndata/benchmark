@@ -1,8 +1,11 @@
+import os
 from .constants import Extension, Dataset
 from .names import get_table_name, get_index_name
 from .constants import coalesce_index_params, get_vector_dim, Extension
 from .database import DatabaseConnection, get_database_url, run_command
 
+
+DIR = '/app/external_indexes'
 
 def create_external_index(extension: Extension, dataset: Dataset, N: str, index_params={}):
     # Only Lantern is supported for now. Throw error if not Lantern
@@ -15,11 +18,15 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         raise ValueError(
             f'Index params {index_params} do not specify an external index')
 
+    # Create directory for data
+    if not os.path.exists(DIR):
+        os.makedirs(DIR)
+
     # Get data
     table = get_table_name(dataset, N)
     index = get_index_name(dataset, N)
     params = coalesce_index_params(extension, index_params)
-    index_file = f"/app/external_indexes/{index}.usearch"
+    index_file = f"{DIR}/{index}.usearch"
 
     # Create external index and save to file
     database_url = get_database_url(extension)
