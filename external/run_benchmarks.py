@@ -28,9 +28,9 @@ if __name__ == "__main__":
     disk_usage = benchmark_create.generate_disk_usage_result(
         extension, dataset, N)
     benchmark_select.generate_result(
-        extension, dataset, N, [K], index_params, bulk=False, skip_index=True)
+        extension, dataset, N, [K], index_params, bulk=True, skip_index=True)
     delete_index(extension, dataset, N)
     save_result(Metric.CREATE_LATENCY, latency_create, **create_kwargs)
     save_result(Metric.DISK_USAGE, disk_usage, **create_kwargs)
     benchmark_insert.generate_result(
-        extension, dataset, N, index_params, K=K, bulk=False)
+        extension, dataset, N, index_params, K=K, bulk=True)
