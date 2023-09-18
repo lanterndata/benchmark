@@ -1,3 +1,4 @@
+import logging
 import argparse
 from typing import Optional, Callable, List
 from core.utils.constants import Extension, Dataset
@@ -23,6 +24,7 @@ def get_args(description, add_arguments: Optional[Callable[[argparse.ArgumentPar
     N = parsed_args.N
     cli.validate_N(parser, dataset, N)
     K = parsed_args.K
-    logging.basicConfig(level=getattr(logging, parsed_args.log.upper()))
+    if hasattr(parsed_args, 'log'):
+        logging.basicConfig(level=getattr(parsed_args, 'log').upper())
 
     return extension, index_params, dataset, N, K, *[getattr(parsed_args, arg) for arg in additional_args]
