@@ -13,16 +13,16 @@ def add_arguments(parser: argparse.ArgumentParser) -> None:
 
 
 def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
-    divider_length = 80
+    divider_length = 85
     divider_line = "-" * divider_length
 
     if markdown:
         print("# Benchmarks")
     else:
         print(divider_line)
-    print("| %-21s | %18s | %18s | %10s |" %
+    print("| %-26s | %18s | %18s | %10s |" %
           ("metric", "old", "new", "pct change"))
-    print(f"|{23 * '-'}|{20 * '-'}|{20 * '-'}|{12 * '-'}|")
+    print(f"|{28 * '-'}|{20 * '-'}|{20 * '-'}|{12 * '-'}|")
 
     for metric, old_value, new_value in benchmarks:
         display_old_value = "-" if old_value is None else \
@@ -34,7 +34,7 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
                         float(old_value) * 100)
         data = (metric.value, display_old_value,
                 display_new_value, display_pct_change)
-        print("| %-21s | %18s | %18s | %10s |" % data)
+        print("| %-26s | %18s | %18s | %10s |" % data)
 
     if not markdown:
         print(divider_line)
