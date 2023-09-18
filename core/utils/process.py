@@ -3,6 +3,10 @@ from .numbers import convert_string_to_number
 from .database import DatabaseConnection
 
 
+def dump_index_params(index_params):
+    return json.dumps(index_params, sort_keys=True)
+
+
 def get_metric_sql_and_value(metric_type):
     multiple_metrics = hasattr(metric_type, "__len__")
     if multiple_metrics:
@@ -112,7 +116,8 @@ def get_experiment_result(metric_type, extension, index_params, dataset, N, K):
             AND N = %s
             AND K = %s
     """
-    data = (metric_type.value, extension.value, json.dumps(index_params), dataset.value, convert_string_to_number(N), K or 0)
+    data = (metric_type.value, extension.value, dump_index_params(
+        index_params), dataset.value, convert_string_to_number(N), K or 0)
     with DatabaseConnection() as conn:
         result = conn.select_one(sql, data=data)[0]
     return result
@@ -120,15 +125,15 @@ def get_experiment_result(metric_type, extension, index_params, dataset, N, K):
 
 def save_result(metric_type, metric_value, extension, index_params, dataset, n, k=0, out=None, err=None):
     TABLE_COLUMNS = [
-       'extension',
-       'index_params',
-       'dataset',
-       'n',
-       'k',
-       'metric_type',
-       'metric_value',
-       'out',
-       'err',
+        'extension',
+        'index_params',
+        'dataset',
+        'n',
+        'k',
+        'metric_type',
+        'metric_value',
+        'out',
+        'err',
     ]
 
     columns = ', '.join(TABLE_COLUMNS)
@@ -148,7 +153,7 @@ def save_result(metric_type, metric_value, extension, index_params, dataset, n, 
     """
 
     data = (
-        extension.value, json.dumps(index_params), dataset.value, n, k, metric_type.value, metric_value, out, err)
+        extension.value, dump_index_params(index_params), dataset.value, n, k, metric_type.value, metric_value, out, err)
 
     with DatabaseConnection() as conn:
         conn.execute(sql, data=data)
