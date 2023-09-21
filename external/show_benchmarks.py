@@ -26,12 +26,17 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
 
     for metric, old_value, new_value in benchmarks:
         display_old_value = "-" if old_value is None else \
-            "%.3f" % float(old_value)
+            "%.3f" % old_value
         display_new_value = "-" if new_value is None else \
-            "%.3f" % float(new_value)
-        display_pct_change = "-" if new_value is None or old_value is None else \
-            "%.2f%%" % ((float(new_value) - float(old_value)) /
-                        float(old_value) * 100)
+            "%.3f" % new_value
+        has_no_change = new_value is None or old_value is None or old_value == new_value
+        if has_no_change:
+            display_pct_change = "-"
+        else:
+            pct_change = (new_value - old_value) / old_value * 100
+            display_pct_change = "%.2f%%" % pct_change
+            if pct_change > 0:
+                display_pct_change = "+" + display_pct_change
         data = (metric.value, display_old_value,
                 display_new_value, display_pct_change)
         print("| %-31s | %18s | %18s | %10s |" % data)
