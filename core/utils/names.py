@@ -26,6 +26,9 @@ def get_table_name(dataset, N, type='base'):
     table_name = f"{dataset.value}_{type}{N}"
     return table_name
 
+def get_cloud_index_name(dataset, N, type='base'):
+    table_name = get_table_name(dataset, N, type)
+    return table_name.replace('_', '-')
 
 def get_index_name(dataset, N):
     return get_table_name(dataset, N) + "_index"

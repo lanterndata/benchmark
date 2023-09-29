@@ -3,6 +3,7 @@ import argparse
 import logging
 import subprocess
 import statistics
+import json
 from .utils.database import DatabaseConnection, get_database_url
 from .utils.delete_index import delete_index
 from .utils.create_index import get_create_index_query, get_index_name
@@ -12,6 +13,8 @@ from .utils.constants import Metric, Extension, Dataset
 from .utils import cli
 from .utils.process import save_result, get_experiment_results
 from .utils.print import print_labels, print_row, get_title
+from .utils.cloud_provider import get_cloud_provider
+from .utils.names import get_cloud_index_name, get_table_name
 
 SUPPRESS_COMMAND = "SET client_min_messages TO WARNING"
 
@@ -36,6 +39,11 @@ def generate_external_performance_result(extension, dataset, N, index_params):
     t2 = time.time()
     return (t2 - t1) * 1000
 
+def generate_cloud_performance_result(provider_instance, vector_data, index_params):
+    t1 = time.time()
+    provider_instance.create_index(index_params, vector_data)
+    t2 = time.time()
+    return (t2 - t1) * 1000
 
 def generate_performance_result(extension, dataset, N, index_params):
     if 'external' in index_params and index_params['external']:
@@ -149,3 +157,53 @@ if __name__ == '__main__':
 
     # Generate result
     generate_result(extension, dataset, N, index_params, count=count)
+
+
+def generate_cloud_result(provider, dataset, N, index_params={}, count=10):
+    cloud_provider = get_cloud_provider(provider)
+    index_name = get_cloud_index_name(dataset, N)
+    cloud_provider.delete_index(index_name)
+    index_params['name'] = index_name
+
+    print(get_title(provider, index_params, dataset, N))
+    
+    print_labels(f"Iteration /{count}", 'Latency (ms)')
+
+    times = []
+    vector_data = []
+
+    with DatabaseConnection(Extension.NONE) as conn:
+        base_table_name = get_table_name(dataset=dataset, N=N)
+        vector_data = conn.select(f'SELECT v FROM {base_table_name}')
+        vector_data = list(map(lambda x: (str(x[0]), json.loads(x[1][0])), enumerate(vector_data)))
+
+    for iteration in range(count):
+        time = generate_cloud_performance_result(cloud_provider, vector_data, index_params)
+
+        times.append(time)
+
+        print_row(str(iteration), "{:.2f}".format(time))
+
+        cloud_provider.delete_index(index_name)
+
+    latency_average = statistics.mean(times)
+
+    def save_create_result(metric_type, metric_value):
+        save_result(
+            metric_type=metric_type,
+            metric_value=metric_value,
+            extension=provider,
+            index_params=index_params,
+            dataset=dataset,
+            n=convert_string_to_number(N),
+        )
+
+    save_create_result(Metric.CREATE_LATENCY, latency_average)
+    if count > 1:        
+        latency_stddev = statistics.stdev(times)
+        save_create_result(Metric.CREATE_LATENCY_STDDEV, latency_stddev)
+
+    print('average latency:',  f"{latency_average:.2f} ms")
+    if count > 1:
+        print('stddev latency', f"{latency_stddev:.2f} ms")
+    print()
