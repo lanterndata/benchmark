@@ -36,7 +36,7 @@ DEFAULT_INDEX_PARAMS = {
     Extension.PGVECTOR_HNSW: {'m': 32, 'ef_construction': 128, 'ef': 10},
     Extension.LANTERN: {'m': 32, 'ef_construction': 128, 'ef': 10},
     Extension.NEON: {'m': 32, 'ef_construction': 128, 'ef': 10},
-    Cloud.PINECONE: { 'name': '', 'metric': 'cosine', 'pods': 1, 'replicas': 1, 'pod_type': 'p2' },
+    Cloud.PINECONE: { 'name': '', 'metric': 'euclidean', 'pods': 1, 'replicas': 1, 'pod_type': 'p2' },
     Extension.NONE: {},
 }
 

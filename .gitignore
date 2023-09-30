@@ -6,6 +6,7 @@ db/
 *.fvecs
 *.bvecs
 *.csv
+.env
 
 # Python
 *.pyc
