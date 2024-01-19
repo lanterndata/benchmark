@@ -2,7 +2,7 @@ import os
 from .constants import Extension, Dataset
 from .names import get_table_name, get_index_name
 from .constants import coalesce_index_params, get_vector_dim, Extension
-from .database import DatabaseConnection, get_database_url, run_command
+from .database import get_database_url, run_command
 
 
 DIR = '/app/external_indexes'
@@ -28,12 +28,12 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
     params = coalesce_index_params(extension, index_params)
     index_file = f"{DIR}/{index}.usearch"
 
-    # Create external index and save to file
+    # Create external index
     database_url = get_database_url(extension)
     command = ' '.join([
         'sshpass -p root ssh -o StrictHostKeyChecking=no -p 22 root@lantern',
-        'lantern-create-index',
-        f"-u \"{database_url}\"",
+        'lantern-cli create-index',
+        f"-u '{database_url}'",
         f"-t \"{table}\"",
         '-c "v"',
         f"-m {params['m']}",
@@ -42,18 +42,9 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         f"-d {get_vector_dim(dataset)}",
         '--metric-kind l2sq',
         f"--out {index_file}",
+        f"--import",
     ])
-    out, err = run_command(command)
+    _, err = run_command(command)
     if err:
         print(err)
 
-    # Create index from file
-    sql = f"""
-        CREATE INDEX {index}
-        ON {table}
-        USING hnsw (v)
-        WITH (_experimental_index_path='{index_file}');
-    """
-
-    with DatabaseConnection(extension) as conn:
-        conn.execute(sql)
