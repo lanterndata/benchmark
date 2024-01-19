@@ -9,7 +9,7 @@ def get_create_pgvector_ivfflat_index_query(table, index, index_params):
     sql = f"""
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
-        ivfflat (v vector_l2_ops) WITH (
+        ivfflat (v vector_cosine_ops) WITH (
             lists = {params['lists']}
         );
         SET LOCAL ivfflat.probes = {params['probes']};
@@ -23,7 +23,7 @@ def get_create_pgvector_hnsw_index_query(table, index, index_params):
     sql = f"""
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
-        hnsw (v vector_l2_ops) WITH (
+        hnsw (v vector_cosine_ops) WITH (
             m={params['m']},
             ef_construction={params['ef_construction']}
         );

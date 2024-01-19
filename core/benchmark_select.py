@@ -39,7 +39,7 @@ def get_performance_query(dataset, N, K, bulk, id=None):
                 FROM
                     {base_table_name}
                 ORDER BY
-                    q.v <-> v
+                    q.v <=> v
                 LIMIT
                     {K}
             ) b ON true
@@ -55,7 +55,7 @@ def get_performance_query(dataset, N, K, bulk, id=None):
             SELECT *
             FROM
                 {base_table_name}
-            ORDER BY v <-> (
+            ORDER BY v <=> (
                 SELECT v
                 FROM
                     {query_table_name}
