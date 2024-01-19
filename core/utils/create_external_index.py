@@ -41,6 +41,7 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         f"-d {get_vector_dim(dataset)}",
         '--metric-kind cos',
         f"--out {index_file}",
+        f"--index-name {index}",
         f"--import",
     ])
     _, err = run_command(command)
