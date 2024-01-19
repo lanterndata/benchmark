@@ -31,7 +31,6 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
     # Create external index
     database_url = get_database_url(extension)
     command = ' '.join([
-        'sshpass -p root ssh -o StrictHostKeyChecking=no -p 22 root@lantern',
         'lantern-cli create-index',
         f"-u '{database_url}'",
         f"-t \"{table}\"",
