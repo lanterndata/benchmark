@@ -40,7 +40,7 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         f"--ef {params['ef']}",
         f"--efc {params['ef_construction']}",
         f"-d {get_vector_dim(dataset)}",
-        '--metric-kind l2sq',
+        '--metric-kind cos',
         f"--out {index_file}",
         f"--import",
     ])
