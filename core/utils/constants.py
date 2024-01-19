@@ -188,13 +188,13 @@ VALID_DATASETS = [dataset.value for dataset in Dataset]
 VALID_DATASET_SIZES = {
     Dataset.SIFT: ['10k', '100k', '200k', '400k', '600k', '800k', '1m', '2m', '5m', '10m', '20m', '50m', '100m', '200m', '500m', '1b'],
     Dataset.GIST: ['100k', '200k', '400k', '600k', '800k', '1m'],
-    Dataset.OPENAI: ['5m'],
+    Dataset.OPENAI: ['1m', '5m'],
 }
 
 VALID_DATASET_QUERY_SIZES = {
     Dataset.SIFT: ['10k', '1m', '1b'],
     Dataset.GIST: ['1m'],
-    Dataset.OPENAI: ['5m'],
+    Dataset.OPENAI: ['1m', '5m'],
 }
 
 SUGGESTED_DATASET_SIZES = {
