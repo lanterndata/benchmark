@@ -5,7 +5,7 @@ from .constants import coalesce_index_params, get_vector_dim, Extension
 from .database import get_database_url, run_command
 
 
-DIR = '/app/external_indexes'
+DIR = '/tmp/external_indexes'
 
 def create_external_index(extension: Extension, dataset: Dataset, N: str, index_params={}):
     # Only Lantern is supported for now. Throw error if not Lantern
