@@ -42,7 +42,6 @@ def create_external_index(extension: Extension, dataset: Dataset, N: str, index_
         '--metric-kind cos',
         f"--out {index_file}",
         f"--index-name {index}",
-        f"--remote-database false",
         f"--import",
     ])
     _, err = run_command(command)

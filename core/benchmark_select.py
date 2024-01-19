@@ -119,7 +119,7 @@ def generate_utilization_result_one(extension, dataset, N, K, bulk, id):
             if read_match:
                 read_value = int(read_match.group(1))
             return shared_hit_value, read_value
-        if ' <-> ' in line:
+        if ' <=> ' in line:
             start_search = True
 
 
@@ -185,7 +185,7 @@ def generate_recall(extension, dataset, N, K, base_table_name_input=None):
                 FROM
                     {base_table_name}
                 ORDER BY
-                    {base_table_name}.v <-> q.v
+                    {base_table_name}.v <=> q.v
                 LIMIT
                     {K}
             ) b ON TRUE
