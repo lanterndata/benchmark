@@ -33,4 +33,4 @@ if __name__ == "__main__":
     save_result(Metric.CREATE_LATENCY, latency_create, **create_kwargs)
     save_result(Metric.DISK_USAGE, disk_usage, **create_kwargs)
     benchmark_insert.generate_result(
-        extension, dataset, min(N, 10000), index_params, K=K, bulk=True)
+        extension, dataset, "10k", index_params, K=K, bulk=True)
