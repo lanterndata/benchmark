@@ -167,7 +167,7 @@ def generate_recall(extension, dataset, N, K, base_table_name_input=None):
     with DatabaseConnection(extension) as conn:
         query_ids_sql = f"SELECT id FROM {query_table_name} LIMIT 100"
         query_ids = conn.select(query_ids_sql)
-        conn.select(f"SET hnsw.init_k={K}")
+        conn.execute(f"SET hnsw.init_k={K}")
 
         recall_at_k_sum = 0
         sql = f"""
