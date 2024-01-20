@@ -1,7 +1,7 @@
 from core.utils.delete_index import delete_index
 from core.utils.process import save_result
 from core.utils.numbers import convert_string_to_number
-from core.utils.constants import Extension, Metric
+from core.utils.constants import Extension, Metric, Dataset
 from core import benchmark_create, benchmark_insert, benchmark_select
 from external.utils import cli
 
@@ -32,5 +32,7 @@ if __name__ == "__main__":
     delete_index(extension, dataset, N)
     save_result(Metric.CREATE_LATENCY, latency_create, **create_kwargs)
     save_result(Metric.DISK_USAGE, disk_usage, **create_kwargs)
-    benchmark_insert.generate_result(
-        extension, dataset, "10k", index_params, K=K, bulk=True)
+
+    if dataset != Dataset.OPENAI:
+        benchmark_insert.generate_result(
+            extension, dataset, N, index_params, K=K, bulk=True)
