@@ -78,7 +78,7 @@ class DatabaseConnection:
             raise
 
 
-def run_pgbench(extension, query, clients=8, threads=8, transactions=15):
+def run_pgbench(extension, query, clients=32, threads=32, transactions=15):
     with NamedTemporaryFile(mode="w", delete=False) as tmp_file:
         tmp_file.write(query)
         tmp_file_path = tmp_file.name
