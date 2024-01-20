@@ -19,8 +19,6 @@ def get_performance_query(dataset, N, K, bulk, id=None):
     N_number = convert_string_to_number(N)
     if bulk:
         query = f"""
-            SET hnsw.init_k={K};
-
             SELECT
                 q.id AS query_id,
                 ARRAY_AGG(b.id) AS base_ids
@@ -53,8 +51,6 @@ def get_performance_query(dataset, N, K, bulk, id=None):
         query_id_sql = ":id" if id is None else id
         query = f"""
             {set_id_sql}
-
-            SET hnsw.init_k={K};
 
             SELECT *
             FROM
@@ -167,7 +163,7 @@ def generate_recall(extension, dataset, N, K, base_table_name_input=None):
     with DatabaseConnection(extension) as conn:
         query_ids_sql = f"SELECT id FROM {query_table_name} LIMIT 100"
         query_ids = conn.select(query_ids_sql)
-        conn.execute(f"SET hnsw.init_k={K}")
+        # conn.execute(f"SET hnsw.init_k={K}")
 
         recall_at_k_sum = 0
         sql = f"""
