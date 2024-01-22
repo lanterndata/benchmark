@@ -13,10 +13,11 @@ def add_arguments(parser: argparse.ArgumentParser) -> None:
 
 
 def get_corresponding_stddev_result(metric_name, benchmarks):
+    metric_name_without_unit = metric_name.split("(")[0].strip()
     for result in benchmarks:
         metric = result[0].value
 
-        if metric_name in metric and "stddev" in metric:
+        if metric_name_without_unit in metric and "stddev" in metric:
             return result
 
     return None

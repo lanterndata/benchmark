@@ -103,7 +103,10 @@ def get_benchmarks(extension, index_params, dataset, N, K, return_old=False):
 
     add_metric(Metric.RECALL_AFTER_CREATE, use_K=True)
     add_metric(Metric.RECALL_AFTER_INSERT, use_K=True)
+    add_metric(Metric.SELECT_TPS, use_K=True)
     add_metric(Metric.SELECT_BULK_TPS, use_K=True)
+    add_metric(Metric.SELECT_LATENCY, use_K=True)
+    add_metric(Metric.SELECT_LATENCY_STDDEV, use_K=True)
     add_metric(Metric.SELECT_BULK_LATENCY, use_K=True)
     add_metric(Metric.SELECT_BULK_LATENCY_STDDEV, use_K=True)
     add_metric(Metric.CREATE_LATENCY)
