@@ -29,16 +29,16 @@ def get_metric_name(metric_name: str, bulk_size: int):
     return metric_name.replace("bulk", "bulk({})".format(bulk_size))
 
 def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
-    divider_length = 90
+    divider_length = 96
     divider_line = "-" * divider_length
 
     if markdown:
         print("# Benchmarks")
     else:
         print(divider_line)
-    print("| %-31s | %18s | %18s | %10s |" %
+    print("| %-31s | %20s | %20s | %12s |" %
           ("metric", "old", "new", "pct change"))
-    print(f"|{33 * '-'}|{20 * '-'}|{20 * '-'}|{12 * '-'}|")
+    print(f"|{33 * '-'}|{22 * '-'}|{22 * '-'}|{14 * '-'}|")
 
     for metric, old_value, new_value in benchmarks:
         # Do not show stddev values
@@ -72,7 +72,7 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
         metric_name = get_metric_name(metric.value, 100)
         data = (metric_name, display_old_value,
                 display_new_value, display_pct_change)
-        print("| %-31s | %18s | %18s | %10s |" % data)
+        print("| %-31s | %20s | %20s | %12s |" % data)
 
     if not markdown:
         print(divider_line)
