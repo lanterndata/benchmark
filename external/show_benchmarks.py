@@ -49,8 +49,10 @@ def print_benchmarks(benchmarks: List[Tuple[Metric, str, str]], markdown=False):
         stddev_result_new = ""
         stddev_result_old = ""
 
-        if stddev_result:
+        if stddev_result and stddev_result[1]:
             stddev_result_old = " ± %.3f𝜎" % stddev_result[1]
+
+        if stddev_result and stddev_result[2]:
             stddev_result_new = " ± %.3f𝜎" % stddev_result[2]
 
 
