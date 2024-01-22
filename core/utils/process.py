@@ -119,8 +119,8 @@ def get_experiment_result(metric_type, extension, index_params, dataset, N, K):
     data = (metric_type.value, extension.value, dump_index_params(
         index_params), dataset.value, convert_string_to_number(N), K or 0)
     with DatabaseConnection() as conn:
-        result = conn.select_one(sql, data=data)[0]
-    return result
+        result = conn.select_one(sql, data=data)
+    return 0.0 if result is None else result[0]
 
 
 def save_result(metric_type, metric_value, extension, index_params, dataset, n, k=0, out=None, err=None):
