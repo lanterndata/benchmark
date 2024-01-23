@@ -137,7 +137,7 @@ def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K
                 extension=extension,
                 index_params=index_params,
                 dataset=dataset,
-                n=iter_N + 1000,
+                n=convert_string_to_number(N_string),
                 out=stdout,
                 err=stderr,
             )
