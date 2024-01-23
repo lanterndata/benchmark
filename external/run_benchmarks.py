@@ -36,4 +36,4 @@ if __name__ == "__main__":
     save_result(Metric.DISK_USAGE, disk_usage, **create_kwargs)
 
     benchmark_insert.generate_result(
-        extension, dataset, N, index_params, K=None, bulk=False, max_N=10000)
+        extension, dataset, N, index_params, K=None, bulk=True, max_N=5000)
