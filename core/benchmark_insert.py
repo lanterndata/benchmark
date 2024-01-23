@@ -1,3 +1,4 @@
+import sys
 import argparse
 import logging
 from .utils.create_index import create_custom_index
@@ -78,14 +79,14 @@ def create_sequence(extension, bulk, start_N):
     return sequence_name
 
 
-def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K=None):
+def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K=None, max_N=sys.maxsize):
     # Create benchmark table
     source_table = get_table_name(dataset, N_string)
     delete_dest_table(extension, dataset)
     dest_table = create_dest_table(extension, dataset)
 
     # Initialize benchmarking sequence
-    N = convert_string_to_number(N_string)
+    N = min(convert_string_to_number(N_string), max_N)
     start_N = int(N / 10)
     sequence_name = create_sequence(extension, bulk, start_N)
 

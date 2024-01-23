@@ -35,6 +35,5 @@ if __name__ == "__main__":
     save_result(Metric.CREATE_LATENCY, latency_create, **create_kwargs)
     save_result(Metric.DISK_USAGE, disk_usage, **create_kwargs)
 
-    if dataset != Dataset.OPENAI:
-        benchmark_insert.generate_result(
-            extension, dataset, N, index_params, K=K, bulk=True)
+    benchmark_insert.generate_result(
+        extension, dataset, N, index_params, K=None, bulk=True, max_N=3000)
