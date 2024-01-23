@@ -1,3 +1,4 @@
+import os
 import sys
 import argparse
 import logging
@@ -125,8 +126,9 @@ def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K
                 {id_query}
         """
 
+        cpu_count = os.cpu_count() or 1
         stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
-            extension, query, clients=1, transactions=transactions)
+            extension, query, clients=cpu_count, threads=cpu_count, transactions=transactions)
 
         def save_insert_result(metric_type, metric_value):
             save_result(
