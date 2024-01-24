@@ -1,3 +1,5 @@
+import os
+import sys
 import argparse
 import logging
 from .utils.create_index import create_custom_index
@@ -78,14 +80,14 @@ def create_sequence(extension, bulk, start_N):
     return sequence_name
 
 
-def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K=None):
+def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K=None, max_N=sys.maxsize):
     # Create benchmark table
     source_table = get_table_name(dataset, N_string)
     delete_dest_table(extension, dataset)
     dest_table = create_dest_table(extension, dataset)
 
     # Initialize benchmarking sequence
-    N = convert_string_to_number(N_string)
+    N = min(convert_string_to_number(N_string), max_N)
     start_N = int(N / 10)
     sequence_name = create_sequence(extension, bulk, start_N)
 
@@ -104,13 +106,14 @@ def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K
     create_dest_index(extension, dataset, index_params)
 
     print_insert_title_and_labels(extension, index_params, dataset)
-    for iter_N in range(start_N, N, 1000):
+    bulk_interval = min(N, 1000)
+    for iter_N in range(start_N, N, bulk_interval):
         if bulk:
             id_query = f"id >= next_id AND id < next_id + 100"
-            transactions = 10
+            transactions = int(bulk_interval / 100)
         else:
             id_query = f"id = next_id"
-            transactions = 1000
+            transactions = bulk_interval
         query = f"""
             WITH next_id_table AS (
                 SELECT nextval('{sequence_name}') AS next_id
@@ -124,8 +127,9 @@ def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K
                 {id_query}
         """
 
+        cpu_count = os.cpu_count() or 1
         stdout, stderr, tps, latency_average, latency_stddev = run_pgbench(
-            extension, query, clients=1, transactions=transactions)
+            extension, query, clients=cpu_count, threads=cpu_count, transactions=transactions)
 
         def save_insert_result(metric_type, metric_value):
             save_result(
@@ -134,7 +138,7 @@ def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K
                 extension=extension,
                 index_params=index_params,
                 dataset=dataset,
-                n=iter_N + 1000,
+                n=convert_string_to_number(N_string),
                 out=stdout,
                 err=stderr,
             )

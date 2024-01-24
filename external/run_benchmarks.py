@@ -29,10 +29,13 @@ if __name__ == "__main__":
         extension, dataset, N)
     benchmark_select.generate_result(
         extension, dataset, N, [K], index_params, bulk=True, skip_index=True)
+    benchmark_select.generate_result(
+        extension, dataset, N, [K], index_params, bulk=False, skip_index=True)
     delete_index(extension, dataset, N)
     save_result(Metric.CREATE_LATENCY, latency_create, **create_kwargs)
     save_result(Metric.DISK_USAGE, disk_usage, **create_kwargs)
 
-    if dataset != Dataset.OPENAI:
-        benchmark_insert.generate_result(
-            extension, dataset, N, index_params, K=K, bulk=True)
+    benchmark_insert.generate_result(
+        extension, dataset, N, index_params, K=None, bulk=True, max_N=100)
+    benchmark_insert.generate_result(
+        extension, dataset, N, index_params, K=None, bulk=False, max_N=100)

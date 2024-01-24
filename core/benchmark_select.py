@@ -217,7 +217,7 @@ def generate_result(extension, dataset, N, K_values, index_params={}, bulk=False
         delete_index(extension, dataset, N)
         create_index(extension, dataset, N, index_params=index_params)
 
-    print(get_title(extension, index_params, dataset, N))
+    print(get_title(extension, index_params, dataset, N, bulk))
     print_labels('K', 'Recall', 'TPS', 'Avg Latency (ms)',
                  'Stddev Latency (ms)', 'Buffer Shared Hit', 'Buffer Read')
 

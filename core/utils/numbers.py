@@ -18,8 +18,7 @@ def convert_string_to_number(s):
     try:
         return int(float(s) * multiplier)
     except ValueError:
-        logging.error(f"Could not convert {s} to a number.")
-        return None
+        raise(Exception(f"Could not convert {s} to a number."))
 
 
 def convert_number_to_string(num):
