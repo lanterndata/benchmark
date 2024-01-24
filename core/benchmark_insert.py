@@ -106,13 +106,14 @@ def generate_result(extension, dataset, N_string, index_params={}, bulk=False, K
     create_dest_index(extension, dataset, index_params)
 
     print_insert_title_and_labels(extension, index_params, dataset)
-    for iter_N in range(start_N, N, 1000):
+    bulk_interval = min(N, 1000)
+    for iter_N in range(start_N, N, bulk_interval):
         if bulk:
             id_query = f"id >= next_id AND id < next_id + 100"
-            transactions = 10
+            transactions = int(bulk_interval / 100)
         else:
             id_query = f"id = next_id"
-            transactions = 1000
+            transactions = bulk_interval
         query = f"""
             WITH next_id_table AS (
                 SELECT nextval('{sequence_name}') AS next_id
