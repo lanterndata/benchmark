@@ -15,7 +15,7 @@ def validate_benchmarks(benchmarks: List[Tuple[Metric, str, str]]):
             continue
 
         diff = new_value - old_value
-        pct_change = diff / old_value
+        pct_change = diff / (old_value or 1)
 
         if metric in METRICS_THAT_SHOULD_INCREASE:
             if pct_change < -0.1:
