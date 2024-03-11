@@ -39,7 +39,7 @@ def get_create_lantern_index_query(table, index, index_params):
     sql = f"""
         SET maintenance_work_mem = '2GB';
         CREATE INDEX {index} ON {table} USING
-        hnsw (v) WITH (
+        lantern_hnsw (v) WITH (
             dim={vector_dim},
             M={params['m']},
             ef_construction={params['ef_construction']},
