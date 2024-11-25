@@ -38,8 +38,6 @@ def generate_external_performance_result(extension, dataset, N, index_params):
 
 
 def generate_performance_result(extension, dataset, N, index_params):
-    if 'external' in index_params and index_params['external']:
-        return generate_external_performance_result(extension, dataset, N, index_params)
     create_index_query = get_create_index_query(
         extension, dataset, N, index_params)
     result = subprocess.run(["psql", get_database_url(extension), "-c", SUPPRESS_COMMAND, "-c",
