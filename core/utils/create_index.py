@@ -39,6 +39,9 @@ def get_create_lantern_index_query(table, index, index_params):
     vector_dim = get_vector_dim(table)
     sql = f"""
         SET maintenance_work_mem = '2GB';
+        SET lantern.external_index_host='127.0.0.1';
+        SET lantern.external_index_port=8998;
+        SET lantern.external_index_secure=false;
         CREATE INDEX {index} ON {table} USING
         lantern_hnsw (v) WITH (
             dim={vector_dim},
