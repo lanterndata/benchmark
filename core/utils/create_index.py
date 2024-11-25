@@ -25,7 +25,8 @@ def get_create_pgvector_hnsw_index_query(table, index, index_params):
         CREATE INDEX {index} ON {table} USING
         hnsw (v vector_cosine_ops) WITH (
             m={params['m']},
-            ef_construction={params['ef_construction']}
+            ef_construction={params['ef_construction']},
+            external={params['external']}
         );
         SET LOCAL hnsw.ef_search = {params['ef']};
         SET enable_seqscan = off;
@@ -43,7 +44,8 @@ def get_create_lantern_index_query(table, index, index_params):
             dim={vector_dim},
             M={params['m']},
             ef_construction={params['ef_construction']},
-            ef={params['ef']}
+            ef={params['ef']},
+            external={params['external']}
         );
         SET enable_seqscan = off;
     """
@@ -92,9 +94,6 @@ def create_custom_index(extension, table, index, index_params={}):
 
 
 def create_index(extension, dataset, N, index_params={}):
-    if 'external' in index_params:
-        create_external_index(extension, dataset, N, index_params)
-        return
     sql = get_create_index_query(extension, dataset, N, index_params)
     if sql is not None:
         with DatabaseConnection(extension) as conn:
