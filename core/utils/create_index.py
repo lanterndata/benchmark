@@ -43,7 +43,7 @@ def get_create_lantern_index_query(table, index, index_params):
         SET lantern.external_index_port=8998;
         SET lantern.external_index_secure=false;
         CREATE INDEX {index} ON {table} USING
-        lantern_hnsw (v) WITH (
+        lantern_hnsw (v dist_cos_ops) WITH (
             dim={vector_dim},
             M={params['m']},
             ef_construction={params['ef_construction']},
